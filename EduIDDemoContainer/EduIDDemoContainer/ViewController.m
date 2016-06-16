@@ -12,11 +12,9 @@
 
 @interface ViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextField *eduIdLoginName;
+@property (weak, nonatomic) IBOutlet UITextField *containerProgram;
 
-@property (weak, nonatomic) IBOutlet UITextField *eduIdPassword;
-
-@property (weak, nonatomic) IBOutlet UILabel *token;
+@property (weak, nonatomic) IBOutlet UILabel *servicesText;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonAuthorise;
 
@@ -37,11 +35,9 @@
 -(IBAction)authorButtonPressed:(id)sender
 {
     //create json strings from text fields to command extension for permannt storage
-    NSString *eduIdLoginNameText = _eduIdLoginName.text;
-    NSString *eduIdPasswordText = _eduIdPassword.text;
+    NSString *ContainerPrg = _containerProgram.text;
     NSDictionary *serverDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                eduIdLoginNameText, CMD_SET_USER_NAME,
-                                eduIdPasswordText, CMD_SET_USER_PW,
+                                ContainerPrg, CMD_CONTAINER_PRG,
                                 nil];
     NSData *serverJSON=[NSJSONSerialization dataWithJSONObject:serverDict
                                                        options:0
