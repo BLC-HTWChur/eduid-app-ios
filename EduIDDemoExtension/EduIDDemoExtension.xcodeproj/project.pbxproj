@@ -1,0 +1,676 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		335A8ECC1D0DEA35004B8653 /* PersistentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 335A8ECB1D0DEA35004B8653 /* PersistentStore.m */; };
+		335A8ED11D1127FB004B8653 /* EduIdLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 335A8ED01D1127FA004B8653 /* EduIdLogin.m */; };
+		335A8ED41D112868004B8653 /* IdentityProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 335A8ED31D112868004B8653 /* IdentityProvider.m */; };
+		33F7B9EA1D0D575A00AB1DA1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F7B9E91D0D575A00AB1DA1 /* main.m */; };
+		33F7B9ED1D0D575A00AB1DA1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F7B9EC1D0D575A00AB1DA1 /* AppDelegate.m */; };
+		33F7B9F01D0D575A00AB1DA1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F7B9EF1D0D575A00AB1DA1 /* ViewController.m */; };
+		33F7B9F31D0D575A00AB1DA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33F7B9F11D0D575A00AB1DA1 /* Main.storyboard */; };
+		33F7B9F51D0D575A00AB1DA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33F7B9F41D0D575A00AB1DA1 /* Assets.xcassets */; };
+		33F7B9F81D0D575A00AB1DA1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33F7B9F61D0D575A00AB1DA1 /* LaunchScreen.storyboard */; };
+		33F7BA031D0D575B00AB1DA1 /* EduIDDemoExtensionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F7BA021D0D575B00AB1DA1 /* EduIDDemoExtensionTests.m */; };
+		33F7BA0E1D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F7BA0D1D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.m */; };
+		33F7BA231D0D598700AB1DA1 /* ActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F7BA221D0D598700AB1DA1 /* ActionViewController.m */; };
+		33F7BA261D0D598700AB1DA1 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33F7BA241D0D598700AB1DA1 /* MainInterface.storyboard */; };
+		33F7BA2A1D0D598700AB1DA1 /* eduIDAuthorise.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 33F7BA1F1D0D598700AB1DA1 /* eduIDAuthorise.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		33F7B9FF1D0D575B00AB1DA1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33F7B9DD1D0D575A00AB1DA1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33F7B9E41D0D575A00AB1DA1;
+			remoteInfo = EduIDDemoExtension;
+		};
+		33F7BA0A1D0D575B00AB1DA1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33F7B9DD1D0D575A00AB1DA1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33F7B9E41D0D575A00AB1DA1;
+			remoteInfo = EduIDDemoExtension;
+		};
+		33F7BA281D0D598700AB1DA1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33F7B9DD1D0D575A00AB1DA1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33F7BA1E1D0D598700AB1DA1;
+			remoteInfo = eduIDAuthorise;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		33F7BA2E1D0D598700AB1DA1 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				33F7BA2A1D0D598700AB1DA1 /* eduIDAuthorise.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		335A8EC91D0DE182004B8653 /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = constants.h; path = common/constants.h; sourceTree = "<group>"; };
+		335A8ECA1D0DEA35004B8653 /* PersistentStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersistentStore.h; sourceTree = "<group>"; };
+		335A8ECB1D0DEA35004B8653 /* PersistentStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersistentStore.m; sourceTree = "<group>"; };
+		335A8ECF1D1127FA004B8653 /* eduIdLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eduIdLogin.h; sourceTree = "<group>"; };
+		335A8ED01D1127FA004B8653 /* EduIdLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EduIdLogin.m; sourceTree = "<group>"; };
+		335A8ED21D112868004B8653 /* IdentityProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityProvider.h; sourceTree = "<group>"; };
+		335A8ED31D112868004B8653 /* IdentityProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityProvider.m; sourceTree = "<group>"; };
+		33F7B9E51D0D575A00AB1DA1 /* EduIDDemoExtension.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EduIDDemoExtension.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		33F7B9E91D0D575A00AB1DA1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		33F7B9EB1D0D575A00AB1DA1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		33F7B9EC1D0D575A00AB1DA1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		33F7B9EE1D0D575A00AB1DA1 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		33F7B9EF1D0D575A00AB1DA1 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		33F7B9F21D0D575A00AB1DA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		33F7B9F41D0D575A00AB1DA1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		33F7B9F71D0D575A00AB1DA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		33F7B9F91D0D575A00AB1DA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33F7B9FE1D0D575B00AB1DA1 /* EduIDDemoExtensionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EduIDDemoExtensionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		33F7BA021D0D575B00AB1DA1 /* EduIDDemoExtensionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EduIDDemoExtensionTests.m; sourceTree = "<group>"; };
+		33F7BA041D0D575B00AB1DA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33F7BA091D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EduIDDemoExtensionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		33F7BA0D1D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EduIDDemoExtensionUITests.m; sourceTree = "<group>"; };
+		33F7BA0F1D0D575B00AB1DA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33F7BA1F1D0D598700AB1DA1 /* eduIDAuthorise.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = eduIDAuthorise.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		33F7BA211D0D598700AB1DA1 /* ActionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionViewController.h; sourceTree = "<group>"; };
+		33F7BA221D0D598700AB1DA1 /* ActionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionViewController.m; sourceTree = "<group>"; };
+		33F7BA251D0D598700AB1DA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		33F7BA271D0D598700AB1DA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		33F7B9E21D0D575A00AB1DA1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33F7B9FB1D0D575B00AB1DA1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33F7BA061D0D575B00AB1DA1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33F7BA1C1D0D598700AB1DA1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		33F7B9DC1D0D575A00AB1DA1 = {
+			isa = PBXGroup;
+			children = (
+				335A8EC91D0DE182004B8653 /* constants.h */,
+				33F7B9E71D0D575A00AB1DA1 /* EduIDDemoExtension */,
+				33F7BA011D0D575B00AB1DA1 /* EduIDDemoExtensionTests */,
+				33F7BA0C1D0D575B00AB1DA1 /* EduIDDemoExtensionUITests */,
+				33F7BA201D0D598700AB1DA1 /* eduIDAuthorise */,
+				33F7B9E61D0D575A00AB1DA1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		33F7B9E61D0D575A00AB1DA1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				33F7B9E51D0D575A00AB1DA1 /* EduIDDemoExtension.app */,
+				33F7B9FE1D0D575B00AB1DA1 /* EduIDDemoExtensionTests.xctest */,
+				33F7BA091D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.xctest */,
+				33F7BA1F1D0D598700AB1DA1 /* eduIDAuthorise.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		33F7B9E71D0D575A00AB1DA1 /* EduIDDemoExtension */ = {
+			isa = PBXGroup;
+			children = (
+				33F7B9EB1D0D575A00AB1DA1 /* AppDelegate.h */,
+				33F7B9EC1D0D575A00AB1DA1 /* AppDelegate.m */,
+				33F7B9EE1D0D575A00AB1DA1 /* ViewController.h */,
+				33F7B9EF1D0D575A00AB1DA1 /* ViewController.m */,
+				33F7B9F11D0D575A00AB1DA1 /* Main.storyboard */,
+				33F7B9F41D0D575A00AB1DA1 /* Assets.xcassets */,
+				33F7B9F61D0D575A00AB1DA1 /* LaunchScreen.storyboard */,
+				33F7B9F91D0D575A00AB1DA1 /* Info.plist */,
+				33F7B9E81D0D575A00AB1DA1 /* Supporting Files */,
+			);
+			path = EduIDDemoExtension;
+			sourceTree = "<group>";
+		};
+		33F7B9E81D0D575A00AB1DA1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				33F7B9E91D0D575A00AB1DA1 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		33F7BA011D0D575B00AB1DA1 /* EduIDDemoExtensionTests */ = {
+			isa = PBXGroup;
+			children = (
+				33F7BA021D0D575B00AB1DA1 /* EduIDDemoExtensionTests.m */,
+				33F7BA041D0D575B00AB1DA1 /* Info.plist */,
+			);
+			path = EduIDDemoExtensionTests;
+			sourceTree = "<group>";
+		};
+		33F7BA0C1D0D575B00AB1DA1 /* EduIDDemoExtensionUITests */ = {
+			isa = PBXGroup;
+			children = (
+				33F7BA0D1D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.m */,
+				33F7BA0F1D0D575B00AB1DA1 /* Info.plist */,
+			);
+			path = EduIDDemoExtensionUITests;
+			sourceTree = "<group>";
+		};
+		33F7BA201D0D598700AB1DA1 /* eduIDAuthorise */ = {
+			isa = PBXGroup;
+			children = (
+				335A8ED21D112868004B8653 /* IdentityProvider.h */,
+				335A8ED31D112868004B8653 /* IdentityProvider.m */,
+				335A8ECF1D1127FA004B8653 /* eduIdLogin.h */,
+				335A8ED01D1127FA004B8653 /* EduIdLogin.m */,
+				335A8ECA1D0DEA35004B8653 /* PersistentStore.h */,
+				335A8ECB1D0DEA35004B8653 /* PersistentStore.m */,
+				33F7BA211D0D598700AB1DA1 /* ActionViewController.h */,
+				33F7BA221D0D598700AB1DA1 /* ActionViewController.m */,
+				33F7BA241D0D598700AB1DA1 /* MainInterface.storyboard */,
+				33F7BA271D0D598700AB1DA1 /* Info.plist */,
+			);
+			path = eduIDAuthorise;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		33F7B9E41D0D575A00AB1DA1 /* EduIDDemoExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 33F7BA121D0D575B00AB1DA1 /* Build configuration list for PBXNativeTarget "EduIDDemoExtension" */;
+			buildPhases = (
+				33F7B9E11D0D575A00AB1DA1 /* Sources */,
+				33F7B9E21D0D575A00AB1DA1 /* Frameworks */,
+				33F7B9E31D0D575A00AB1DA1 /* Resources */,
+				33F7BA2E1D0D598700AB1DA1 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				33F7BA291D0D598700AB1DA1 /* PBXTargetDependency */,
+			);
+			name = EduIDDemoExtension;
+			productName = EduIDDemoExtension;
+			productReference = 33F7B9E51D0D575A00AB1DA1 /* EduIDDemoExtension.app */;
+			productType = "com.apple.product-type.application";
+		};
+		33F7B9FD1D0D575B00AB1DA1 /* EduIDDemoExtensionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 33F7BA151D0D575B00AB1DA1 /* Build configuration list for PBXNativeTarget "EduIDDemoExtensionTests" */;
+			buildPhases = (
+				33F7B9FA1D0D575B00AB1DA1 /* Sources */,
+				33F7B9FB1D0D575B00AB1DA1 /* Frameworks */,
+				33F7B9FC1D0D575B00AB1DA1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				33F7BA001D0D575B00AB1DA1 /* PBXTargetDependency */,
+			);
+			name = EduIDDemoExtensionTests;
+			productName = EduIDDemoExtensionTests;
+			productReference = 33F7B9FE1D0D575B00AB1DA1 /* EduIDDemoExtensionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		33F7BA081D0D575B00AB1DA1 /* EduIDDemoExtensionUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 33F7BA181D0D575B00AB1DA1 /* Build configuration list for PBXNativeTarget "EduIDDemoExtensionUITests" */;
+			buildPhases = (
+				33F7BA051D0D575B00AB1DA1 /* Sources */,
+				33F7BA061D0D575B00AB1DA1 /* Frameworks */,
+				33F7BA071D0D575B00AB1DA1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				33F7BA0B1D0D575B00AB1DA1 /* PBXTargetDependency */,
+			);
+			name = EduIDDemoExtensionUITests;
+			productName = EduIDDemoExtensionUITests;
+			productReference = 33F7BA091D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		33F7BA1E1D0D598700AB1DA1 /* eduIDAuthorise */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 33F7BA2B1D0D598700AB1DA1 /* Build configuration list for PBXNativeTarget "eduIDAuthorise" */;
+			buildPhases = (
+				33F7BA1B1D0D598700AB1DA1 /* Sources */,
+				33F7BA1C1D0D598700AB1DA1 /* Frameworks */,
+				33F7BA1D1D0D598700AB1DA1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = eduIDAuthorise;
+			productName = eduIDAuthorise;
+			productReference = 33F7BA1F1D0D598700AB1DA1 /* eduIDAuthorise.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		33F7B9DD1D0D575A00AB1DA1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = SII;
+				TargetAttributes = {
+					33F7B9E41D0D575A00AB1DA1 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					33F7B9FD1D0D575B00AB1DA1 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = 33F7B9E41D0D575A00AB1DA1;
+					};
+					33F7BA081D0D575B00AB1DA1 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = 33F7B9E41D0D575A00AB1DA1;
+					};
+					33F7BA1E1D0D598700AB1DA1 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 33F7B9E01D0D575A00AB1DA1 /* Build configuration list for PBXProject "EduIDDemoExtension" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 33F7B9DC1D0D575A00AB1DA1;
+			productRefGroup = 33F7B9E61D0D575A00AB1DA1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				33F7B9E41D0D575A00AB1DA1 /* EduIDDemoExtension */,
+				33F7B9FD1D0D575B00AB1DA1 /* EduIDDemoExtensionTests */,
+				33F7BA081D0D575B00AB1DA1 /* EduIDDemoExtensionUITests */,
+				33F7BA1E1D0D598700AB1DA1 /* eduIDAuthorise */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		33F7B9E31D0D575A00AB1DA1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33F7B9F81D0D575A00AB1DA1 /* LaunchScreen.storyboard in Resources */,
+				33F7B9F51D0D575A00AB1DA1 /* Assets.xcassets in Resources */,
+				33F7B9F31D0D575A00AB1DA1 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33F7B9FC1D0D575B00AB1DA1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33F7BA071D0D575B00AB1DA1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33F7BA1D1D0D598700AB1DA1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33F7BA261D0D598700AB1DA1 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		33F7B9E11D0D575A00AB1DA1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33F7B9F01D0D575A00AB1DA1 /* ViewController.m in Sources */,
+				33F7B9ED1D0D575A00AB1DA1 /* AppDelegate.m in Sources */,
+				33F7B9EA1D0D575A00AB1DA1 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33F7B9FA1D0D575B00AB1DA1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33F7BA031D0D575B00AB1DA1 /* EduIDDemoExtensionTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33F7BA051D0D575B00AB1DA1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33F7BA0E1D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		33F7BA1B1D0D598700AB1DA1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				335A8ECC1D0DEA35004B8653 /* PersistentStore.m in Sources */,
+				33F7BA231D0D598700AB1DA1 /* ActionViewController.m in Sources */,
+				335A8ED41D112868004B8653 /* IdentityProvider.m in Sources */,
+				335A8ED11D1127FB004B8653 /* EduIdLogin.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		33F7BA001D0D575B00AB1DA1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33F7B9E41D0D575A00AB1DA1 /* EduIDDemoExtension */;
+			targetProxy = 33F7B9FF1D0D575B00AB1DA1 /* PBXContainerItemProxy */;
+		};
+		33F7BA0B1D0D575B00AB1DA1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33F7B9E41D0D575A00AB1DA1 /* EduIDDemoExtension */;
+			targetProxy = 33F7BA0A1D0D575B00AB1DA1 /* PBXContainerItemProxy */;
+		};
+		33F7BA291D0D598700AB1DA1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33F7BA1E1D0D598700AB1DA1 /* eduIDAuthorise */;
+			targetProxy = 33F7BA281D0D598700AB1DA1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		33F7B9F11D0D575A00AB1DA1 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				33F7B9F21D0D575A00AB1DA1 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		33F7B9F61D0D575A00AB1DA1 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				33F7B9F71D0D575A00AB1DA1 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		33F7BA241D0D598700AB1DA1 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				33F7BA251D0D598700AB1DA1 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		33F7BA101D0D575B00AB1DA1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		33F7BA111D0D575B00AB1DA1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		33F7BA131D0D575B00AB1DA1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = EduIDDemoExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = HTW.EduIDDemoExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		33F7BA141D0D575B00AB1DA1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = EduIDDemoExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = HTW.EduIDDemoExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		33F7BA161D0D575B00AB1DA1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = EduIDDemoExtensionTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = HTW.EduIDDemoExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EduIDDemoExtension.app/EduIDDemoExtension";
+			};
+			name = Debug;
+		};
+		33F7BA171D0D575B00AB1DA1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = EduIDDemoExtensionTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = HTW.EduIDDemoExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EduIDDemoExtension.app/EduIDDemoExtension";
+			};
+			name = Release;
+		};
+		33F7BA191D0D575B00AB1DA1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = EduIDDemoExtensionUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = HTW.EduIDDemoExtensionUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = EduIDDemoExtension;
+			};
+			name = Debug;
+		};
+		33F7BA1A1D0D575B00AB1DA1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = EduIDDemoExtensionUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = HTW.EduIDDemoExtensionUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = EduIDDemoExtension;
+			};
+			name = Release;
+		};
+		33F7BA2C1D0D598700AB1DA1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = eduIDAuthorise/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = HTW.EduIDDemoExtension.eduIDAuthorise;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		33F7BA2D1D0D598700AB1DA1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = eduIDAuthorise/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = HTW.EduIDDemoExtension.eduIDAuthorise;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		33F7B9E01D0D575A00AB1DA1 /* Build configuration list for PBXProject "EduIDDemoExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33F7BA101D0D575B00AB1DA1 /* Debug */,
+				33F7BA111D0D575B00AB1DA1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		33F7BA121D0D575B00AB1DA1 /* Build configuration list for PBXNativeTarget "EduIDDemoExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33F7BA131D0D575B00AB1DA1 /* Debug */,
+				33F7BA141D0D575B00AB1DA1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		33F7BA151D0D575B00AB1DA1 /* Build configuration list for PBXNativeTarget "EduIDDemoExtensionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33F7BA161D0D575B00AB1DA1 /* Debug */,
+				33F7BA171D0D575B00AB1DA1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		33F7BA181D0D575B00AB1DA1 /* Build configuration list for PBXNativeTarget "EduIDDemoExtensionUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33F7BA191D0D575B00AB1DA1 /* Debug */,
+				33F7BA1A1D0D575B00AB1DA1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		33F7BA2B1D0D598700AB1DA1 /* Build configuration list for PBXNativeTarget "eduIDAuthorise" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33F7BA2C1D0D598700AB1DA1 /* Debug */,
+				33F7BA2D1D0D598700AB1DA1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 33F7B9DD1D0D575A00AB1DA1 /* Project object */;
+}
