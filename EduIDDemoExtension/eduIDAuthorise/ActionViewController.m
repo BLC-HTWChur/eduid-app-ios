@@ -170,7 +170,10 @@
 //we are done with the extension, return to caller
 -(void) extensionDone
 {
-    //create json string of server url to command extension for permanent storage
+    //create a dummy json string for the service token.
+    // FIXME use shared persistant data store for keeping the data
+    // TODO load data from data store and filter the apis.
+    // TODO attach the token data from the service endpoints to the RSD.
 
     NSDictionary *token = [NSDictionary dictionaryWithObjectsAndKeys:@"1234", @"kid", @"helloWorld", @"mac_key", @"HS256", @"mac_algorithm", @"123123121241513513", @"client_id",nil];
     NSDictionary *xapi  = [NSDictionary dictionaryWithObjectsAndKeys:@"lrs/xapi", @"apiLink", nil];
