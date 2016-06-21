@@ -171,9 +171,14 @@
 -(void) extensionDone
 {
     //create json string of server url to command extension for permanent storage
-    NSString *serverUrlText = _serverURL.text;
-    NSDictionary *serverDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                serverUrlText, CMD_SET_SERVER_URL, nil];
+
+    NSDictionary *token = [NSDictionary dictionaryWithObjectsAndKeys:@"1234", @"kid", @"helloWorld", @"mac_key", @"HS256", @"mac_algorithm", @"123123121241513513", @"client_id",nil];
+    NSDictionary *xapi  = [NSDictionary dictionaryWithObjectsAndKeys:@"lrs/xapi", @"apiLink", nil];
+    NSDictionary *qti  = [NSDictionary dictionaryWithObjectsAndKeys:@"content/qti", @"apiLink", nil];
+    NSDictionary *apis  = [NSDictionary dictionaryWithObjectsAndKeys: xapi, @"gov.adlnet.xapi", qti, @"org.imsglobal.qti", nil];
+    NSDictionary *engineRsd = [NSDictionary dictionaryWithObjectsAndKeys:@"https://moodle.htwchur.ch", @"homePageLink", @"", @"engineLink", apis, @"apis", token, @"token", nil];
+
+    NSDictionary *services = [NSDictionary dictionaryWithObjectsAndKeys: engineRsd, @"moodle.htwchur.ch", nil];
 
     //create structure to return data to the calling app
     NSExtensionItem* extensionItem = [[NSExtensionItem alloc] init];
@@ -181,7 +186,7 @@
 
     [extensionItem setAttributedTitle:[[NSAttributedString alloc] initWithString:EDUID_EXTENSION_TITLE]];
 
-    [extensionItem setAttachments:@[[[NSItemProvider alloc] initWithItem:serverDict
+    [extensionItem setAttachments:@[[[NSItemProvider alloc] initWithItem:services
                                                           typeIdentifier:EDUID_EXTENSION_TYPE]]];
 
     // call directly because the extension terminates after returning the data.

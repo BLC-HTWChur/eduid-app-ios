@@ -16,6 +16,7 @@
 		33DF1BF91CF7833700EC95DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33DF1BF71CF7833700EC95DF /* LaunchScreen.storyboard */; };
 		33DF1C041CF7833700EC95DF /* EduIDDemoContainerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33DF1C031CF7833700EC95DF /* EduIDDemoContainerTests.m */; };
 		33DF1C0F1CF7833700EC95DF /* EduIDDemoContainerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33DF1C0E1CF7833700EC95DF /* EduIDDemoContainerUITests.m */; };
+		B6B8F04E1D194B2C003C530A /* IdNativeAppIntegrationLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B8F04D1D194B2C003C530A /* IdNativeAppIntegrationLayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		33DF1C0A1CF7833700EC95DF /* EduIDDemoContainerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EduIDDemoContainerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33DF1C0E1CF7833700EC95DF /* EduIDDemoContainerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EduIDDemoContainerUITests.m; sourceTree = "<group>"; };
 		33DF1C101CF7833700EC95DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B6B8F04C1D194B18003C530A /* IdNativeAppIntegrationLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IdNativeAppIntegrationLayer.h; sourceTree = "<group>"; };
+		B6B8F04D1D194B2C003C530A /* IdNativeAppIntegrationLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdNativeAppIntegrationLayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +111,8 @@
 				33DF1BED1CF7833700EC95DF /* AppDelegate.m */,
 				33DF1BEF1CF7833700EC95DF /* ViewController.h */,
 				33DF1BF01CF7833700EC95DF /* ViewController.m */,
+				B6B8F04C1D194B18003C530A /* IdNativeAppIntegrationLayer.h */,
+				B6B8F04D1D194B2C003C530A /* IdNativeAppIntegrationLayer.m */,
 				33DF1BF21CF7833700EC95DF /* Main.storyboard */,
 				33DF1BF51CF7833700EC95DF /* Assets.xcassets */,
 				33DF1BF71CF7833700EC95DF /* LaunchScreen.storyboard */,
@@ -276,6 +281,7 @@
 			files = (
 				33DF1BF11CF7833700EC95DF /* ViewController.m in Sources */,
 				33DF1BEE1CF7833700EC95DF /* AppDelegate.m in Sources */,
+				B6B8F04E1D194B2C003C530A /* IdNativeAppIntegrationLayer.m in Sources */,
 				33DF1BEB1CF7833700EC95DF /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
