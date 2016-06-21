@@ -36,32 +36,41 @@
 
 -(IBAction)authorButtonPressed:(id)sender
 {
-    //create json strings from text fields to command extension for permannt storage
-    NSString *eduIdLoginNameText = _eduIdLoginName.text;
-    NSString *eduIdPasswordText = _eduIdPassword.text;
-    NSDictionary *serverDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                eduIdLoginNameText, CMD_SET_USER_NAME,
-                                eduIdPasswordText, CMD_SET_USER_PW,
-                                nil];
-    NSData *serverJSON=[NSJSONSerialization dataWithJSONObject:serverDict
+    NSArray *protocols = @[@"gov.adlnet.xapi", @"org.imsglobal.qti"];
+
+    NSData *serverJSON=[NSJSONSerialization dataWithJSONObject:protocols
                                                        options:0
                                                          error:nil];
+
     NSString *serverJSONText=[[NSString alloc] initWithData:serverJSON encoding:NSUTF8StringEncoding];
     NSLog(@"%@", serverJSONText);
-    
-    //put the data to be sent into an array
-    NSArray *dataToShare = @[serverJSON];
+
+    // The NSItemProvider is the hook for passing objects securely between apps
+    NSItemProvider *itemProvider = [[NSItemProvider alloc] initWithItem:protocols
+                                                         typeIdentifier:EDUID_EXTENSION_TYPE];
+
+    // The NSExtensionItem is a container for explicitly passing information
+    // between extensions and containers
+    NSExtensionItem *extensionItem = [[NSExtensionItem alloc] init];
+    extensionItem.attachments = @[ itemProvider ];
+
     //create object to access extension
-    UIActivityViewController *activityExtension = [[UIActivityViewController alloc] initWithActivityItems:dataToShare                                                                             applicationActivities:nil];
+    UIActivityViewController *activityExtension = [[UIActivityViewController alloc] initWithActivityItems:@[extensionItem]
+                                                                                    applicationActivities:nil];
     
     //define activities when the extension is finished
     activityExtension.completionWithItemsHandler=^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError)
-    {//delegate to method for code clarity
-        [self extensionCompleted:activityType
-                     isCompleted:completed
-               withItemsReturned:returnedItems
-                        hasError:activityError];
+    {
+        if (returnedItems.count > 0) {
+            // hand down to member function
+            [self extensionCompleted:activityType
+                         isCompleted:completed
+                   withItemsReturned:returnedItems
+                            hasError:activityError];
+        }
+        // No need to do anything because nothing has been received 
     };
+
     //hand over to iOS to handle the extension
     [self presentViewController:activityExtension
                        animated:YES
@@ -85,7 +94,7 @@
         NSItemProvider *itemProvider = item.attachments[0];
         //I know the item I want to get is a string and is signed as a string
         //The completion handler is called when extraction of this string is completed
-        [itemProvider loadItemForTypeIdentifier:@"NSString"
+        [itemProvider loadItemForTypeIdentifier: EDUID_EXTENSION_TYPE
                                         options:nil
                               completionHandler:^(NSString *returnText, NSError *error)
          {//delegate for code clarity

@@ -43,7 +43,7 @@
     {
         self.persistentStore=[[PersistentStore alloc] init];
     }
-    [itemProvider loadItemForTypeIdentifier:(NSString *)kUTTypeData
+    [itemProvider loadItemForTypeIdentifier: EDUID_EXTENSION_TYPE
                                     options:nil
                           completionHandler:^(NSData *receivedJson, NSError *error)
      {//handler to be performed when data receiving is finished
@@ -137,7 +137,9 @@
     [_buttonLogIn setEnabled:YES];
 }
 
-/** starts the process of authorisation at the eduID service*/
+/** 
+ * starts the process of authorisation at the eduID service
+ */
 -(void) authoriseAtEduIdService
 {
     //This is all dumyy code to simulate authorisation and to learn how to program properly ...
@@ -168,30 +170,22 @@
 //we are done with the extension, return to caller
 -(void) extensionDone
 {
-    //create json string of server url to command extension for permannt storage
+    //create json string of server url to command extension for permanent storage
     NSString *serverUrlText = _serverURL.text;
     NSDictionary *serverDict = [NSDictionary dictionaryWithObjectsAndKeys:
                                 serverUrlText, CMD_SET_SERVER_URL, nil];
-    NSData *serverJSON=[NSJSONSerialization dataWithJSONObject:serverDict
-                                                       options:0
-                                                         error:nil];
-    NSString *serverJSONText=[[NSString alloc] initWithData:serverJSON encoding:NSUTF8StringEncoding];
-    NSLog(@"%s%s%@", __FILE__, __func__, serverJSONText);
-    
-    //put the data to be sent into an array
-    NSArray *dataToShare = @[serverJSON];
-    
+
     //create structure to return data to the calling app
     NSExtensionItem* extensionItem = [[NSExtensionItem alloc] init];
     //Place the data in the transfer data structure.
-    [extensionItem setAttachments:@[[[NSItemProvider alloc] initWithItem:dataToShare typeIdentifier:@"NSData"]]];
-    
-    [[NSOperationQueue mainQueue]
-     addOperationWithBlock:^
-     {//call asynchronously
-         //place the transfer data in the extension context and finalise extension activities.
-         [self.extensionContext completeRequestReturningItems:@[extensionItem] completionHandler:nil];
-     }];
+
+    [extensionItem setAttributedTitle:[[NSAttributedString alloc] initWithString:EDUID_EXTENSION_TITLE]];
+
+    [extensionItem setAttachments:@[[[NSItemProvider alloc] initWithItem:serverDict
+                                                          typeIdentifier:EDUID_EXTENSION_TYPE]]];
+
+    // call directly because the extension terminates after returning the data.
+    [self.extensionContext completeRequestReturningItems:@[extensionItem] completionHandler:nil];
 }
 
 @end

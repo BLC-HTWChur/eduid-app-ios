@@ -14,4 +14,12 @@
 #define CMD_SET_USER_NAME @"CMD_SET_USER_NAME" //command to set the user name
 #define CMD_SET_USER_PW @"CMD_SET_USER_PW" //command to set the user name
 
+// IOS Extension Hooks
+
+// Use a fake URN, because there is no official URN for the differen OAUTH endpoints
+// at the device level.
+#define EDUID_EXTENSION_TYPE @"urn:ietf:params:oauth:assertion" // name for the app protocol
+#define EDUID_EXTENSION_TITLE @"Protocol Endpoints"
+
+
 #endif /* constants_h */
