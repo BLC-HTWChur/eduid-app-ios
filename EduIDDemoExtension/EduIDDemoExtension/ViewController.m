@@ -10,6 +10,7 @@
 
 #import "ViewController.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "../OAuthRequester.h"
 
 @interface ViewController ()
 
@@ -24,6 +25,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    OAuthRequester *req = [OAuthRequester oauthWithUrlString:@"https://eduid.htwchur.ch/eduid/eduid.php/token"];
+
+    NSString *tString =@"{\"kid\":\"1234test-14\",\"mac_key\":\"helloWorld\",\"mac_algorithm\":\"HS256\",\"client_id\":\"ch.htwchur.eduid.ios.0\",\"access_token\":\"acf5acfaa58665e6e74f9d03e504b7dce7bc9568\"}";
+
+    [req setToken:tString];
+
+    [req registerReceiver:self withSelector:@selector(requestDone)];
+    [req postClientCredentials];
+}
+
+- (void) requestDone
+{
+    NSLog(@"Oauth request completed");
 }
 
 - (void)didReceiveMemoryWarning {
