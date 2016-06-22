@@ -21,8 +21,8 @@
 		33F7BA231D0D598700AB1DA1 /* ActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F7BA221D0D598700AB1DA1 /* ActionViewController.m */; };
 		33F7BA261D0D598700AB1DA1 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33F7BA241D0D598700AB1DA1 /* MainInterface.storyboard */; };
 		33F7BA2A1D0D598700AB1DA1 /* eduIDAuthorise.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 33F7BA1F1D0D598700AB1DA1 /* eduIDAuthorise.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		B67CF59C1D1A79DD00714E32 /* NSObject+JWT.m in Sources */ = {isa = PBXBuildFile; fileRef = B67CF59B1D1A79DD00714E32 /* NSObject+JWT.m */; };
-		B67CF59D1D1A79DD00714E32 /* NSObject+JWT.m in Sources */ = {isa = PBXBuildFile; fileRef = B67CF59B1D1A79DD00714E32 /* NSObject+JWT.m */; };
+		B67CF59C1D1A79DD00714E32 /* JWT.m in Sources */ = {isa = PBXBuildFile; fileRef = B67CF59B1D1A79DD00714E32 /* JWT.m */; };
+		B67CF59D1D1A79DD00714E32 /* JWT.m in Sources */ = {isa = PBXBuildFile; fileRef = B67CF59B1D1A79DD00714E32 /* JWT.m */; };
 		B6B8F0481D19310E003C530A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6B8F0471D19310E003C530A /* MobileCoreServices.framework */; };
 /* End PBXBuildFile section */
 
@@ -93,8 +93,8 @@
 		33F7BA221D0D598700AB1DA1 /* ActionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionViewController.m; sourceTree = "<group>"; };
 		33F7BA251D0D598700AB1DA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		33F7BA271D0D598700AB1DA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B67CF59A1D1A79DD00714E32 /* NSObject+JWT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+JWT.h"; sourceTree = "<group>"; };
-		B67CF59B1D1A79DD00714E32 /* NSObject+JWT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JWT.m"; sourceTree = "<group>"; };
+		B67CF59A1D1A79DD00714E32 /* JWT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JWT.h; sourceTree = "<group>"; };
+		B67CF59B1D1A79DD00714E32 /* JWT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JWT.m; sourceTree = "<group>"; };
 		B6B8F0441D192229003C530A /* service_constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = service_constants.h; path = common/service_constants.h; sourceTree = "<group>"; };
 		B6B8F0451D192FE0003C530A /* EduIDDemoExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = EduIDDemoExtension.entitlements; sourceTree = "<group>"; };
 		B6B8F0461D193031003C530A /* eduIDAuthorise.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = eduIDAuthorise.entitlements; sourceTree = "<group>"; };
@@ -167,8 +167,8 @@
 				33F7B9EC1D0D575A00AB1DA1 /* AppDelegate.m */,
 				33F7B9EE1D0D575A00AB1DA1 /* ViewController.h */,
 				33F7B9EF1D0D575A00AB1DA1 /* ViewController.m */,
-				B67CF59A1D1A79DD00714E32 /* NSObject+JWT.h */,
-				B67CF59B1D1A79DD00714E32 /* NSObject+JWT.m */,
+				B67CF59A1D1A79DD00714E32 /* JWT.h */,
+				B67CF59B1D1A79DD00714E32 /* JWT.m */,
 				33F7B9F11D0D575A00AB1DA1 /* Main.storyboard */,
 				33F7B9F41D0D575A00AB1DA1 /* Assets.xcassets */,
 				33F7B9F61D0D575A00AB1DA1 /* LaunchScreen.storyboard */,
@@ -396,7 +396,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33F7B9F01D0D575A00AB1DA1 /* ViewController.m in Sources */,
-				B67CF59C1D1A79DD00714E32 /* NSObject+JWT.m in Sources */,
+				B67CF59C1D1A79DD00714E32 /* JWT.m in Sources */,
 				33F7B9ED1D0D575A00AB1DA1 /* AppDelegate.m in Sources */,
 				33F7B9EA1D0D575A00AB1DA1 /* main.m in Sources */,
 			);
@@ -424,7 +424,7 @@
 			files = (
 				335A8ECC1D0DEA35004B8653 /* PersistentStore.m in Sources */,
 				33F7BA231D0D598700AB1DA1 /* ActionViewController.m in Sources */,
-				B67CF59D1D1A79DD00714E32 /* NSObject+JWT.m in Sources */,
+				B67CF59D1D1A79DD00714E32 /* JWT.m in Sources */,
 				335A8ED41D112868004B8653 /* IdentityProvider.m in Sources */,
 				335A8ED11D1127FB004B8653 /* EduIdLogin.m in Sources */,
 			);
