@@ -146,9 +146,9 @@
 {
     NSString *retval = nil;
 
-    NSDictionary *token = [self getEndpointToken: serviceName];
-    NSString     *url   = [self getEndpointUrl: serviceName
-                                  withProtocol: protocolName];
+    NSDictionary *token = [self getServiceToken: serviceName];
+    NSString     *url   = [self getServiceUrl: serviceName
+                                  forProtocol: protocolName];
 
     if ([url length] > 0) {
         // NSLog(@"%@", url);
@@ -372,7 +372,7 @@
  *
  * JWT requires that all equal signs are eliminated from the end of strings.
  */
-- (NSString*)urlTrim:(NSString)encodedString
+- (NSString*)urlTrim:(NSString*)encodedString
 {
 
     NSString *retval = @"";

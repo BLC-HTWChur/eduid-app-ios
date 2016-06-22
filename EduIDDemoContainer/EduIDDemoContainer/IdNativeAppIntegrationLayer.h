@@ -14,7 +14,7 @@
 
 @interface IdNativeAppIntegrationLayer : NSObject
 
-@property (readonly, retain) NSDictionary *services;
+@property (readonly) NSDictionary *services;
 
 /**
  * Issue the device level request to the authorizing app.
