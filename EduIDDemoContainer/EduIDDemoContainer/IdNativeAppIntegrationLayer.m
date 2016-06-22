@@ -290,41 +290,47 @@
               withKey:(NSString*)strKey
         withAlgorithm:(NSString*)alg
 {
-    const char *cKey  = [strKey cStringUsingEncoding:NSASCIIStringEncoding];
-    const char *cData = [strData cStringUsingEncoding:NSASCIIStringEncoding];
-
-    unsigned char *cHMAC;
-    unsigned char c256HMAC[CC_SHA256_DIGEST_LENGTH];
-    unsigned char c384HMAC[CC_SHA384_DIGEST_LENGTH];
-    unsigned char c512HMAC[CC_SHA512_DIGEST_LENGTH];
-
     CCHmacAlgorithm ccalg = kCCHmacAlgSHA256;
-    cHMAC = c256HMAC;
 
     NSString *hash = @"";
 
     if ([alg hasPrefix:@"HS"]) {
+        NSData *keyData = [strKey dataUsingEncoding:NSUTF8StringEncoding];
+        //NSLog(@"keyData Length: %lu, Data: %@", keyData.length, keyData);
+
+        NSData *inData = [strData dataUsingEncoding:NSUTF8StringEncoding];
+        //NSLog(@"inData Length: %lu, Data: %@", inData.length, inData);
+
+        NSMutableData *HMACdata = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
+
         if ([alg isEqualToString: @"HS384"]) {
             ccalg = kCCHmacAlgSHA384;
-            cHMAC = c384HMAC;
+            HMACdata = [NSMutableData dataWithLength:CC_SHA384_DIGEST_LENGTH];
         }
         else if ([alg isEqualToString:@"HS512"]) {
             ccalg = kCCHmacAlgSHA512;
-            cHMAC = c512HMAC;
+            HMACdata = [NSMutableData dataWithLength:CC_SHA512_DIGEST_LENGTH];
         }
 
-        CCHmac(ccalg, cKey, strlen(cKey), cData, strlen(cData), cHMAC);
+        CCHmac(ccalg,
+               keyData.bytes,
+               keyData.length,
+               inData.bytes,
+               inData.length,
+               (void *)HMACdata.bytes);
 
-        NSData *HMAC = [[NSData alloc] initWithBytes:cHMAC
-                                              length:sizeof(cHMAC)];
+        // NSLog(@"Hash Mac data generated: %@", HMACdata);
 
-        hash = [HMAC base64EncodedStringWithOptions:0];
-
-        hash = [self urlTrim:hash];
+        hash = [HMACdata base64EncodedStringWithOptions:0];
+        //NSLog(@"Hash Mac generated: %@", hash);
     }
+
+    hash = [self urlTrim:hash];
+
+    //NSLog(@"%@", hash);
+
     // TODO RSA signing (RS*)
     // TODO EC signing (ES*)
-
     return hash;
 }
 
