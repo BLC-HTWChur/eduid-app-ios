@@ -3,7 +3,7 @@
 //  EduIDDemoContainer
 //
 //  Created by SII on 26.05.16.
-//  Copyright © 2016 SII. All rights reserved.
+//  Copyright © 2016 HTW Chur. All rights reserved.
 //
 
 #include "../common/constants.h" //common values for the whole project
@@ -56,8 +56,8 @@
 - (void) idExtensionCompleted {
     NSLog(@"ID Extension Completed");
 
-    NSLog(@"%@", [nail getEndpointUrl:@"moodle.htwchur.ch" withProtocol:@"gov.adlnet.xapi"]);
-    NSLog(@"%@", [nail getEndpointAuthorization:@"moodle.htwchur.ch" withProtocol:@"gov.adlnet.xapi" withClaims:nil]);
+    NSLog(@"%@", [nail getServiceUrl:@"moodle.htwchur.ch" forProtocol:@"gov.adlnet.xapi"]);
+    NSLog(@"%@", [nail getServiceAuthorization:@"moodle.htwchur.ch" forProtocol:@"gov.adlnet.xapi"]);
 }
 
 

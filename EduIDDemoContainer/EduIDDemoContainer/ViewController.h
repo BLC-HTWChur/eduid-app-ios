@@ -3,7 +3,7 @@
 //  EduIDDemoContainer
 //
 //  Created by SII on 26.05.16.
-//  Copyright © 2016 SII. All rights reserved.
+//  Copyright © 2016 HTW Chur. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
