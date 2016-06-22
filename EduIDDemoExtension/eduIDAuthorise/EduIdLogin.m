@@ -37,7 +37,7 @@
           dataTask:(NSURLSessionDataTask *)dataTask
     didReceiveData:(NSData *)data
 {
-    NSLog([[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding]);
+    NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding]);
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
@@ -108,23 +108,7 @@ didCompleteWithError:(NSError *)error{
 
 -(NSString*) login
 {
-    NSMutableURLRequest *loginRequest=[self prepareLoginRequest];
-    _eduLoginSessionTask = [[self getURLSession]
-                        dataTaskWithRequest:loginRequest];
-   NSURLResponse * response = nil;
-    NSError * error = nil;
-    NSData * data = [NSURLConnection sendSynchronousRequest:loginRequest
-                                          returningResponse:&response
-                                                      error:&error];
-    
-    if (error == nil)
-    {
-        NSLog([[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding]);
-    }
- 
-    [_eduLoginSessionTask resume];
-    
-    return @"We expect a token to be returned";
-    
+    return @"";
 }
+
 @end
