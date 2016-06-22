@@ -11,23 +11,22 @@
 @interface OAuthRequester : NSObject
 
 @property NSURL *url;
-@property (readonly) NSString *token;
-@property (readonly) NSNumber *status;
+@property NSString *deviceToken;
+@property NSString *clientToken;
+@property NSString *userToken;
 
+@property NSString *clientID; //
+
+@property (readonly) NSNumber *status;
+@property (readonly) NSString *result;
 
 + (OAuthRequester*) oauth;
 + (OAuthRequester*) oauthWithUrl:(NSURL*)turl;
-+ (OAuthRequester*) oauthWithUrl:(NSURL*)turl withToken:(NSString*)tokenString;
 + (OAuthRequester*) oauthWithUrlString:(NSString*)turl;
-+ (OAuthRequester*) oauthWithUrlString:(NSString*)turl withToken:(NSString*)tokenString;
 
 - (OAuthRequester*) init;
 - (OAuthRequester*) initWithUrl:(NSURL*)turl;
-- (OAuthRequester*) initWithUrl:(NSURL*)turl withToken:(NSString*)tokenString;
 - (OAuthRequester*) initWithUrlString:(NSString*)turl;
-- (OAuthRequester*) initWithUrlString:(NSString*)turl withToken:(NSString*)tokenString;
-
-- (void) setToken:(NSString *)ttoken;
 
 - (void) registerReceiver:(id)receiver withSelector:(SEL)selector;
 

@@ -31,19 +31,23 @@
 
 - (void) sign;
 
+- (void) hardReset;
+- (void) reset;
+- (void) resetWithTokenString: (NSString*)stoken;
+
 - (void) setClaim:(NSString*)claimName
         withValue:(NSObject*)claimValue;
 
 - (void) setHeader:(NSString*)headerName
-        withValue:(NSString*)headerValue;
+         withValue:(NSString*)headerValue;
 
-- (void) setIssuer:(NSString*)issuer;
-- (void) setSubject:(NSString*)subject;
 - (void) setAudience:(NSString*)audience;
-- (void) setIssuedAt:(NSNumber*)timestamp;
-- (void) setNotBefore:(NSNumber*)timestamp;
 - (void) setExpiration:(NSNumber*)timestamp;
 - (void) setId:(NSString*)tokenId;
+- (void) setIssuedAt:(NSNumber*)timestamp;
+- (void) setIssuer:(NSString*)issuer;
+- (void) setNotBefore:(NSNumber*)timestamp;
+- (void) setSubject:(NSString*)subject;
 
 - (void) setKid:(NSString*)kid;
 

@@ -32,13 +32,9 @@
     return [[JWT alloc] initWithTokenString:ptoken];
 }
 
-
 - (JWT*) init
 {
-    token = nil;
-    header = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"JWT", @"typ", nil];
-    claims = [NSMutableDictionary dictionary];
-
+    [self hardReset];
     return self;
 }
 
@@ -58,27 +54,46 @@
     return [self initWithToken:dToken];
 }
 
+- (void) hardReset
+{
+    [self reset];
+    token = nil;
+}
+
+- (void) reset
+{
+    header = [NSMutableDictionary dictionaryWithDictionary:@{@"typ": @"JWT"}];
+    claims = [NSMutableDictionary dictionary];
+    signature = nil;
+}
+
+- (void) resetWithTokenString:(NSString *)stoken
+{
+    [self reset];
+    token = [JWT jsonDecode:stoken];
+}
 
 - (NSString*) compact
 {
-    NSArray *tstr;
+    NSArray *strList;
+
     if (signature == nil) {
         [self sign];
     }
 
     if (signature != nil) {
-        tstr = @[[JWT base64url:[JWT jsonEncode:header]],
-                 [JWT base64url:[JWT jsonEncode:claims]],
-                 signature];
+        strList = @[[JWT base64url:[JWT jsonEncode:header]],
+                    [JWT base64url:[JWT jsonEncode:claims]],
+                    signature];
     }
     else {
-        tstr = @[[JWT base64url:[JWT jsonEncode:header]],
-                 [JWT base64url:[JWT jsonEncode:claims]],
-                 @""];
+        strList = @[[JWT base64url:[JWT jsonEncode:header]],
+                    [JWT base64url:[JWT jsonEncode:claims]],
+                    @""];
 
     }
 
-    return [tstr componentsJoinedByString:@"."];
+    return [strList componentsJoinedByString:@"."];
 }
 
 - (NSString*) json
@@ -93,20 +108,16 @@
 
     NSDictionary *result;
     if (signature != nil) {
-        result = [NSDictionary dictionaryWithObjectsAndKeys:
-                  hstr, @"header",
-                  pstr, @"protected",
-                  cstr, @"payload",
-                  signature, @"signature",
-                  nil];
+        result = @{@"header":hstr,
+                   @"protected":pstr,
+                   @"payload":cstr,
+                   @"signature":signature};
     }
     else {
-        result = [NSDictionary dictionaryWithObjectsAndKeys:
-                  [JWT jsonEncode:header], @"header",
-                  pstr, @"protected",
-                  cstr, @"payload",
-                  nil];
-
+        result = @{@"header":[JWT jsonEncode:header],
+                   @"protected":pstr,
+                   @"payload":cstr,
+                   @"signature":signature};
     }
     return [JWT jsonEncode:result];
 }
@@ -118,7 +129,9 @@
         NSString *key = [token objectForKey: @"mac_key"];
         NSString *alg = [token objectForKey: @"mac_algorithm"];
 
-        [self setIssuer:[token objectForKey: @"client_id"]];
+        if ([token objectForKey:@"client_id"])
+            [self setIssuer:[token objectForKey: @"client_id"]];
+        
         [self setHeader:@"alg" withValue:alg];
         [self setHeader:@"kid" withValue:kid];
 
@@ -132,7 +145,8 @@
                     withAlgorithm:alg];
     }
     else {
-        [self setHeader:@"alg" withValue:@"none"];
+        [self setHeader:@"alg"
+              withValue:@"none"];
     }
 }
 

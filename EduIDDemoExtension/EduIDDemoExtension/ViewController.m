@@ -18,18 +18,25 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *setServerURL;
 
+@property (readonly) OAuthRequester *req;
+
 @end
 
-@implementation ViewController
+@implementation ViewController {
+    NSInteger cntUserAuth;
+}
+
+@synthesize req;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    OAuthRequester *req = [OAuthRequester oauthWithUrlString:@"https://eduid.htwchur.ch/eduid/eduid.php/token"];
+    req = [OAuthRequester oauthWithUrlString:@"https://eduid.htwchur.ch/eduid/eduid.php/token"];
 
     NSString *tString =@"{\"kid\":\"1234test-14\",\"mac_key\":\"helloWorld\",\"mac_algorithm\":\"HS256\",\"client_id\":\"ch.htwchur.eduid.ios.0\",\"access_token\":\"acf5acfaa58665e6e74f9d03e504b7dce7bc9568\"}";
 
-    [req setToken:tString];
+    cntUserAuth = 0;
+    [req setDeviceToken:tString];
 
     [req registerReceiver:self withSelector:@selector(requestDone)];
     [req postClientCredentials];
@@ -37,7 +44,25 @@
 
 - (void) requestDone
 {
-    NSLog(@"Oauth request completed");
+    NSLog(@"Oauth request completed with %@", [req status]);
+
+    if ([req result])
+        NSLog(@"request result %@", [req result]);
+
+    if ([req deviceToken])
+        NSLog(@"device token %@", [req deviceToken]);
+    if ([req clientToken])
+        NSLog(@"client token %@", [req clientToken]);
+    if ([req userToken])
+        NSLog(@"user token %@", [req userToken]);
+
+    if ([[req status]  isEqual: @200] &&
+        [req clientToken] &&
+        cntUserAuth == 0) {
+        NSLog(@"try to authenticate");
+        cntUserAuth = cntUserAuth + 1;
+        [req postPassword:@"test1234" forUser:@"cgl@htwchur.ch"];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

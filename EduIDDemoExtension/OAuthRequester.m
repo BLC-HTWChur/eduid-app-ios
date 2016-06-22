@@ -9,6 +9,7 @@
 #import "OAuthRequester.h"
 #import "EduIDDemoExtension/JWT.h"
 
+
 @import Foundation;
 @import UIKit;
 
@@ -16,11 +17,24 @@
     id callerObject;
     SEL callerSelector;
     JWT *jwt;
+
+    NSInteger targetToken;
+    NSString *deviceId;
+    NSString *deviceName;
+    NSString *clientId;
 }
 
 @synthesize url;
-@synthesize token;
+@synthesize deviceToken;
+@synthesize clientToken;
+@synthesize userToken;
+
 @synthesize status;
+@synthesize result;
+
+NSInteger const DEVICE_TOKEN = 1;
+NSInteger const CLIENT_TOKEN = 2;
+NSInteger const ACCESS_TOKEN   = 3;
 
 + (OAuthRequester*) oauth
 {
@@ -32,22 +46,9 @@
     return [[OAuthRequester alloc] initWithUrl:turl];
 }
 
-+ (OAuthRequester*) oauthWithUrl:(NSURL*)turl
-                       withToken:(NSString*)tokenString
-{
-    return [[OAuthRequester alloc] initWithUrl:turl withToken:tokenString];
-}
-
 + (OAuthRequester*) oauthWithUrlString:(NSString*)turl
 {
     return [[OAuthRequester alloc] initWithUrlString:turl];
-}
-
-+ (OAuthRequester*) oauthWithUrlString:(NSString*)turl
-                             withToken:(NSString*)tokenString
-{
-    return [[OAuthRequester alloc] initWithUrlString:turl
-                                           withToken:tokenString];
 }
 
 - (OAuthRequester*) init
@@ -55,8 +56,11 @@
     return self;
 
     url = nil;
-    token = nil;
+    deviceToken = nil;
+    clientToken = nil;
+    userToken = nil;
     jwt = nil;
+
 }
 
 - (OAuthRequester*) initWithUrl:(NSURL*)turl
@@ -67,155 +71,116 @@
 
     return self;
 }
-- (OAuthRequester*) initWithUrl:(NSURL*)turl
-                      withToken:(NSString*)tokenString
-{
-    self = [self initWithUrl:turl];
 
-    token = tokenString;
-
-    jwt = [JWT jwtWithTokenString:token];
-
-    return self;
-}
 - (OAuthRequester*) initWithUrlString:(NSString*)turl
 {
     return [self initWithUrl:[NSURL URLWithString:turl]];
 }
 
-- (OAuthRequester*) initWithUrlString:(NSString*)turl
-                            withToken:(NSString*)tokenString
+- (void) selectToken: (NSString*)token
 {
-    return [self initWithUrl:[NSURL URLWithString:turl]
-                   withToken:tokenString];
-}
-
-- (void) setToken:(NSString *)ttoken
-{
-    token = ttoken;
     if (jwt != nil) {
-        [jwt setToken: [JWT jsonDecode:ttoken]];
+        [jwt resetWithTokenString:token];
     }
     else {
         jwt = [JWT jwtWithTokenString:token];
     }
 }
 
+- (void) selectDeviceToken
+{
+    if (deviceToken != nil) {
+        [self selectToken:deviceToken];
+    }
+    else if (jwt != nil) {
+        [jwt hardReset];
+    }
+}
+
+- (void) selectClientToken
+{
+    if (clientToken != nil) {
+        [self selectToken:clientToken];
+    }
+    else if (jwt != nil) {
+        [jwt hardReset];
+    }
+}
+
+- (void) selectUserToken
+{
+    if (userToken != nil) {
+        [self selectToken:userToken];
+    }
+    else if (jwt != nil) {
+        [jwt hardReset];
+    }
+}
+
 - (void) registerReceiver:(id)receiver
              withSelector:(SEL)selector
 {
-    callerObject = receiver;
+    callerObject   = receiver;
     callerSelector = selector;
 }
 
+// helper to test the service availability
 - (void) GET
 {
-    NSString *authValue = @"";
-
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
 
-    if (jwt != nil) {
-        authValue = [@[@"Bearer", [jwt compact]] componentsJoinedByString:@" "];
-        if ([authValue length] > 0) {
-            NSLog(@"%@", authValue);
-            sessionConfiguration.HTTPAdditionalHeaders = @{@"Authorization": authValue};
-        }
-    }
+    [self setAuthHeader:sessionConfiguration];
 
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler:^(NSData *data,
-                                                                NSURLResponse *response,
-                                                                NSError *error) {
-
-        if (!error) {
-            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-
-            status = [NSNumber numberWithInteger:httpResponse.statusCode];
-
-            NSLog(@"%ld", httpResponse.statusCode);
-            if (data && [data length]) {
-                NSLog(@"%@", [[NSString alloc] initWithData:data
-                                                   encoding:NSUTF8StringEncoding]);
-            }
-            else {
-                NSLog(@"received no data");
-            }
-
-            [self completeRequest];
-//
-//            if (httpResponse.statusCode == 200){
-//                NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers|NSJSONReadingAllowFragments error:nil];
-//
-//                //Process the data
-//            }
-        }
-        
-    }];
+                                            completionHandler:[self getResponseCallback]];
     [task resume];
 }
 
+// send the client_credentials request
 - (void) postClientCredentials
 {
-    NSString *authValue = @"";
+    [self prepareDeviceToken];
 
-    UIDevice *device = [UIDevice currentDevice];
-    NSString *deviceID = [[device identifierForVendor] UUIDString];
+    NSDictionary *reqdata = @{@"grant_type": @"client_credentials"};
+
+
+    [self postJSONData:reqdata forTokenType:CLIENT_TOKEN];
+}
+
+- (void) postPassword:(NSString*)password forUser:(NSString*)username
+{
+    [self prepareToken:CLIENT_TOKEN];
+    NSDictionary *reqdata = @{
+                              @"grant_type": @"password",
+                              @"username": username,
+                              @"password": password
+                              };
+
+    [self postJSONData:reqdata forTokenType:ACCESS_TOKEN];
+}
+
+- (void) postJSONData: (NSDictionary*)dict forTokenType:(NSInteger)tokenType
+{
+    NSData *data = [[JWT jsonEncode:dict] dataUsingEncoding:NSUTF8StringEncoding];
 
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
 
-    if (jwt != nil) {
-        [jwt setSubject:deviceID];
-        [jwt setAudience:[url absoluteString]];
-        [jwt setClaim:@"name" withValue:[device name]];
-
-
-        authValue = [@[@"Bearer", [jwt compact]] componentsJoinedByString:@" "];
-        if ([authValue length] > 0) {
-            NSLog(@"%@", authValue);
-            sessionConfiguration.HTTPAdditionalHeaders = @{@"Authorization": authValue};
-        }
-    }
+    [self setAuthHeader:sessionConfiguration];
 
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
 
     [request setHTTPMethod:@"POST"];
 
-    NSDictionary *reqdata = [NSDictionary dictionaryWithObjectsAndKeys:@"client_credentials", @"grant_type", nil];
-    NSData *data = [[JWT jsonEncode:reqdata] dataUsingEncoding:NSUTF8StringEncoding];
-
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:data];
 
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-
-        if (!error) {
-            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-
-            status = [NSNumber numberWithInteger:httpResponse.statusCode];
-
-            NSLog(@"%ld", httpResponse.statusCode);
-            if (data && [data length]) {
-                NSLog(@"%@", [[NSString alloc] initWithData:data
-                                                   encoding:NSUTF8StringEncoding]);
-            }
-            else {
-                NSLog(@"received no data");
-            }
-
-            [self completeRequest];
-        }
-        
-    }];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:[self getResponseCallbackForToken:tokenType]];
     [task resume];
-}
-
-- (void) postPassword:(NSString*)password forUser:(NSString*)username
-{
-    [self completeRequest];
 }
 
 
@@ -229,6 +194,116 @@
         void (*func)(id, SEL) = (void *)imp;
         func(callerObject, callerSelector);
     }
+}
+
+- (void) setAuthHeader:(NSURLSessionConfiguration*)config
+{
+    if (jwt != nil) {
+        NSString *authValue = [@[@"Bearer", [jwt compact]] componentsJoinedByString:@" "];
+
+        if ([authValue length] > 0) {
+            config.HTTPAdditionalHeaders = @{@"Authorization": authValue};
+        }
+    }
+    else {
+        NSLog(@"no jwt present?");
+    }
+}
+
+- (void) prepareToken:(NSInteger)tokenId
+{
+    UIDevice *device = [UIDevice currentDevice];
+    deviceId = [[device identifierForVendor] UUIDString];
+
+    switch (tokenId) {
+        case CLIENT_TOKEN:
+            [self selectClientToken];
+            break;
+        case ACCESS_TOKEN:
+            [self selectUserToken];
+            break;
+        default:
+            break;
+    }
+
+    if (jwt != nil) {
+
+        [jwt setIssuer: deviceId];
+        [jwt setAudience:[url absoluteString]];
+    }
+}
+
+- (void) prepareDeviceToken
+{
+    UIDevice *device = [UIDevice currentDevice];
+    deviceId = [[device identifierForVendor] UUIDString];
+    deviceName = [device name];
+
+    [self selectDeviceToken];
+
+    if (jwt != nil) {
+        NSLog(@"%@", deviceId);
+        NSLog(@"%@", deviceName);
+
+        [jwt setSubject:deviceId];
+        [jwt setAudience:[url absoluteString]];
+
+        clientId = [[jwt token] objectForKey:@"client_id"];
+
+        [jwt setClaim:@"name"
+            withValue:deviceName];
+    }
+}
+
+// call back factory
+- (void (^)(NSData*, NSURLResponse*, NSError*)) getResponseCallback
+{
+    return [self getResponseCallbackForToken:0];
+}
+
+- (void (^)(NSData*, NSURLResponse*, NSError*)) getResponseCallbackForToken:(NSInteger)tokenId
+{
+    // reset the status and the result.
+    result = @"";
+    status = [NSNumber numberWithInteger:-1];
+
+    return ^(NSData *data,
+             NSURLResponse *response,
+             NSError *error) {
+
+        if (!error) {
+
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+
+            status = [NSNumber numberWithInteger:httpResponse.statusCode];
+            NSLog(@"status %ld", [status integerValue]);
+
+            if (data &&
+                [data length]) {
+                result = [[NSString alloc] initWithData:data
+                                               encoding:NSUTF8StringEncoding];
+                NSLog(@"result %@", result);
+
+                if ([status isEqual: @200]) {
+                    NSLog(@"status %ld", tokenId);
+                    switch (tokenId) {
+                        case CLIENT_TOKEN:
+                            NSLog(@"assign client token");
+                            clientToken = result;
+                            break;
+                        case ACCESS_TOKEN:
+                            NSLog(@"assign access token");
+                            userToken = result;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+            }
+        }
+        [self completeRequest];
+    };
 }
 
 @end
