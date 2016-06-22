@@ -64,14 +64,14 @@
             if (activityError == nil &&
                 returnedItems.count > 0) {
 
-                NSLog(@"Return from Extension with success");
+                // NSLog(@"Return from Extension with success");
 
                 // normal app extensions always complete on return.
                 [self extensionCompleted:activityType
                        withItemsReturned:returnedItems];
             }
             else if (activityError != nil) {
-                NSLog(@"Activity failed to complete");
+                // NSLog(@"Activity failed to complete");
                 [self completeAuthorization];
             }
         };
@@ -151,7 +151,7 @@
                                   withProtocol: protocolName];
 
     if ([url length] > 0) {
-        NSLog(@"%@", url);
+        // NSLog(@"%@", url);
 
         NSString *appID = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
 
@@ -159,7 +159,6 @@
         // NSString *deviceID = [[device identifierForVendor] UUIDString];
 
         NSNumber *ti = [NSNumber numberWithInteger:[[NSDate date] timeIntervalSince1970]];
-        NSLog(@"%@", ti);
 
         retval = [token objectForKey: @"access_key"];
 
@@ -186,12 +185,6 @@
                               withAlgorithm:[token objectForKey:@"mac_algorithm"]];
 
             retval = [@[estr, sign] componentsJoinedByString: @"."];
-            
-            //    NSLog(@"%@", hstr);
-            NSLog(@"%@",cstr);
-            //    NSLog(@"%@",estr);
-            //    NSLog(@"%@",sign);
-            //    NSLog(@"%@",retval);
         }
     }
     // generate the JWT
@@ -242,7 +235,7 @@
      {
          // ensure that the attached item is properly loaded
          if (error == nil) {
-             NSLog(@"got dictionary %@", [self jsonEncode:epDict]);
+             // NSLog(@"got dictionary %@", [self jsonEncode:epDict]);
 
              // store it in the client.
              services = epDict;
@@ -263,7 +256,7 @@
     if (callerObject != nil &&
         selector != nil) {
 
-        NSLog(@"complete authorization");
+        // NSLog(@"complete authorization");
 
         IMP imp = [callerObject methodForSelector:selector];
         void (*func)(id, SEL) = (void *)imp;
