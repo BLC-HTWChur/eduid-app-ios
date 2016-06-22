@@ -118,13 +118,14 @@
         NSString *key = [token objectForKey: @"mac_key"];
         NSString *alg = [token objectForKey: @"mac_algorithm"];
 
+        [self setIssuer:[token objectForKey: @"client_id"]];
+        [self setHeader:@"alg" withValue:alg];
+        [self setHeader:@"kid" withValue:kid];
+
         NSString *hstr =[JWT base64url:[JWT jsonEncode:header]];
         NSString *cstr =[JWT base64url:[JWT jsonEncode:claims]];
 
-        NSString *estr = [@[[JWT base64url:hstr],[JWT base64url:cstr]] componentsJoinedByString: @"."];
-
-        [self setHeader:@"alg" withValue:alg];
-        [self setHeader:@"kid" withValue:kid];
+        NSString *estr = [@[hstr,cstr] componentsJoinedByString: @"."];
 
         signature = [JWT signData:estr
                           withKey:key
@@ -228,36 +229,39 @@
               withKey:(NSString*)strKey
         withAlgorithm:(NSString*)alg
 {
-    const char *cKey  = [strKey cStringUsingEncoding:NSASCIIStringEncoding];
-    const char *cData = [strData cStringUsingEncoding:NSASCIIStringEncoding];
-
-    unsigned char *cHMAC;
-    unsigned char c256HMAC[CC_SHA256_DIGEST_LENGTH];
-    unsigned char c384HMAC[CC_SHA384_DIGEST_LENGTH];
-    unsigned char c512HMAC[CC_SHA512_DIGEST_LENGTH];
-
     CCHmacAlgorithm ccalg = kCCHmacAlgSHA256;
-    cHMAC = c256HMAC;
 
     NSString *hash = @"";
 
     if ([alg hasPrefix:@"HS"]) {
+        NSData *keyData = [strKey dataUsingEncoding:NSUTF8StringEncoding];
+        //NSLog(@"keyData Length: %lu, Data: %@", keyData.length, keyData);
+
+        NSData *inData = [strData dataUsingEncoding:NSUTF8StringEncoding];
+        //NSLog(@"inData Length: %lu, Data: %@", inData.length, inData);
+
+        NSMutableData *HMACdata = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
+
         if ([alg isEqualToString: @"HS384"]) {
             ccalg = kCCHmacAlgSHA384;
-            cHMAC = c384HMAC;
+             HMACdata = [NSMutableData dataWithLength:CC_SHA384_DIGEST_LENGTH];
         }
         else if ([alg isEqualToString:@"HS512"]) {
             ccalg = kCCHmacAlgSHA512;
-            cHMAC = c512HMAC;
+            HMACdata = [NSMutableData dataWithLength:CC_SHA512_DIGEST_LENGTH];
         }
 
-        CCHmac(ccalg, cKey, strlen(cKey), cData, strlen(cData), cHMAC);
+        CCHmac(ccalg,
+               keyData.bytes,
+               keyData.length,
+               inData.bytes,
+               inData.length,
+               (void *)HMACdata.bytes);
 
-        NSData *HMAC = [[NSData alloc] initWithBytes:cHMAC
-                                              length:sizeof(cHMAC)];
+        // NSLog(@"Hash Mac data generated: %@", HMACdata);
 
-        hash = [HMAC base64EncodedStringWithOptions:0];
-
+        hash = [HMACdata base64EncodedStringWithOptions:0];
+        //NSLog(@"Hash Mac generated: %@", hash);
         hash = [JWT urlTrim:hash];
     }
     // TODO RSA signing (RS*)
@@ -318,7 +322,7 @@
 
     if (encodedString != nil &&
         [encodedString length]) {
-        retval  = [encodedString stringByTrimmingCharactersInSet: equalSet];
+        retval  = [encodedString stringByTrimmingCharactersInSet:equalSet];
     }
     return retval;
     

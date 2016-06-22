@@ -47,6 +47,9 @@
 
 - (void) setKid:(NSString*)kid;
 
++ (NSString*) jsonEncode:(NSDictionary*)dict;
++ (NSDictionary*) jsonDecode:(NSString*)jsonString;
+
 @end
 
 #endif
