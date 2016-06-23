@@ -9,7 +9,6 @@
 #import "OAuthRequester.h"
 #import "EduIDDemoExtension/JWT.h"
 
-
 @import Foundation;
 @import UIKit;
 
@@ -22,19 +21,26 @@
     NSString *deviceId;
     NSString *deviceName;
     NSString *clientId;
+    
+    NSManagedObjectContext *context;
 }
 
 @synthesize url;
 @synthesize deviceToken;
-@synthesize clientToken;
-@synthesize userToken;
+@synthesize clientToken = _clientToken;
+@synthesize accessToken = _accessToken;
+
+@synthesize clientData;
+@synthesize accessData;
 
 @synthesize status;
 @synthesize result;
 
+@synthesize dataStore = _DS;
+
 NSInteger const DEVICE_TOKEN = 1;
 NSInteger const CLIENT_TOKEN = 2;
-NSInteger const ACCESS_TOKEN   = 3;
+NSInteger const ACCESS_TOKEN = 3;
 
 + (OAuthRequester*) oauth
 {
@@ -57,10 +63,13 @@ NSInteger const ACCESS_TOKEN   = 3;
 
     url = nil;
     deviceToken = nil;
-    clientToken = nil;
-    userToken = nil;
+    _clientToken = nil;
+    _accessToken = nil;
+    
+    clientData = nil;
+    accessData = nil;
+    
     jwt = nil;
-
 }
 
 - (OAuthRequester*) initWithUrl:(NSURL*)turl
@@ -87,6 +96,89 @@ NSInteger const ACCESS_TOKEN   = 3;
     }
 }
 
+// persistent token management
+// Fetch the tokens from the local data store
+
+- (void) setDataStore:(SharedDataStore *)dataStore
+{
+    _DS = dataStore;
+    [self loadTokens];
+}
+
+- (void) loadTokens
+{
+    if (_DS != nil) {
+        NSManagedObjectContext *moc = [_DS managedObjectContext];
+        
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Tokens"];
+        
+        NSError *error = nil;
+        NSArray *results = [moc executeFetchRequest:request error:&error];
+        if (results) {
+            for (Tokens *t in results)
+            {
+                if ([[t subject] isEqual: @"ch.eduid.app"] &&
+                    [[t target] isEqual: @"eduid.htwchur.ch"]) {
+                    
+                    if ([[t type] isEqual: @"client"]) {
+                        clientData = t;
+                        _clientToken = [t token];
+                        NSLog(@"client token: %@", _clientToken);
+                    }
+                    else if ([[t type] isEqual: @"access"]) {
+                        accessData = t;
+                        _accessToken = [t token];
+                        NSLog(@"access token: %@", _accessToken);
+                    }
+                }
+            }
+        }
+    }
+}
+
+-(void) storeTokens
+{
+    if (_DS != nil) [_DS saveContext];
+}
+
+// request management
+
+- (void) setClientToken:(NSString *)clientToken
+{
+    _clientToken = clientToken;
+    
+    if (_DS != nil) {
+        if (clientData == nil) {
+            clientData = [NSEntityDescription insertNewObjectForEntityForName:@"Tokens"
+                                                       inManagedObjectContext:[_DS managedObjectContext]];
+            [clientData setTarget:@"eduid.htwchur.ch"];
+            [clientData setSubject:@"ch.eduid.app"];
+            [clientData setType:@"client"];
+        }
+        
+        [clientData setToken:clientToken];
+        [_DS saveContext];
+    }
+}
+
+- (void) setAccessToken:(NSString *)accessToken
+{
+    _accessToken = accessToken;
+    
+    if (_DS != nil) {
+        if (accessData == nil) {
+            accessData = [NSEntityDescription insertNewObjectForEntityForName:@"Tokens"
+                                                       inManagedObjectContext:[_DS managedObjectContext]];
+            [accessData setTarget:@"eduid.htwchur.ch"];
+            [accessData setSubject:@"ch.eduid.app"];
+            [accessData setType:@"access"];
+        }
+        
+        [accessData setToken:accessToken];
+        [_DS saveContext];
+    }
+}
+
 - (void) selectDeviceToken
 {
     if (deviceToken != nil) {
@@ -99,8 +191,8 @@ NSInteger const ACCESS_TOKEN   = 3;
 
 - (void) selectClientToken
 {
-    if (clientToken != nil) {
-        [self selectToken:clientToken];
+    if (_clientToken != nil) {
+        [self selectToken:_clientToken];
     }
     else if (jwt != nil) {
         [jwt hardReset];
@@ -109,8 +201,8 @@ NSInteger const ACCESS_TOKEN   = 3;
 
 - (void) selectUserToken
 {
-    if (userToken != nil) {
-        [self selectToken:userToken];
+    if (_accessToken != nil) {
+        [self selectToken:_accessToken];
     }
     else if (jwt != nil) {
         [jwt hardReset];
@@ -289,11 +381,11 @@ NSInteger const ACCESS_TOKEN   = 3;
                     switch (tokenId) {
                         case CLIENT_TOKEN:
                             NSLog(@"assign client token");
-                            clientToken = result;
+                            [self setClientToken:result];
                             break;
                         case ACCESS_TOKEN:
                             NSLog(@"assign access token");
-                            userToken = result;
+                            [self setAccessToken:result];
                             break;
                         default:
                             break;

@@ -8,10 +8,10 @@
 
 #include "../common/constants.h" //common values for the whole project
 
+@import MobileCoreServices;
+
 #import "ActionViewController.h"
-#import "PersistentStore.h"
-#import "IdentityProvider.h"
-#import <MobileCoreServices/MobileCoreServices.h>
+#import "../OAuthRequester.h"
 
 @interface ActionViewController ()
 
@@ -25,65 +25,58 @@
 
 @property (weak, nonatomic) IBOutlet UIView *canvas;
 
-@property (strong, nonatomic) PersistentStore *persistentStore;
-
-@property (strong, nonatomic) IdentityProvider *identityProvider;
-
 @end
 
 @implementation ActionViewController
 
+
+@synthesize eduIdDS = _dataStore;
+
+- (SharedDataStore*)eduIdDS
+{
+    if (!_dataStore) {
+        _dataStore = [[SharedDataStore alloc] init];
+    }
+    return _dataStore;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _identityProvider=[[IdentityProvider alloc] init];
-    //I know there is only a simple text object in the array of data which was given to the extension.
+
+    // init out shared data and the OAuthRequester
+    
+    SharedDataStore *ds = [self eduIdDS];
+    
+    NSString *tString =@"{\"kid\":\"1234test-14\",\"mac_key\":\"helloWorld\",\"mac_algorithm\":\"HS256\",\"client_id\":\"ch.htwchur.eduid.ios.0\",\"access_token\":\"acf5acfaa58665e6e74f9d03e504b7dce7bc9568\"}";
+    
+    OAuthRequester *req = [OAuthRequester oauthWithUrlString:@"https://eduid.htwchur.ch/eduid/eduid.php/token"];
+    
+    [req setDataStore:ds];
+    [req setDeviceToken:tString];
+    
+    // we should see our shared keys in the logs.
+    
+    // Now it is time to look at which protocols have to be handled.
+
     NSExtensionItem *item = self.extensionContext.inputItems[0];
     NSItemProvider *itemProvider = item.attachments[0];
-    if(nil == _persistentStore)
-    {
-        self.persistentStore=[[PersistentStore alloc] init];
-    }
+    
     [itemProvider loadItemForTypeIdentifier: EDUID_EXTENSION_TYPE
                                     options:nil
-                          completionHandler:^(NSData *receivedJson, NSError *error)
-     {//handler to be performed when data receiving is finished
-         //delegated for code clarity
-         [self completionLoadItemForTypeIdentifier:receivedJson
-                                         withError:error];
+                          completionHandler:^(id results, NSError *error)
+     {
+         if (!error) {
+             [self receiveProtocols:(NSArray*)results];
+         }
      }];
 
 }
 
 //This is called by the completion handler (when data unpacking of the data sent by the extension is finished)
--(void) completionLoadItemForTypeIdentifier:(NSData *) receivedData
-                                  withError:(NSError *) error
+-(void) receiveProtocols:(NSArray *) protocolList
 {
-    //We expect to find a command in the dictionery. It will be stored here
-    NSString *cmdContent;
-    //parse received data to dictionary
-    NSDictionary* receivedDataJson = [NSJSONSerialization JSONObjectWithData:receivedData options:kNilOptions error:&error];
-    //search for command CMD_SET_SERVER_URL
-    cmdContent=receivedDataJson[CMD_SET_SERVER_URL];
-    if (nil != cmdContent)
-    {//command was found
-        [self setServerUrl:cmdContent];
-        [self setUiCalledFromExtensionShell];
-        //[self extensionDone]; //seems not to work from here (Why ever)
-        return;
-    }
-    //all shell possibilities are exhausted -> we were called by a container
-    [self setUiCalledFromContainer];
-    //search for command CMD_SET_USER_NAME
-    cmdContent=receivedDataJson[CMD_SET_USER_NAME];
-    if (nil != cmdContent)
-    {//command was found
-        [self setUserName:cmdContent];
-    }
-    //search for command CMD_SET_USER_PW
-    cmdContent=receivedDataJson[CMD_SET_USER_PW];
-    if (nil != cmdContent)
-    {//command was found
-        [self setUserPw:cmdContent];
+    for (NSString *s in protocolList) {
+        NSLog(@"Protocol Name: %@", s);
     }
 }
 
@@ -92,69 +85,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-//Button reaction -> log in
-- (IBAction)logIn:(id)sender {
-    [self authoriseAtEduIdService];
-}
 
 //button to finish extension was pressed
 - (IBAction)done {
     //we are finished
     [self extensionDone];
-}
-
--(void) setServerUrl:(NSString *) serverURL
-{
-    _serverURL.text=serverURL;
-    _persistentStore.eduIdServerURL=[NSURL URLWithString:serverURL];
-    [_persistentStore saveDefaults];
-}
-
--(void) setUserName:(NSString *) userName
-{
-    _eduIdLoginName.text=userName;
-    _persistentStore.eduIdUserName=userName;
-    [_persistentStore saveDefaults];
-}
-
--(void) setUserPw:(NSString *) userPw
-{
-    _eduIdPassword.text=userPw;
-}
-
-//When we were called from the shell of the extension, we only want to display the server URL
--(void) setUiCalledFromExtensionShell
-{
-    [_eduIdLoginName setEnabled:NO];
-    [_eduIdPassword setEnabled:NO];
-    [_buttonLogIn setEnabled:NO];
-}
-
--(void) setUiCalledFromContainer
-{
-    [_eduIdLoginName setEnabled:YES];
-    [_eduIdPassword setEnabled:YES];
-    [_buttonLogIn setEnabled:YES];
-}
-
-/** 
- * starts the process of authorisation at the eduID service
- */
--(void) authoriseAtEduIdService
-{
-    //This is all dumyy code to simulate authorisation and to learn how to program properly ...
-    [self viewEnableGUI:NO];
-    _canvas.backgroundColor=[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.5];
-    [_identityProvider login];
-    if([_eduIdLoginName.text caseInsensitiveCompare:@"OK"] == NSOrderedSame)
-    {
-        _canvas.backgroundColor=[UIColor colorWithRed:0.2 green:0.82 blue:0.2 alpha:0.5];
-    }
-    else
-    {
-        _canvas.backgroundColor=[UIColor colorWithRed:0.8 green:0.2 blue:0.2 alpha:0.5];
-    }
-    [self viewEnableGUI:YES];
 }
 
 /** enable or disable the whole GUI

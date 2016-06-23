@@ -8,12 +8,25 @@
 
 #import "AppDelegate.h"
 
+#import "../SharedDataStore.h"
+
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
 
+@synthesize eduIdDS = _dataStore;
+
+- (SharedDataStore*)eduIdDS
+{
+    NSLog(@"get data store");
+    if (!_dataStore) {
+        _dataStore = [[SharedDataStore alloc] init];
+        NSLog(@"got data store");
+    }
+    return _dataStore;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -41,5 +54,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
 
 @end

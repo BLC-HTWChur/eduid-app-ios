@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *token;
 @property (nullable, nonatomic, retain) NSString *type;
 @property (nullable, nonatomic, retain) NSString *target;
-@property (nullable, nonatomic, retain) NSString *source;
+@property (nullable, nonatomic, retain) NSString *subject;
 
 @end
 

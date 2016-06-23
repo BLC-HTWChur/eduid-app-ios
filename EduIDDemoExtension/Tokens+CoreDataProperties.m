@@ -16,6 +16,6 @@
 @dynamic token;
 @dynamic type;
 @dynamic target;
-@dynamic source;
+@dynamic subject;
 
 @end

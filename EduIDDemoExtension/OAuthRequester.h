@@ -6,19 +6,28 @@
 //  Copyright © 2016 SII. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
+
+#import "SharedDataStore.h"
+#import "Tokens+CoreDataProperties.h"
 
 @interface OAuthRequester : NSObject
 
-@property NSURL *url;
-@property NSString *deviceToken;
-@property NSString *clientToken;
-@property NSString *userToken;
+@property (retain, nonatomic) NSURL *url;
+@property (retain, nonatomic) NSString *deviceToken;
+@property (retain, setter=setRawClientToken:) NSString *clientToken;
+@property (retain, setter=setRawAccessToken:) NSString *accessToken;
 
-@property NSString *clientID; //
+@property (retain, nonatomic) NSString *clientID; //
 
-@property (readonly) NSNumber *status;
-@property (readonly) NSString *result;
+@property (readonly, retain) NSNumber *status;
+@property (readonly, retain) NSString *result;
+
+@property (retain, setter=setRawDataStore:) SharedDataStore *dataStore;
+
+@property (retain, nonatomic) Tokens *clientData;
+@property (retain, nonatomic)Tokens *accessData;
+
 
 + (OAuthRequester*) oauth;
 + (OAuthRequester*) oauthWithUrl:(NSURL*)turl;
@@ -28,10 +37,15 @@
 - (OAuthRequester*) initWithUrl:(NSURL*)turl;
 - (OAuthRequester*) initWithUrlString:(NSString*)turl;
 
+- (void) setDataStore:(SharedDataStore *)dataStore;
+
 - (void) registerReceiver:(id)receiver withSelector:(SEL)selector;
 
 - (void) GET;
 - (void) postClientCredentials;
 - (void) postPassword:(NSString*)password forUser:(NSString*)username;
+
+- (void) loadTokens;
+- (void) storeTokens;
 
 @end

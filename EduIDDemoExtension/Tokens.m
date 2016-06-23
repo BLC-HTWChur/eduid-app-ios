@@ -11,5 +11,9 @@
 @implementation Tokens
 
 // Insert code here to add functionality to your managed object subclass
+@dynamic token;
+@dynamic type;
+@dynamic target;
+@dynamic subject;
 
 @end
