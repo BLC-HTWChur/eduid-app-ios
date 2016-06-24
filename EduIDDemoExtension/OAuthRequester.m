@@ -254,6 +254,25 @@ NSInteger const ACCESS_TOKEN = 3;
     [self postJSONData:reqdata forTokenType:ACCESS_TOKEN];
 }
 
+- (void) logout{
+    // delete accessToken
+    if (_accessToken &&
+        accessData &&
+        _DS) {
+
+        NSString * tAccessToken = _accessToken;
+
+        [[_DS managedObjectContext] deleteObject: accessData];
+        [_DS saveContext];
+
+        accessData = nil;
+
+        // invalidate token at the IDP
+        // TODO implement token invalidation based on RFC
+    }
+
+}
+
 - (void) postJSONData: (NSDictionary*)dict forTokenType:(NSInteger)tokenType
 {
     NSData *data = [[JWT jsonEncode:dict] dataUsingEncoding:NSUTF8StringEncoding];

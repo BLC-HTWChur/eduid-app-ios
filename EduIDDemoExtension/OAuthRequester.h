@@ -45,6 +45,8 @@
 - (void) postClientCredentials;
 - (void) postPassword:(NSString*)password forUser:(NSString*)username;
 
+- (void) logout;
+
 - (void) loadTokens;
 - (void) storeTokens;
 
