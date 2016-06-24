@@ -26,6 +26,18 @@
 		B6CAB1411D1D450500577A58 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CAB1401D1D450500577A58 /* ProfileViewController.m */; };
 		B6CAB1441D1D451B00577A58 /* LogoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CAB1431D1D451B00577A58 /* LogoutViewController.m */; };
 		B6CAB1471D1D4C5A00577A58 /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CAB1461D1D4C5A00577A58 /* SplashViewController.m */; };
+		B6D86AE41D1DB06000813415 /* Protocols+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AE11D1DB06000813415 /* Protocols+CoreDataProperties.m */; };
+		B6D86AE51D1DB06000813415 /* Protocols+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AE11D1DB06000813415 /* Protocols+CoreDataProperties.m */; };
+		B6D86AE61D1DB06000813415 /* Protocols.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AE31D1DB06000813415 /* Protocols.m */; };
+		B6D86AE71D1DB06000813415 /* Protocols.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AE31D1DB06000813415 /* Protocols.m */; };
+		B6D86AF41D1DB09800813415 /* UserService+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AF11D1DB09800813415 /* UserService+CoreDataProperties.m */; };
+		B6D86AF51D1DB09800813415 /* UserService+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AF11D1DB09800813415 /* UserService+CoreDataProperties.m */; };
+		B6D86AF61D1DB09800813415 /* UserService.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AF31D1DB09800813415 /* UserService.m */; };
+		B6D86AF71D1DB09800813415 /* UserService.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AF31D1DB09800813415 /* UserService.m */; };
+		B6D86B041D1DB59E00813415 /* EduidConfig+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B011D1DB59E00813415 /* EduidConfig+CoreDataProperties.m */; };
+		B6D86B051D1DB59E00813415 /* EduidConfig+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B011D1DB59E00813415 /* EduidConfig+CoreDataProperties.m */; };
+		B6D86B061D1DB59E00813415 /* EduidConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B031D1DB59E00813415 /* EduidConfig.m */; };
+		B6D86B071D1DB59E00813415 /* EduidConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B031D1DB59E00813415 /* EduidConfig.m */; };
 		B6E1DCB91D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B6E1DCB71D1BE97B00E72C75 /* EduidData.xcdatamodeld */; };
 		B6E1DCBA1D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B6E1DCB71D1BE97B00E72C75 /* EduidData.xcdatamodeld */; };
 		B6E1DCBF1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E1DCBC1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m */; };
@@ -111,6 +123,18 @@
 		B6CAB1431D1D451B00577A58 /* LogoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoutViewController.m; sourceTree = "<group>"; };
 		B6CAB1451D1D4C5A00577A58 /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
 		B6CAB1461D1D4C5A00577A58 /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
+		B6D86AE01D1DB06000813415 /* Protocols+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Protocols+CoreDataProperties.h"; sourceTree = "<group>"; };
+		B6D86AE11D1DB06000813415 /* Protocols+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Protocols+CoreDataProperties.m"; sourceTree = "<group>"; };
+		B6D86AE21D1DB06000813415 /* Protocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Protocols.h; sourceTree = "<group>"; };
+		B6D86AE31D1DB06000813415 /* Protocols.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Protocols.m; sourceTree = "<group>"; };
+		B6D86AF01D1DB09800813415 /* UserService+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UserService+CoreDataProperties.h"; sourceTree = "<group>"; };
+		B6D86AF11D1DB09800813415 /* UserService+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UserService+CoreDataProperties.m"; sourceTree = "<group>"; };
+		B6D86AF21D1DB09800813415 /* UserService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserService.h; sourceTree = "<group>"; };
+		B6D86AF31D1DB09800813415 /* UserService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserService.m; sourceTree = "<group>"; };
+		B6D86B001D1DB59E00813415 /* EduidConfig+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EduidConfig+CoreDataProperties.h"; sourceTree = "<group>"; };
+		B6D86B011D1DB59E00813415 /* EduidConfig+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EduidConfig+CoreDataProperties.m"; sourceTree = "<group>"; };
+		B6D86B021D1DB59E00813415 /* EduidConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EduidConfig.h; sourceTree = "<group>"; };
+		B6D86B031D1DB59E00813415 /* EduidConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EduidConfig.m; sourceTree = "<group>"; };
 		B6E1DCB81D1BE97B00E72C75 /* EduidData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EduidData.xcdatamodel; sourceTree = "<group>"; };
 		B6E1DCBB1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tokens+CoreDataProperties.h"; sourceTree = "<group>"; };
 		B6E1DCBC1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tokens+CoreDataProperties.m"; sourceTree = "<group>"; };
@@ -157,10 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				B6E1DCB71D1BE97B00E72C75 /* EduidData.xcdatamodeld */,
-				B6E1DCBB1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.h */,
-				B6E1DCBC1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m */,
-				B6E1DCBD1D1BEB6C00E72C75 /* Tokens.h */,
-				B6E1DCBE1D1BEB6C00E72C75 /* Tokens.m */,
+				B6D86ADF1D1DAFB300813415 /* Models */,
 				B67CF5A41D1A99F300714E32 /* OAuthRequester.h */,
 				B67CF5A51D1A99F300714E32 /* OAuthRequester.m */,
 				B6E1DCC31D1BFD2700E72C75 /* SharedDataStore.h */,
@@ -248,6 +269,29 @@
 				33F7BA271D0D598700AB1DA1 /* Info.plist */,
 			);
 			path = eduIDAuthorise;
+			sourceTree = "<group>";
+		};
+		B6D86ADF1D1DAFB300813415 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B6E1DCBB1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.h */,
+				B6E1DCBC1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m */,
+				B6E1DCBD1D1BEB6C00E72C75 /* Tokens.h */,
+				B6E1DCBE1D1BEB6C00E72C75 /* Tokens.m */,
+				B6D86B001D1DB59E00813415 /* EduidConfig+CoreDataProperties.h */,
+				B6D86B011D1DB59E00813415 /* EduidConfig+CoreDataProperties.m */,
+				B6D86B021D1DB59E00813415 /* EduidConfig.h */,
+				B6D86B031D1DB59E00813415 /* EduidConfig.m */,
+				B6D86AE01D1DB06000813415 /* Protocols+CoreDataProperties.h */,
+				B6D86AE11D1DB06000813415 /* Protocols+CoreDataProperties.m */,
+				B6D86AE21D1DB06000813415 /* Protocols.h */,
+				B6D86AE31D1DB06000813415 /* Protocols.m */,
+				B6D86AF01D1DB09800813415 /* UserService+CoreDataProperties.h */,
+				B6D86AF11D1DB09800813415 /* UserService+CoreDataProperties.m */,
+				B6D86AF21D1DB09800813415 /* UserService.h */,
+				B6D86AF31D1DB09800813415 /* UserService.m */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -424,16 +468,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				33F7B9F01D0D575A00AB1DA1 /* ViewController.m in Sources */,
+				B6D86B041D1DB59E00813415 /* EduidConfig+CoreDataProperties.m in Sources */,
+				B6D86AE61D1DB06000813415 /* Protocols.m in Sources */,
 				B67CF59C1D1A79DD00714E32 /* JWT.m in Sources */,
+				B6D86AE41D1DB06000813415 /* Protocols+CoreDataProperties.m in Sources */,
+				B6D86AF41D1DB09800813415 /* UserService+CoreDataProperties.m in Sources */,
 				B6E1DCBF1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m in Sources */,
 				B6E1DCC51D1BFD2700E72C75 /* SharedDataStore.m in Sources */,
 				B6CAB1411D1D450500577A58 /* ProfileViewController.m in Sources */,
 				33F7B9ED1D0D575A00AB1DA1 /* AppDelegate.m in Sources */,
+				B6D86B061D1DB59E00813415 /* EduidConfig.m in Sources */,
 				B67CF5A61D1A99F300714E32 /* OAuthRequester.m in Sources */,
 				33F7B9EA1D0D575A00AB1DA1 /* main.m in Sources */,
 				B6CAB1441D1D451B00577A58 /* LogoutViewController.m in Sources */,
 				B6E1DCB91D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */,
 				B6E1DCC11D1BEB6C00E72C75 /* Tokens.m in Sources */,
+				B6D86AF61D1DB09800813415 /* UserService.m in Sources */,
 				B6CAB1471D1D4C5A00577A58 /* SplashViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -459,12 +509,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6E1DCC61D1BFD2700E72C75 /* SharedDataStore.m in Sources */,
+				B6D86AE51D1DB06000813415 /* Protocols+CoreDataProperties.m in Sources */,
 				33F7BA231D0D598700AB1DA1 /* ActionViewController.m in Sources */,
 				B67CF59D1D1A79DD00714E32 /* JWT.m in Sources */,
 				B6E1DCBA1D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */,
 				B6E1DCC01D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m in Sources */,
+				B6D86AF71D1DB09800813415 /* UserService.m in Sources */,
 				B6E1DCC21D1BEB6C00E72C75 /* Tokens.m in Sources */,
+				B6D86B051D1DB59E00813415 /* EduidConfig+CoreDataProperties.m in Sources */,
 				B67CF5A71D1A99F300714E32 /* OAuthRequester.m in Sources */,
+				B6D86B071D1DB59E00813415 /* EduidConfig.m in Sources */,
+				B6D86AF51D1DB09800813415 /* UserService+CoreDataProperties.m in Sources */,
+				B6D86AE71D1DB06000813415 /* Protocols.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

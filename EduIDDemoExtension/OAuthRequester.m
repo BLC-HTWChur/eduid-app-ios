@@ -8,9 +8,16 @@
 
 #import "OAuthRequester.h"
 #import "EduIDDemoExtension/JWT.h"
+#import "EduidConfig.h"
 
 @import Foundation;
 @import UIKit;
+
+@interface OAuthRequester ()
+
+@property (retain, nonatomic) NSString *clientId;
+
+@end
 
 @implementation OAuthRequester {
     id callerObject;
@@ -20,7 +27,6 @@
     NSInteger targetToken;
     NSString *deviceId;
     NSString *deviceName;
-    NSString *clientId;
 
     BOOL retryRequest;
     BOOL invalidDevice;
@@ -40,6 +46,8 @@
 @synthesize result;
 
 @synthesize dataStore = _DS;
+
+@synthesize clientId;
 
 NSInteger const DEVICE_TOKEN = 1;
 NSInteger const CLIENT_TOKEN = 2;
@@ -118,7 +126,39 @@ NSInteger const ACCESS_TOKEN = 3;
 - (void) setDataStore:(SharedDataStore *)dataStore
 {
     _DS = dataStore;
+    [self loadClientId];
     [self loadTokens];
+}
+
+- (void) loadClientId
+{
+    if (_DS != nil) {
+        NSManagedObjectContext *moc = [_DS managedObjectContext];
+        
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"EduidConfiguration"];
+        
+        [request setPredicate:[NSPredicate predicateWithFormat:@"cfg_name == %@", @"client_id"]];
+        
+        NSError *error = nil;
+        NSArray *results = [moc executeFetchRequest:request error:&error];
+        if (results) {
+            for (EduidConfig *cfg in results) {
+                clientId = [cfg cfg_value];
+                break;
+            }
+        }
+        
+        if (!clientId) {
+            UIDevice *device = [UIDevice currentDevice];
+            clientId = [[device identifierForVendor] UUIDString];
+            EduidConfig *tConfig = [NSEntityDescription insertNewObjectForEntityForName:@"EduidConfiguration"
+                                                                   inManagedObjectContext:[_DS managedObjectContext]];
+            [tConfig setCfg_name:@"client_id"];
+            [tConfig setCfg_value:clientId];
+        }
+        
+        NSLog(@"client id is now %@", clientId);
+    }
 }
 
 - (void) loadTokens
@@ -396,10 +436,10 @@ NSInteger const ACCESS_TOKEN = 3;
     [self selectDeviceToken];
 
     if (jwt != nil) {
-        NSLog(@"%@", deviceId);
+        NSLog(@"%@", clientId);
         NSLog(@"%@", deviceName);
 
-        [jwt setSubject:deviceId];
+        [jwt setSubject:clientId];
         [jwt setClaim:@"name"
             withValue:deviceName];
     }

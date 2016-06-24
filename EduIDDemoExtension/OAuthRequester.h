@@ -9,7 +9,7 @@
 @import Foundation;
 
 #import "SharedDataStore.h"
-#import "Tokens+CoreDataProperties.h"
+#import "Tokens.h"
 
 @interface OAuthRequester : NSObject
 
