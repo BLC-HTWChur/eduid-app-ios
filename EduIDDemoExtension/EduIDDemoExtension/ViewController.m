@@ -18,67 +18,141 @@
 
 @interface ViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextField *serverURLText;
-
-@property (weak, nonatomic) IBOutlet UIButton *setServerURL;
+@property (weak, nonatomic) IBOutlet UITextField *usernameInput;
+@property (weak, nonatomic) IBOutlet UITextField *passwordInput;
+@property (strong, nonatomic) IBOutlet UIView *contentView;
 
 @property (readonly) OAuthRequester *req;
 
 @end
 
 @implementation ViewController {
-    NSInteger cntUserAuth;
+    NSInteger didAppear;
+    BOOL kbResize;
+    BOOL authRetry;
 }
 
 @synthesize req;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    NSString *tString =@"{\"kid\":\"1234test-14\",\"mac_key\":\"helloWorld\",\"mac_algorithm\":\"HS256\",\"client_id\":\"ch.htwchur.eduid.ios.0\",\"access_token\":\"acf5acfaa58665e6e74f9d03e504b7dce7bc9568\"}";
+    didAppear = 0;
+    kbResize = NO;
+    authRetry = NO;
 
-    cntUserAuth = 0;
-    
+    // Do any additional setup after loading the view, typically from a nib.
+
     AppDelegate *main = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    SharedDataStore *ds = [main eduIdDS];
-    
-    req = [OAuthRequester oauthWithUrlString:@"https://eduid.htwchur.ch/eduid/eduid.php/token"];
-    
-    [req setDataStore:ds];
-    [req setDeviceToken:tString];
+
+    req = [main oauth];
 
     [req registerReceiver:self withSelector:@selector(requestDone)];
-    if (![req clientToken]) {
-        [req postClientCredentials];
-    }
+
+    [self registerForKeyboardNotifications];
+}
+
+-(void) viewDidAppear:(BOOL)animated
+{
+    didAppear = 1;
 }
 
 - (void) requestDone
 {
-    NSLog(@"Oauth request completed with %@", [req status]);
+    if ([[req status] integerValue] > 0) {
+        if (![req clientToken]) {
+            authRetry = [req retry];
+        }
+        else if ([req clientToken] && ![req accessToken] && authRetry) {
+            authRetry = NO;
+            if ([_passwordInput.text length] &&
+                [_usernameInput.text length]) {
 
-    if ([req result])
-        NSLog(@"request result %@", [req result]);
-
-    if ([req deviceToken])
-        NSLog(@"device token %@", [req deviceToken]);
-    if ([req clientToken])
-        NSLog(@"client token %@", [req clientToken]);
-    if ([req accessToken])
-        NSLog(@"user token %@", [req accessToken]);
-
-    if ([[req status]  isEqual: @200] &&
-        [req clientToken] &&
-        cntUserAuth == 0) {
-        NSLog(@"try to authenticate");
-        cntUserAuth = cntUserAuth + 1;
-        [req postPassword:@"test1234" forUser:@"cgl@htwchur.ch"];
+                [req postPassword:_passwordInput.text
+                          forUser:_usernameInput.text];
+            }
+            else {
+                [_passwordInput resignFirstResponder];
+                [_usernameInput resignFirstResponder];
+            }
+        }
+        else if ([req clientToken] && ![req accessToken]) {
+            // login failed.
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_passwordInput resignFirstResponder];
+                [_usernameInput resignFirstResponder];
+                // TODO display error message
+            });
+        }
+        else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self performSegueWithIdentifier:@"toProfileSegue"
+                                                sender:self];
+            });
+        }
     }
+
+    // There are 3 cases.
+    // case 1: There is no client token, in this case our login has failed badly and we have to retry after reset
+    // case 2: there is a client token but no access token and we should retry.
+    // case 3: there is a client token but no access token in this case the login has just normally failed.
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)loginButtonPressed:(id)sender {
+    if ([_passwordInput.text length] && [_usernameInput.text length]) {
+        [req postPassword:_passwordInput.text
+                  forUser:_usernameInput.text];
+    }
+    else {
+        NSLog(@"username and/or password empty");
+
+        [_passwordInput resignFirstResponder];
+        [_usernameInput resignFirstResponder];
+    }
+}
+
+- (void)registerForKeyboardNotifications
+{
+    NSLog(@"register keyboard notifications");
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
+- (void)keyboardWillShow:(NSNotification *)note {
+    NSDictionary *userInfo = note.userInfo;
+    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+
+    CGRect keyboardFrameEnd = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardFrameEnd = [self.view convertRect:keyboardFrameEnd fromView:nil];
+
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
+        self.contentView.frame = CGRectMake(0, 0, keyboardFrameEnd.size.width, keyboardFrameEnd.origin.y);
+    } completion:nil];
+}
+
+- (void)keyboardWillBeHidden:(NSNotification *)note {
+    NSDictionary *userInfo = note.userInfo;
+    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+
+    CGRect keyboardFrameEnd = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardFrameEnd = [self.view convertRect:keyboardFrameEnd fromView:nil];
+
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
+        self.contentView.frame = CGRectMake(0, 0, keyboardFrameEnd.size.width, keyboardFrameEnd.origin.y);
+    } completion:nil];
 }
 
 @end

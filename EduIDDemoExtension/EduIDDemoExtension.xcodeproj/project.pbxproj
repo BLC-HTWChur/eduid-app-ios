@@ -23,6 +23,9 @@
 		B67CF5A61D1A99F300714E32 /* OAuthRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = B67CF5A51D1A99F300714E32 /* OAuthRequester.m */; };
 		B67CF5A71D1A99F300714E32 /* OAuthRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = B67CF5A51D1A99F300714E32 /* OAuthRequester.m */; };
 		B6B8F0481D19310E003C530A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6B8F0471D19310E003C530A /* MobileCoreServices.framework */; };
+		B6CAB1411D1D450500577A58 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CAB1401D1D450500577A58 /* ProfileViewController.m */; };
+		B6CAB1441D1D451B00577A58 /* LogoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CAB1431D1D451B00577A58 /* LogoutViewController.m */; };
+		B6CAB1471D1D4C5A00577A58 /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CAB1461D1D4C5A00577A58 /* SplashViewController.m */; };
 		B6E1DCB91D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B6E1DCB71D1BE97B00E72C75 /* EduidData.xcdatamodeld */; };
 		B6E1DCBA1D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B6E1DCB71D1BE97B00E72C75 /* EduidData.xcdatamodeld */; };
 		B6E1DCBF1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E1DCBC1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m */; };
@@ -102,6 +105,12 @@
 		B6B8F0451D192FE0003C530A /* EduIDDemoExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = EduIDDemoExtension.entitlements; sourceTree = "<group>"; };
 		B6B8F0461D193031003C530A /* eduIDAuthorise.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = eduIDAuthorise.entitlements; sourceTree = "<group>"; };
 		B6B8F0471D19310E003C530A /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		B6CAB13F1D1D450500577A58 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		B6CAB1401D1D450500577A58 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		B6CAB1421D1D451B00577A58 /* LogoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogoutViewController.h; sourceTree = "<group>"; };
+		B6CAB1431D1D451B00577A58 /* LogoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoutViewController.m; sourceTree = "<group>"; };
+		B6CAB1451D1D4C5A00577A58 /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
+		B6CAB1461D1D4C5A00577A58 /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
 		B6E1DCB81D1BE97B00E72C75 /* EduidData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EduidData.xcdatamodel; sourceTree = "<group>"; };
 		B6E1DCBB1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tokens+CoreDataProperties.h"; sourceTree = "<group>"; };
 		B6E1DCBC1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tokens+CoreDataProperties.m"; sourceTree = "<group>"; };
@@ -186,6 +195,12 @@
 				33F7B9EC1D0D575A00AB1DA1 /* AppDelegate.m */,
 				33F7B9EE1D0D575A00AB1DA1 /* ViewController.h */,
 				33F7B9EF1D0D575A00AB1DA1 /* ViewController.m */,
+				B6CAB13F1D1D450500577A58 /* ProfileViewController.h */,
+				B6CAB1401D1D450500577A58 /* ProfileViewController.m */,
+				B6CAB1421D1D451B00577A58 /* LogoutViewController.h */,
+				B6CAB1431D1D451B00577A58 /* LogoutViewController.m */,
+				B6CAB1451D1D4C5A00577A58 /* SplashViewController.h */,
+				B6CAB1461D1D4C5A00577A58 /* SplashViewController.m */,
 				B67CF59A1D1A79DD00714E32 /* JWT.h */,
 				B67CF59B1D1A79DD00714E32 /* JWT.m */,
 				33F7B9F11D0D575A00AB1DA1 /* Main.storyboard */,
@@ -412,11 +427,14 @@
 				B67CF59C1D1A79DD00714E32 /* JWT.m in Sources */,
 				B6E1DCBF1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m in Sources */,
 				B6E1DCC51D1BFD2700E72C75 /* SharedDataStore.m in Sources */,
+				B6CAB1411D1D450500577A58 /* ProfileViewController.m in Sources */,
 				33F7B9ED1D0D575A00AB1DA1 /* AppDelegate.m in Sources */,
 				B67CF5A61D1A99F300714E32 /* OAuthRequester.m in Sources */,
 				33F7B9EA1D0D575A00AB1DA1 /* main.m in Sources */,
+				B6CAB1441D1D451B00577A58 /* LogoutViewController.m in Sources */,
 				B6E1DCB91D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */,
 				B6E1DCC11D1BEB6C00E72C75 /* Tokens.m in Sources */,
+				B6CAB1471D1D4C5A00577A58 /* SplashViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

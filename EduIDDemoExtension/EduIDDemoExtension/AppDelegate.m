@@ -17,15 +17,28 @@
 @implementation AppDelegate
 
 @synthesize eduIdDS = _dataStore;
+@synthesize oauth   = _requestor;
 
 - (SharedDataStore*)eduIdDS
 {
-    NSLog(@"get data store");
     if (!_dataStore) {
         _dataStore = [[SharedDataStore alloc] init];
-        NSLog(@"got data store");
     }
     return _dataStore;
+}
+
+- (OAuthRequester*)oauth
+{
+    if (!_requestor) {
+        _requestor = [OAuthRequester oauthWithUrlString:@"https://eduid.htwchur.ch/eduid/eduid.php/token"];
+
+        NSString *tString =@"{\"kid\":\"1234test-14\",\"mac_key\":\"helloWorld\",\"mac_algorithm\":\"HS256\",\"client_id\":\"ch.htwchur.eduid.ios.0\",\"access_token\":\"acf5acfaa58665e6e74f9d03e504b7dce7bc9568\"}";
+
+        [_requestor setDeviceToken:tString];
+
+        [_requestor setDataStore:[self eduIdDS]];
+    }
+    return _requestor;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {

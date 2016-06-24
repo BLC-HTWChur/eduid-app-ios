@@ -45,9 +45,13 @@
 - (void) postClientCredentials;
 - (void) postPassword:(NSString*)password forUser:(NSString*)username;
 
+- (void) authorize;  // allows the caller to request or trigger authorization 
 - (void) logout;
 
 - (void) loadTokens;
 - (void) storeTokens;
+
+- (BOOL) retry;
+- (BOOL) invalid;
 
 @end

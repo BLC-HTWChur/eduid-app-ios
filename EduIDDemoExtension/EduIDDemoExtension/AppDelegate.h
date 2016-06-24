@@ -9,11 +9,13 @@
 @import UIKit;
 
 #import "../SharedDataStore.h"
+#import "../OAuthRequester.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (retain, readonly) SharedDataStore *eduIdDS;
+@property (retain, readonly) OAuthRequester *oauth;
 
 @end
 

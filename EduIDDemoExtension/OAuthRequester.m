@@ -21,6 +21,9 @@
     NSString *deviceId;
     NSString *deviceName;
     NSString *clientId;
+
+    BOOL retryRequest;
+    BOOL invalidDevice;
     
     NSManagedObjectContext *context;
 }
@@ -68,6 +71,9 @@ NSInteger const ACCESS_TOKEN = 3;
     
     clientData = nil;
     accessData = nil;
+
+    retryRequest = NO;
+    invalidDevice = NO;
     
     jwt = nil;
 }
@@ -94,6 +100,16 @@ NSInteger const ACCESS_TOKEN = 3;
     else {
         jwt = [JWT jwtWithTokenString:token];
     }
+}
+
+- (BOOL) retry
+{
+    return retryRequest;
+}
+
+- (BOOL) invalid
+{
+    return invalidDevice;
 }
 
 // persistent token management
@@ -132,6 +148,7 @@ NSInteger const ACCESS_TOKEN = 3;
                     }
                 }
             }
+            [self completeRequest];
         }
     }
 }
@@ -234,8 +251,7 @@ NSInteger const ACCESS_TOKEN = 3;
 // send the client_credentials request
 - (void) postClientCredentials
 {
-    [self prepareDeviceToken];
-
+    NSLog(@"client registration");
     NSDictionary *reqdata = @{@"grant_type": @"client_credentials"};
 
 
@@ -244,7 +260,7 @@ NSInteger const ACCESS_TOKEN = 3;
 
 - (void) postPassword:(NSString*)password forUser:(NSString*)username
 {
-    [self prepareToken:CLIENT_TOKEN];
+    NSLog(@"authenticate");
     NSDictionary *reqdata = @{
                               @"grant_type": @"password",
                               @"username": username,
@@ -256,25 +272,44 @@ NSInteger const ACCESS_TOKEN = 3;
 
 - (void) logout{
     // delete accessToken
+    NSLog(@"requested logout");
     if (_accessToken &&
         accessData &&
         _DS) {
+        // invalidate token at the IDP
+        // TODO implement token invalidation based on RFC
 
-        NSString * tAccessToken = _accessToken;
 
         [[_DS managedObjectContext] deleteObject: accessData];
         [_DS saveContext];
 
         accessData = nil;
-
-        // invalidate token at the IDP
-        // TODO implement token invalidation based on RFC
+        _accessToken = nil;
+        [self completeRequest];
     }
+    else {
+        [self completeRequest];
+    }
+}
 
+- (void) authorize
+{
+    NSLog(@"verify authorization");
+    // if we have no client token we try to request one
+    if (!_clientToken) {
+        // TODO verify that we have network access
+        [self postClientCredentials];
+    }
+    else {
+        [self completeRequest];
+    }
 }
 
 - (void) postJSONData: (NSDictionary*)dict forTokenType:(NSInteger)tokenType
 {
+
+    [self prepareToken:tokenType - 1];
+
     NSData *data = [[JWT jsonEncode:dict] dataUsingEncoding:NSUTF8StringEncoding];
 
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -326,7 +361,15 @@ NSInteger const ACCESS_TOKEN = 3;
     UIDevice *device = [UIDevice currentDevice];
     deviceId = [[device identifierForVendor] UUIDString];
 
+    NSString *issuer = deviceId;
+
     switch (tokenId) {
+        case DEVICE_TOKEN:
+            [self prepareDeviceToken];
+            if (jwt) {
+                issuer = [[jwt token] objectForKey:@"client_id"];
+            }
+            break;
         case CLIENT_TOKEN:
             [self selectClientToken];
             break;
@@ -339,7 +382,7 @@ NSInteger const ACCESS_TOKEN = 3;
 
     if (jwt != nil) {
 
-        [jwt setIssuer: deviceId];
+        [jwt setIssuer: issuer];
         [jwt setAudience:[url absoluteString]];
     }
 }
@@ -357,10 +400,6 @@ NSInteger const ACCESS_TOKEN = 3;
         NSLog(@"%@", deviceName);
 
         [jwt setSubject:deviceId];
-        [jwt setAudience:[url absoluteString]];
-
-        clientId = [[jwt token] objectForKey:@"client_id"];
-
         [jwt setClaim:@"name"
             withValue:deviceName];
     }
@@ -377,6 +416,7 @@ NSInteger const ACCESS_TOKEN = 3;
     // reset the status and the result.
     result = @"";
     status = [NSNumber numberWithInteger:-1];
+    retryRequest = NO; // reset retry marker
 
     return ^(NSData *data,
              NSURLResponse *response,
@@ -399,22 +439,66 @@ NSInteger const ACCESS_TOKEN = 3;
                     NSLog(@"status %ld", tokenId);
                     switch (tokenId) {
                         case CLIENT_TOKEN:
-                            NSLog(@"assign client token");
+                            NSLog(@"assign client token %@", result);
                             [self setClientToken:result];
                             break;
                         case ACCESS_TOKEN:
-                            NSLog(@"assign access token");
+                            NSLog(@"assign access token %@", result);
                             [self setAccessToken:result];
                             break;
                         default:
                             break;
                     }
                 }
-
+                else if ([status isEqual: @400] &&
+                    [result isEqual: @"malformed header detected!"]) {
+                    // this means our token has expired
+                    NSLog(@"huston, we have a problem. invalidate token");
+                    [self invalidateToken: (tokenId - 1)];
+                }
+                else {
+                    NSLog(@"different status %@", status);
+                }
             }
         }
         [self completeRequest];
     };
+}
+
+- (void) invalidateToken:(NSInteger)tokenType
+{
+    retryRequest = YES;
+    switch (tokenType) {
+        case DEVICE_TOKEN:
+            // TODO: expose this information so we can display error messages
+            // NSLog(@"FATAL: The Version has been invalidated!");
+            retryRequest = NO;
+            invalidDevice = YES;
+            break;
+        case CLIENT_TOKEN:
+            // NSLog(@"invalidate client token");
+            [[_DS managedObjectContext] deleteObject: clientData];
+            [_DS saveContext];
+
+            clientData = nil;
+            _clientToken = nil;
+            // complete the old request before starting a new one
+            [self completeRequest];
+
+            // try to get a new token
+            [self postClientCredentials];
+            break;
+        case ACCESS_TOKEN:
+            // NSLog(@"invalidate access token");
+            [[_DS managedObjectContext] deleteObject: accessData];
+            [_DS saveContext];
+
+            accessData = nil;
+            _accessToken = nil;
+            break;
+        default:
+            break;
+    }
 }
 
 @end
