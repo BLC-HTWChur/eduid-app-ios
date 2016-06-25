@@ -378,7 +378,11 @@ NSInteger const ACCESS_TOKEN = 3;
 
         IMP imp = [callerObject methodForSelector:callerSelector];
         void (*func)(id, SEL) = (void *)imp;
-        func(callerObject, callerSelector);
+        
+        // because our objects operate on the main thread, we signal them there
+        dispatch_async(dispatch_get_main_queue(), ^{
+            func(callerObject, callerSelector);
+        });
     }
 }
 
@@ -517,9 +521,10 @@ NSInteger const ACCESS_TOKEN = 3;
             break;
         case CLIENT_TOKEN:
             // NSLog(@"invalidate client token");
-            [[_DS managedObjectContext] deleteObject: clientData];
-            [_DS saveContext];
-
+            if (clientData) {
+                [[_DS managedObjectContext] deleteObject: clientData];
+                [_DS saveContext];
+            }
             clientData = nil;
             _clientToken = nil;
             // complete the old request before starting a new one
@@ -529,10 +534,11 @@ NSInteger const ACCESS_TOKEN = 3;
             [self postClientCredentials];
             break;
         case ACCESS_TOKEN:
-            // NSLog(@"invalidate access token");
-            [[_DS managedObjectContext] deleteObject: accessData];
-            [_DS saveContext];
-
+            if (accessData) {
+                // NSLog(@"invalidate access token");
+                [[_DS managedObjectContext] deleteObject: accessData];
+                [_DS saveContext];
+            }
             accessData = nil;
             _accessToken = nil;
             break;
