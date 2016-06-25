@@ -55,16 +55,14 @@
 
 - (void) requestDone
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([req accessToken]) {
-            NSLog(@"appeared & got access token, switch to profile view");
-            [self performSegueWithIdentifier:@"toRootProfileSegue" sender:self];
-        }
-        else {
-            NSLog(@"appeared & should send to login view");
-            [self performSegueWithIdentifier:@"toRootLoginSegue" sender:self];
-        }
-    });
+    if ([req accessToken]) {
+        NSLog(@"appeared & got access token, switch to profile view");
+        [self performSegueWithIdentifier:@"toRootProfileSegue" sender:self];
+    }
+    else {
+        NSLog(@"appeared & should send to login view");
+        [self performSegueWithIdentifier:@"toRootLoginSegue" sender:self];
+    }
 }
 
 

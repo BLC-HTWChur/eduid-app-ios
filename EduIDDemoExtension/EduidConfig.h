@@ -1,8 +1,8 @@
 //
-//  Configuration.h
+//  EduidConfig.h
 //  EduIDDemoExtension
 //
-//  Created by Christian Glahn on 24/06/16.
+//  Created by Christian Glahn on 25/06/16.
 //  Copyright © 2016 SII. All rights reserved.
 //
 

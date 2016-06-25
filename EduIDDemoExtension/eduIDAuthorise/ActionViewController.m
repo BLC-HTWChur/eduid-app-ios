@@ -29,47 +29,61 @@
 
 @implementation ActionViewController
 
-
-@synthesize eduIdDS = _dataStore;
-
-- (SharedDataStore*)eduIdDS
-{
-    if (!_dataStore) {
-        _dataStore = [[SharedDataStore alloc] init];
-    }
-    return _dataStore;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    // init out shared data and the OAuthRequester
     
     SharedDataStore *ds = [self eduIdDS];
     
-    NSString *tString =@"{\"kid\":\"1234test-14\",\"mac_key\":\"helloWorld\",\"mac_algorithm\":\"HS256\",\"client_id\":\"ch.htwchur.eduid.ios.0\",\"access_token\":\"acf5acfaa58665e6e74f9d03e504b7dce7bc9568\"}";
     
-    OAuthRequester *req = [OAuthRequester oauthWithUrlString:@"https://eduid.htwchur.ch/eduid/eduid.php/token"];
+    if (![self oauth]) {
+        NSString *tString =@"{\"kid\":\"1234test-14\",\"mac_key\":\"helloWorld\",\"mac_algorithm\":\"HS256\",\"client_id\":\"ch.htwchur.eduid.ios.0\",\"access_token\":\"acf5acfaa58665e6e74f9d03e504b7dce7bc9568\"}";
+        
+        OAuthRequester *req = [OAuthRequester oauthWithUrlString:@"https://eduid.htwchur.ch/eduid/eduid.php/token"];
+        
+        [self setOauth: req];
+        
+        [req setDataStore:ds];
+        [req setDeviceToken:tString];
+    }
     
-    [req setDataStore:ds];
-    [req setDeviceToken:tString];
-    
-    // we should see our shared keys in the logs.
-    
-    // Now it is time to look at which protocols have to be handled.
+    [[self oauth] registerReceiver:self
+             withSelector:@selector(requestDone)];
 
-    NSExtensionItem *item = self.extensionContext.inputItems[0];
-    NSItemProvider *itemProvider = item.attachments[0];
     
-    [itemProvider loadItemForTypeIdentifier: EDUID_EXTENSION_TYPE
-                                    options:nil
-                          completionHandler:^(id results, NSError *error)
-     {
-         if (!error) {
-             [self receiveProtocols:(NSArray*)results];
-         }
-     }];
+    NSLog(@"Load Extension Context!");
+    
+    if (![self origContext]) {
+        [self setOrigContext:self.extensionContext];
+        
+        NSExtensionItem *item = self.extensionContext.inputItems[0];
+        NSItemProvider *itemProvider = item.attachments[0];
+        
+        [itemProvider loadItemForTypeIdentifier: EDUID_EXTENSION_TYPE
+                                        options:nil
+                              completionHandler:^(id results, NSError *error)
+         {
+             if (!error) {
+                 [self receiveProtocols:(NSArray*)results];
+             }
+             else {
+                 NSLog(@"invalid extension context");
+             }
+         }];
+    }
+}
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    // test if we are logged in
+    if (![[self oauth] accessToken])
+    {
+        [self performSegueWithIdentifier:@"toLoginView" sender:self];
+    }
+    else {
+        // find out if the user's services provide the appropriate interfaces
+        
+        // if not we send the user directly to the federation search.
+    }
 }
 
 //This is called by the completion handler (when data unpacking of the data sent by the extension is finished)
@@ -77,6 +91,7 @@
 {
     for (NSString *s in protocolList) {
         NSLog(@"Protocol Name: %@", s);
+        [self setRequestData:protocolList];
     }
 }
 
@@ -85,10 +100,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-
 //button to finish extension was pressed
 - (IBAction)done {
     //we are finished
+    NSLog(@"return to container app");
     [self extensionDone];
 }
 
@@ -128,7 +143,7 @@
                                                           typeIdentifier:EDUID_EXTENSION_TYPE]]];
 
     // call directly because the extension terminates after returning the data.
-    [self.extensionContext completeRequestReturningItems:@[extensionItem] completionHandler:nil];
+    [[self origContext] completeRequestReturningItems:@[extensionItem] completionHandler:nil];
 }
 
 @end

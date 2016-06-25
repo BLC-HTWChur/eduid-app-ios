@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15F34" minimumToolsVersion="Xcode 7.0">
-    <entity name="EduidConfiguration" representedClassName="Configuration" syncable="YES">
+    <entity name="EduidConfiguration" representedClassName="EduidConfig" syncable="YES">
         <attribute name="cfg_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cfg_value" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -20,9 +20,9 @@
         <attribute name="rsd" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Tokens" positionX="-63" positionY="-18" width="128" height="105"/>
         <element name="EduidConfiguration" positionX="-63" positionY="9" width="128" height="75"/>
-        <element name="UserService" positionX="-54" positionY="18" width="128" height="90"/>
         <element name="Protocols" positionX="-36" positionY="45" width="128" height="75"/>
+        <element name="Tokens" positionX="-63" positionY="-18" width="128" height="105"/>
+        <element name="UserService" positionX="-54" positionY="18" width="128" height="90"/>
     </elements>
 </model>

@@ -7,10 +7,8 @@
 //
 
 @import UIKit;
-#import "../SharedDataStore.h"
+#import "ExtensionController.h"
 
-@interface ActionViewController : UIViewController
-
-@property (readonly, retain) SharedDataStore *eduIdDS;
+@interface ActionViewController : ExtensionController
 
 @end

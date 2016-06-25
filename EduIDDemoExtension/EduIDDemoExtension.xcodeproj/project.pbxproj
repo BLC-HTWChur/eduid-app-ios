@@ -34,10 +34,13 @@
 		B6D86AF51D1DB09800813415 /* UserService+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AF11D1DB09800813415 /* UserService+CoreDataProperties.m */; };
 		B6D86AF61D1DB09800813415 /* UserService.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AF31D1DB09800813415 /* UserService.m */; };
 		B6D86AF71D1DB09800813415 /* UserService.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AF31D1DB09800813415 /* UserService.m */; };
-		B6D86B041D1DB59E00813415 /* EduidConfig+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B011D1DB59E00813415 /* EduidConfig+CoreDataProperties.m */; };
-		B6D86B051D1DB59E00813415 /* EduidConfig+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B011D1DB59E00813415 /* EduidConfig+CoreDataProperties.m */; };
-		B6D86B061D1DB59E00813415 /* EduidConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B031D1DB59E00813415 /* EduidConfig.m */; };
-		B6D86B071D1DB59E00813415 /* EduidConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B031D1DB59E00813415 /* EduidConfig.m */; };
+		B6D86B0A1D1E7AF600813415 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B091D1E7AF600813415 /* LoginViewController.m */; };
+		B6D86B151D1E7E7400813415 /* EduidConfig+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B121D1E7E7400813415 /* EduidConfig+CoreDataProperties.m */; };
+		B6D86B161D1E7E7400813415 /* EduidConfig+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B121D1E7E7400813415 /* EduidConfig+CoreDataProperties.m */; };
+		B6D86B171D1E7E7400813415 /* EduidConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B141D1E7E7400813415 /* EduidConfig.m */; };
+		B6D86B181D1E7E7400813415 /* EduidConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B141D1E7E7400813415 /* EduidConfig.m */; };
+		B6D86B1B1D1EAB1500813415 /* ExtensionController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B1A1D1EAB1500813415 /* ExtensionController.m */; };
+		B6D86B1E1D1EBA7C00813415 /* FederationSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B1D1D1EBA7C00813415 /* FederationSearchController.m */; };
 		B6E1DCB91D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B6E1DCB71D1BE97B00E72C75 /* EduidData.xcdatamodeld */; };
 		B6E1DCBA1D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B6E1DCB71D1BE97B00E72C75 /* EduidData.xcdatamodeld */; };
 		B6E1DCBF1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E1DCBC1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m */; };
@@ -131,11 +134,17 @@
 		B6D86AF11D1DB09800813415 /* UserService+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UserService+CoreDataProperties.m"; sourceTree = "<group>"; };
 		B6D86AF21D1DB09800813415 /* UserService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserService.h; sourceTree = "<group>"; };
 		B6D86AF31D1DB09800813415 /* UserService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserService.m; sourceTree = "<group>"; };
-		B6D86B001D1DB59E00813415 /* EduidConfig+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EduidConfig+CoreDataProperties.h"; sourceTree = "<group>"; };
-		B6D86B011D1DB59E00813415 /* EduidConfig+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EduidConfig+CoreDataProperties.m"; sourceTree = "<group>"; };
-		B6D86B021D1DB59E00813415 /* EduidConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EduidConfig.h; sourceTree = "<group>"; };
-		B6D86B031D1DB59E00813415 /* EduidConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EduidConfig.m; sourceTree = "<group>"; };
-		B6E1DCB81D1BE97B00E72C75 /* EduidData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EduidData.xcdatamodel; sourceTree = "<group>"; };
+		B6D86B081D1E7AF600813415 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		B6D86B091D1E7AF600813415 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		B6D86B111D1E7E7400813415 /* EduidConfig+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EduidConfig+CoreDataProperties.h"; sourceTree = "<group>"; };
+		B6D86B121D1E7E7400813415 /* EduidConfig+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EduidConfig+CoreDataProperties.m"; sourceTree = "<group>"; };
+		B6D86B131D1E7E7400813415 /* EduidConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EduidConfig.h; sourceTree = "<group>"; };
+		B6D86B141D1E7E7400813415 /* EduidConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EduidConfig.m; sourceTree = "<group>"; };
+		B6D86B191D1EAB1500813415 /* ExtensionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtensionController.h; sourceTree = "<group>"; };
+		B6D86B1A1D1EAB1500813415 /* ExtensionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtensionController.m; sourceTree = "<group>"; };
+		B6D86B1C1D1EBA7C00813415 /* FederationSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FederationSearchController.h; sourceTree = "<group>"; };
+		B6D86B1D1D1EBA7C00813415 /* FederationSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FederationSearchController.m; sourceTree = "<group>"; };
+		B6E1DCB81D1BE97B00E72C75 /* EduidData.xcdatamodel */ = {isa = PBXFileReference; explicitFileType = wrapper.xcdatamodel; path = EduidData.xcdatamodel; sourceTree = "<group>"; };
 		B6E1DCBB1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tokens+CoreDataProperties.h"; sourceTree = "<group>"; };
 		B6E1DCBC1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tokens+CoreDataProperties.m"; sourceTree = "<group>"; };
 		B6E1DCBD1D1BEB6C00E72C75 /* Tokens.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tokens.h; sourceTree = "<group>"; };
@@ -265,6 +274,12 @@
 				B6B8F0461D193031003C530A /* eduIDAuthorise.entitlements */,
 				33F7BA211D0D598700AB1DA1 /* ActionViewController.h */,
 				33F7BA221D0D598700AB1DA1 /* ActionViewController.m */,
+				B6D86B081D1E7AF600813415 /* LoginViewController.h */,
+				B6D86B191D1EAB1500813415 /* ExtensionController.h */,
+				B6D86B1C1D1EBA7C00813415 /* FederationSearchController.h */,
+				B6D86B1D1D1EBA7C00813415 /* FederationSearchController.m */,
+				B6D86B1A1D1EAB1500813415 /* ExtensionController.m */,
+				B6D86B091D1E7AF600813415 /* LoginViewController.m */,
 				33F7BA241D0D598700AB1DA1 /* MainInterface.storyboard */,
 				33F7BA271D0D598700AB1DA1 /* Info.plist */,
 			);
@@ -277,11 +292,11 @@
 				B6E1DCBB1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.h */,
 				B6E1DCBC1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m */,
 				B6E1DCBD1D1BEB6C00E72C75 /* Tokens.h */,
+				B6D86B111D1E7E7400813415 /* EduidConfig+CoreDataProperties.h */,
+				B6D86B121D1E7E7400813415 /* EduidConfig+CoreDataProperties.m */,
+				B6D86B131D1E7E7400813415 /* EduidConfig.h */,
+				B6D86B141D1E7E7400813415 /* EduidConfig.m */,
 				B6E1DCBE1D1BEB6C00E72C75 /* Tokens.m */,
-				B6D86B001D1DB59E00813415 /* EduidConfig+CoreDataProperties.h */,
-				B6D86B011D1DB59E00813415 /* EduidConfig+CoreDataProperties.m */,
-				B6D86B021D1DB59E00813415 /* EduidConfig.h */,
-				B6D86B031D1DB59E00813415 /* EduidConfig.m */,
 				B6D86AE01D1DB06000813415 /* Protocols+CoreDataProperties.h */,
 				B6D86AE11D1DB06000813415 /* Protocols+CoreDataProperties.m */,
 				B6D86AE21D1DB06000813415 /* Protocols.h */,
@@ -467,8 +482,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6D86B151D1E7E7400813415 /* EduidConfig+CoreDataProperties.m in Sources */,
 				33F7B9F01D0D575A00AB1DA1 /* ViewController.m in Sources */,
-				B6D86B041D1DB59E00813415 /* EduidConfig+CoreDataProperties.m in Sources */,
 				B6D86AE61D1DB06000813415 /* Protocols.m in Sources */,
 				B67CF59C1D1A79DD00714E32 /* JWT.m in Sources */,
 				B6D86AE41D1DB06000813415 /* Protocols+CoreDataProperties.m in Sources */,
@@ -477,8 +492,8 @@
 				B6E1DCC51D1BFD2700E72C75 /* SharedDataStore.m in Sources */,
 				B6CAB1411D1D450500577A58 /* ProfileViewController.m in Sources */,
 				33F7B9ED1D0D575A00AB1DA1 /* AppDelegate.m in Sources */,
-				B6D86B061D1DB59E00813415 /* EduidConfig.m in Sources */,
 				B67CF5A61D1A99F300714E32 /* OAuthRequester.m in Sources */,
+				B6D86B171D1E7E7400813415 /* EduidConfig.m in Sources */,
 				33F7B9EA1D0D575A00AB1DA1 /* main.m in Sources */,
 				B6CAB1441D1D451B00577A58 /* LogoutViewController.m in Sources */,
 				B6E1DCB91D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */,
@@ -510,15 +525,18 @@
 			files = (
 				B6E1DCC61D1BFD2700E72C75 /* SharedDataStore.m in Sources */,
 				B6D86AE51D1DB06000813415 /* Protocols+CoreDataProperties.m in Sources */,
+				B6D86B1E1D1EBA7C00813415 /* FederationSearchController.m in Sources */,
 				33F7BA231D0D598700AB1DA1 /* ActionViewController.m in Sources */,
 				B67CF59D1D1A79DD00714E32 /* JWT.m in Sources */,
+				B6D86B0A1D1E7AF600813415 /* LoginViewController.m in Sources */,
 				B6E1DCBA1D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */,
+				B6D86B161D1E7E7400813415 /* EduidConfig+CoreDataProperties.m in Sources */,
 				B6E1DCC01D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m in Sources */,
 				B6D86AF71D1DB09800813415 /* UserService.m in Sources */,
+				B6D86B181D1E7E7400813415 /* EduidConfig.m in Sources */,
+				B6D86B1B1D1EAB1500813415 /* ExtensionController.m in Sources */,
 				B6E1DCC21D1BEB6C00E72C75 /* Tokens.m in Sources */,
-				B6D86B051D1DB59E00813415 /* EduidConfig+CoreDataProperties.m in Sources */,
 				B67CF5A71D1A99F300714E32 /* OAuthRequester.m in Sources */,
-				B6D86B071D1DB59E00813415 /* EduidConfig.m in Sources */,
 				B6D86AF51D1DB09800813415 /* UserService+CoreDataProperties.m in Sources */,
 				B6D86AE71D1DB06000813415 /* Protocols.m in Sources */,
 			);
