@@ -171,23 +171,50 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Username" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dnb-ws-Kde">
+                                <rect key="frame" x="269" y="115" width="110" height="37"/>
+                                <accessibility key="accessibilityConfiguration" label="Username">
+                                    <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
+                                </accessibility>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Mail Address" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UYk-Qm-QgR">
+                                <rect key="frame" x="278" y="160" width="99" height="21"/>
+                                <accessibility key="accessibilityConfiguration" label="E-mail Address">
+                                    <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
+                                </accessibility>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="rDf-ao-K22" secondAttribute="trailing" id="BCP-Lp-DFZ"/>
+                            <constraint firstItem="com-om-pmI" firstAttribute="top" relation="greaterThanOrEqual" secondItem="UYk-Qm-QgR" secondAttribute="bottom" constant="200" id="EGW-c6-FdP"/>
+                            <constraint firstItem="Dnb-ws-Kde" firstAttribute="leading" secondItem="Tg8-Rs-wil" secondAttribute="leadingMargin" id="GiO-qN-SkY"/>
                             <constraint firstAttribute="trailing" secondItem="rDf-ao-K22" secondAttribute="trailing" id="I9h-DY-sd8"/>
                             <constraint firstAttribute="trailingMargin" secondItem="com-om-pmI" secondAttribute="trailing" id="KBF-1o-eZe"/>
                             <constraint firstItem="rDf-ao-K22" firstAttribute="top" secondItem="oG3-ln-4uC" secondAttribute="bottom" id="Kvt-bS-dGG"/>
+                            <constraint firstItem="UYk-Qm-QgR" firstAttribute="top" secondItem="Dnb-ws-Kde" secondAttribute="bottom" constant="8" id="MTu-HY-6JD"/>
                             <constraint firstItem="com-om-pmI" firstAttribute="leading" secondItem="Tg8-Rs-wil" secondAttribute="leadingMargin" id="Mi4-N3-WtX"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Dnb-ws-Kde" secondAttribute="trailing" id="Mmj-yX-yX6"/>
                             <constraint firstItem="rDf-ao-K22" firstAttribute="top" secondItem="oG3-ln-4uC" secondAttribute="bottom" id="Oql-BV-BaZ"/>
                             <constraint firstAttribute="trailing" secondItem="com-om-pmI" secondAttribute="trailing" id="RGH-I9-g0C"/>
+                            <constraint firstItem="Dnb-ws-Kde" firstAttribute="top" secondItem="rDf-ao-K22" secondAttribute="bottom" constant="8" id="RbP-UJ-KWb"/>
                             <constraint firstItem="G43-EM-QoY" firstAttribute="top" secondItem="com-om-pmI" secondAttribute="bottom" id="TFF-Jo-oiP"/>
                             <constraint firstItem="com-om-pmI" firstAttribute="centerX" secondItem="Tg8-Rs-wil" secondAttribute="centerX" id="ThP-Rv-dWc"/>
                             <constraint firstItem="rDf-ao-K22" firstAttribute="centerX" secondItem="Tg8-Rs-wil" secondAttribute="centerX" id="TyF-Ec-jWl"/>
                             <constraint firstItem="com-om-pmI" firstAttribute="leading" secondItem="Tg8-Rs-wil" secondAttribute="leading" id="V1y-vp-zxP"/>
                             <constraint firstItem="com-om-pmI" firstAttribute="top" relation="greaterThanOrEqual" secondItem="rDf-ao-K22" secondAttribute="bottom" constant="300" id="Vm3-fD-lWD"/>
+                            <constraint firstItem="UYk-Qm-QgR" firstAttribute="leading" secondItem="Tg8-Rs-wil" secondAttribute="leadingMargin" id="cMd-fY-0S4"/>
                             <constraint firstItem="G43-EM-QoY" firstAttribute="top" secondItem="com-om-pmI" secondAttribute="bottom" id="dgh-AA-AQE"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="UYk-Qm-QgR" secondAttribute="trailing" id="irM-Et-Y17"/>
                             <constraint firstItem="rDf-ao-K22" firstAttribute="leading" secondItem="Tg8-Rs-wil" secondAttribute="leading" id="kMo-Gd-omW"/>
+                            <constraint firstItem="Dnb-ws-Kde" firstAttribute="centerX" secondItem="Tg8-Rs-wil" secondAttribute="centerX" id="nPs-R3-w4p"/>
+                            <constraint firstItem="UYk-Qm-QgR" firstAttribute="centerX" secondItem="Tg8-Rs-wil" secondAttribute="centerX" id="pkA-rR-vDy"/>
                             <constraint firstItem="rDf-ao-K22" firstAttribute="leading" secondItem="Tg8-Rs-wil" secondAttribute="leadingMargin" id="qYU-KR-OBf"/>
                         </constraints>
                         <variation key="default">
@@ -197,10 +224,15 @@
                                 <exclude reference="qYU-KR-OBf"/>
                                 <exclude reference="KBF-1o-eZe"/>
                                 <exclude reference="Mi4-N3-WtX"/>
+                                <exclude reference="Vm3-fD-lWD"/>
                                 <exclude reference="TFF-Jo-oiP"/>
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="emailLabel" destination="UYk-Qm-QgR" id="hkN-Iu-yeh"/>
+                        <outlet property="usernameLabel" destination="Dnb-ws-Kde" id="SZb-qf-Qv2"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yH8-Bl-tNt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

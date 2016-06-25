@@ -52,9 +52,10 @@
 
 @synthesize clientId;
 
-NSInteger const DEVICE_TOKEN = 1;
-NSInteger const CLIENT_TOKEN = 2;
-NSInteger const ACCESS_TOKEN = 3;
+NSInteger const DEVICE_TOKEN  = 1;
+NSInteger const CLIENT_TOKEN  = 2;
+NSInteger const ACCESS_TOKEN  = 3;
+NSInteger const SERVICE_TOKEN = 4;
 
 + (OAuthRequester*) oauth
 {
@@ -295,7 +296,9 @@ NSInteger const ACCESS_TOKEN = 3;
 - (void) postClientCredentials
 {
     NSLog(@"client registration");
-    nextUrl = [NSURL URLWithString:@"token" relativeToURL:url];
+    NSString *u = [url absoluteString];
+    u= [u stringByAppendingString:@"/token"];
+    nextUrl = [NSURL URLWithString:u];
     
     NSDictionary *reqdata = @{@"grant_type": @"client_credentials"};
 
@@ -305,7 +308,9 @@ NSInteger const ACCESS_TOKEN = 3;
 - (void) postPassword:(NSString*)password forUser:(NSString*)username
 {
     NSLog(@"authenticate");
-    nextUrl = [NSURL URLWithString:@"token" relativeToURL:url];
+    NSString *u = [url absoluteString];
+    u= [u stringByAppendingString:@"/token"];
+    nextUrl = [NSURL URLWithString:u];
     
     NSDictionary *reqdata = @{
                               @"grant_type": @"password",
@@ -314,6 +319,22 @@ NSInteger const ACCESS_TOKEN = 3;
                               };
 
     [self postJSONData:reqdata forTokenType:ACCESS_TOKEN];
+}
+
+- (void) getUserProfile {
+    if (_accessToken) {
+        NSString *u = [url absoluteString];
+        u= [u stringByAppendingString:@"/user-profile"];
+        
+        nextUrl = [NSURL URLWithString:u];
+        [self fetchDataWithToken:ACCESS_TOKEN];
+    }
+    else {
+        NSLog(@"No access token present");
+        
+        status = @-400;
+        [self completeRequest];
+    }
 }
 
 - (void) logout{
@@ -327,8 +348,10 @@ NSInteger const ACCESS_TOKEN = 3;
         // interestingly, OAuth does not define any token revokation mechnism
         
         // if necessary, revoke ALL access tokens with the resource services.
-
-        nextUrl = [NSURL URLWithString:@"revoke" relativeToURL:url];
+        
+        NSString *u = [url absoluteString];
+        u= [u stringByAppendingString:@"/revoke"];
+        nextUrl = [NSURL URLWithString:u];
         
         // authorize itself using JWT-Bearer to revoke
         // send access_token value as token to revoke (will revoke the related refresh token)
@@ -384,6 +407,22 @@ NSInteger const ACCESS_TOKEN = 3;
     [task resume];
 }
 
+- (void) fetchDataWithToken:(NSInteger)tokenType
+{
+    [self prepareToken:tokenType];
+    
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
+    [self setAuthHeader:sessionConfiguration];
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+    NSURLRequest *request = [NSURLRequest requestWithURL:nextUrl];
+    
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:[self getResponseCallback]];
+    [task resume];
+
+}
 
 - (void) completeRequest {
     if (callerObject != nil &&
@@ -512,11 +551,17 @@ NSInteger const ACCESS_TOKEN = 3;
                 else if ([status isEqual: @400] &&
                     [result isEqual: @"malformed header detected!"]) {
                     // this means our token has expired
-                    NSLog(@"huston, we have a problem. invalidate token");
-                    [self invalidateToken: (tokenId - 1)];
+                    if (tokenId > 2) {
+                        NSLog(@"huston, we have a problem. invalidate token");
+                        [self invalidateToken: (tokenId - 1)];
+                    }
+                    else {
+                        NSLog(@"server problem ");
+                    }
                 }
                 else {
                     NSLog(@"different status %@", status);
+                    NSLog(@"service message: %@", result);
                 }
             }
         }
