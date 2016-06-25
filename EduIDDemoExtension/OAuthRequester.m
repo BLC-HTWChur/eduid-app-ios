@@ -16,6 +16,7 @@
 @interface OAuthRequester ()
 
 @property (retain, nonatomic) NSString *clientId;
+@property (retain) NSURL *nextUrl;
 
 @end
 
@@ -35,6 +36,8 @@
 }
 
 @synthesize url;
+@synthesize nextUrl;
+
 @synthesize deviceToken;
 @synthesize clientToken = _clientToken;
 @synthesize accessToken = _accessToken;
@@ -292,8 +295,9 @@ NSInteger const ACCESS_TOKEN = 3;
 - (void) postClientCredentials
 {
     NSLog(@"client registration");
+    nextUrl = [NSURL URLWithString:@"token" relativeToURL:url];
+    
     NSDictionary *reqdata = @{@"grant_type": @"client_credentials"};
-
 
     [self postJSONData:reqdata forTokenType:CLIENT_TOKEN];
 }
@@ -301,6 +305,8 @@ NSInteger const ACCESS_TOKEN = 3;
 - (void) postPassword:(NSString*)password forUser:(NSString*)username
 {
     NSLog(@"authenticate");
+    nextUrl = [NSURL URLWithString:@"token" relativeToURL:url];
+    
     NSDictionary *reqdata = @{
                               @"grant_type": @"password",
                               @"username": username,
@@ -317,14 +323,23 @@ NSInteger const ACCESS_TOKEN = 3;
         accessData &&
         _DS) {
         // invalidate token at the IDP
-        // TODO implement token invalidation based on RFC
+        // TODO implement token invalidation based on RFC 7009
+        // interestingly, OAuth does not define any token revokation mechnism
+        
+        // if necessary, revoke ALL access tokens with the resource services.
 
-
+        nextUrl = [NSURL URLWithString:@"revoke" relativeToURL:url];
+        
+        // authorize itself using JWT-Bearer to revoke
+        // send access_token value as token to revoke (will revoke the related refresh token)
+        // Alternatively send refresh token to revoke
+        
         [[_DS managedObjectContext] deleteObject: accessData];
         [_DS saveContext];
 
         accessData = nil;
         _accessToken = nil;
+        
         [self completeRequest];
     }
     else {
@@ -357,7 +372,7 @@ NSInteger const ACCESS_TOKEN = 3;
     [self setAuthHeader:sessionConfiguration];
 
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:nextUrl];
 
     [request setHTTPMethod:@"POST"];
 
