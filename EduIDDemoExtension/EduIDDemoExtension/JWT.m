@@ -287,7 +287,7 @@
 /**
  * JSON encodes a dictionary
  */
-+ (NSString*)jsonEncode:(NSDictionary*) dict
++ (NSString*)jsonEncode:(id)dict
 {
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
                                                        options:0

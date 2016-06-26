@@ -180,11 +180,11 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="n8s-Gr-CzY"/>
                                 <exclude reference="5AN-PQ-GJj"/>
+                                <exclude reference="n8s-Gr-CzY"/>
                                 <exclude reference="DbX-Lb-Rie"/>
-                                <exclude reference="tIX-nv-UXD"/>
                                 <exclude reference="q5M-qe-UHp"/>
+                                <exclude reference="tIX-nv-UXD"/>
                             </mask>
                         </variation>
                     </view>

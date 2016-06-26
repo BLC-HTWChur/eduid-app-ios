@@ -54,7 +54,7 @@
 
 - (IBAction)authorButtonPressed:(id)sender
 {
-    NSArray *protocols = @[@"gov.adlnet.xapi", @"org.imsglobal.qti"];
+    NSArray *protocols = @[@"gov.adlnet.xapi", @"powertla.content.courselist"];
 
     [nail requestProtocols:protocols forObject:self withSelector:@selector(idExtensionCompleted)];
 }

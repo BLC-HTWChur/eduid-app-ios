@@ -15,7 +15,7 @@
 
 @property (retain, atomic) NSExtensionContext *origContext;
 
-@property (atomic, retain) SharedDataStore *eduIdDS;
+@property (nonatomic, retain) SharedDataStore *eduIdDS;
 @property (atomic, retain) OAuthRequester *oauth;
 
 @property (atomic, retain) NSArray *requestData;

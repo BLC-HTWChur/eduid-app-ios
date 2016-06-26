@@ -41,11 +41,16 @@
 
 - (void) registerReceiver:(id)receiver withSelector:(SEL)selector;
 
-- (void) GET;
+// client authorization
 - (void) postClientCredentials;
+// user authorization
 - (void) postPassword:(NSString*)password forUser:(NSString*)username;
 
+// user information
 - (void) getUserProfile;
+
+// service information
+- (void) postProtocolList: (NSArray*) protocolList;
 
 - (void) authorize;  // allows the caller to request or trigger authorization 
 - (void) logout;

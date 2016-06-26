@@ -12,18 +12,18 @@
 
 #import "ActionViewController.h"
 #import "../OAuthRequester.h"
+#import "../EduIDDemoExtension/JWT.h"
 
 @interface ActionViewController ()
 
 @property (retain) NSArray *myProtocols;
-@property (weak, nonatomic) IBOutlet UILabel *protocolName;
+@property (retain) NSArray *myServices;
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
 @implementation ActionViewController
-
-@synthesize tableView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,8 +43,7 @@
     }
     
     [[self oauth] registerReceiver:self
-             withSelector:@selector(requestDone)];
-
+                      withSelector:@selector(requestDone)];
     
     NSLog(@"Load Extension Context!");
     
@@ -72,6 +71,12 @@
     }
 
     _myProtocols = @[];
+    _myServices  = @[];
+
+    if ([self requestData] && [[self requestData] count]) {
+        NSLog(@"request services for protocols");
+        [[self oauth] postProtocolList:[self requestData]];
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -95,11 +100,10 @@
     [self setRequestData:protocolList];
     _myProtocols = protocolList;
 
-    for (NSString *s in protocolList) {
-        NSLog(@"Protocol Name: %@", s);
+    if ([self requestData] && [[self requestData] count]) {
+        NSLog(@"request services for protocols");
+        [[self oauth] postProtocolList:[self requestData]];
     }
-    
-    [[self tableView] reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -157,10 +161,29 @@
     [[self origContext] completeRequestReturningItems:@[extensionItem] completionHandler:nil];
 }
 
+- (void) requestDone
+{
+    // the protocol request succeeded
+    NSString *result = [[self oauth] result];
+    if (result != nil) {
+        if (result != [[self oauth] clientToken] &&
+            result != [[self oauth] accessToken]) {
+            // only respond to our requests
+            NSLog(@"received result %@", result);
+            
+            _myServices = (NSArray*)[JWT jsonDecode:result];
+            
+            // display
+            [_tableView reloadData];
+        }
+        NSLog(@"result data: %@", result);
+    }
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"init tableview with %lu rows", (unsigned long)[_myProtocols count]);
-    return [_myProtocols count];
+    NSLog(@"init tableview with %lu rows", (unsigned long)[_myServices count]);
+    return [_myServices count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -174,7 +197,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    cell.textLabel.text = [_myProtocols objectAtIndex:indexPath.row];
+    cell.textLabel.text = [[_myServices objectAtIndex:indexPath.row] objectForKey:@"engineName"];
     return cell;
 }
 

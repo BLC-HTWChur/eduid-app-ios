@@ -337,6 +337,18 @@ NSInteger const SERVICE_TOKEN = 4;
     }
 }
 
+- (void) postProtocolList:(NSArray *)protocolList
+{
+    NSString *u = [url absoluteString];
+    u= [u stringByAppendingString:@"/protocol-discovery/protocol"];
+    NSLog(@"request from %@", u);
+    NSLog(@"data: %@", protocolList);
+    
+    nextUrl = [NSURL URLWithString:u];
+    
+    [self postJSONList:protocolList withTokenType:ACCESS_TOKEN];
+}
+
 - (void) logout{
     // delete accessToken
     NSLog(@"requested logout");
@@ -385,26 +397,67 @@ NSInteger const SERVICE_TOKEN = 4;
 
 - (void) postJSONData: (NSDictionary*)dict forTokenType:(NSInteger)tokenType
 {
-
-    [self prepareToken:tokenType - 1];
-
     NSData *data = [[JWT jsonEncode:dict] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [self postWithData:data
+          andTokenType:tokenType
+         toAssignToken:YES];
+}
 
+- (void) postJSONData: (NSDictionary*)dict withTokenType:(NSInteger)tokenType
+{
+    NSData *data = [[JWT jsonEncode:dict] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [self postWithData:data
+          andTokenType:tokenType
+         toAssignToken:NO];
+}
+
+- (void) postJSONList: (NSArray*)array withTokenType:(NSInteger)tokenType
+{
+    NSData *data = [[JWT jsonEncode:array] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [self postWithData:data
+          andTokenType:tokenType
+         toAssignToken:NO];
+}
+
+- (void) postWithData:(NSData*)data
+        andTokenType:(NSInteger)tokenType
+        toAssignToken:(BOOL)assign
+{
+    if (assign) {
+        [self prepareToken:tokenType -1];
+    }
+    else {
+        [self prepareToken:tokenType];
+    }
+    
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-
+    
     [self setAuthHeader:sessionConfiguration];
-
+    
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:nextUrl];
-
+    
     [request setHTTPMethod:@"POST"];
-
+    
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:data];
-
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler:[self getResponseCallbackForToken:tokenType]];
+    
+    NSURLSessionDataTask *task;
+    
+    if (assign) {
+        task = [session dataTaskWithRequest:request
+                          completionHandler:[self getResponseCallbackForToken:tokenType]];
+    }
+    else {
+        task = [session dataTaskWithRequest:request
+                          completionHandler:[self getResponseCallback]];
+    }
+    
     [task resume];
+
 }
 
 - (void) fetchDataWithToken:(NSInteger)tokenType
@@ -446,6 +499,7 @@ NSInteger const SERVICE_TOKEN = 4;
         NSString *authValue = [@[@"Bearer", [jwt compact]] componentsJoinedByString:@" "];
 
         if ([authValue length] > 0) {
+            NSLog(@"auth header: %@", authValue);
             config.HTTPAdditionalHeaders = @{@"Authorization": authValue};
         }
     }
@@ -456,16 +510,20 @@ NSInteger const SERVICE_TOKEN = 4;
 
 - (void) prepareToken:(NSInteger)tokenId
 {
-    UIDevice *device = [UIDevice currentDevice];
-    deviceId = [[device identifierForVendor] UUIDString];
+    NSString *issuer = clientId;
+    if (!clientId) {
+        UIDevice *device = [UIDevice currentDevice];
+        deviceId = [[device identifierForVendor] UUIDString];
 
-    NSString *issuer = deviceId;
+        issuer = deviceId;
+        clientId = deviceId;
+    }
 
     switch (tokenId) {
         case DEVICE_TOKEN:
             [self prepareDeviceToken];
             if (jwt) {
-                issuer = [[jwt token] objectForKey:@"client_id"];
+                issuer = clientId;
             }
             break;
         case CLIENT_TOKEN:
@@ -580,10 +638,18 @@ NSInteger const SERVICE_TOKEN = 4;
             // NSLog(@"invalidate client token");
             if (clientData) {
                 [[_DS managedObjectContext] deleteObject: clientData];
-                [_DS saveContext];
             }
             clientData = nil;
             _clientToken = nil;
+
+            // if the client token is invalid, then the access token is too
+            if (accessData) {
+                [[_DS managedObjectContext] deleteObject: accessData];
+            }
+
+            accessData = nil;
+            _accessToken = nil;
+            
             // complete the old request before starting a new one
             [self completeRequest];
 
@@ -594,7 +660,6 @@ NSInteger const SERVICE_TOKEN = 4;
             if (accessData) {
                 // NSLog(@"invalidate access token");
                 [[_DS managedObjectContext] deleteObject: accessData];
-                [_DS saveContext];
             }
             accessData = nil;
             _accessToken = nil;
@@ -602,6 +667,7 @@ NSInteger const SERVICE_TOKEN = 4;
         default:
             break;
     }
+    [_DS saveContext];
 }
 
 @end
