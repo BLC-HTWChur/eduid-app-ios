@@ -15,19 +15,15 @@
 
 @interface ActionViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextField *eduIdLoginName;
-
-@property (weak, nonatomic) IBOutlet UITextField *eduIdPassword;
-
-@property (weak, nonatomic) IBOutlet UILabel *serverURL;
-
-@property (weak, nonatomic) IBOutlet UIButton *buttonLogIn;
-
-@property (weak, nonatomic) IBOutlet UIView *canvas;
+@property (retain) NSArray *myProtocols;
+@property (weak, nonatomic) IBOutlet UILabel *protocolName;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
 @implementation ActionViewController
+
+@synthesize tableView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -53,16 +49,20 @@
     NSLog(@"Load Extension Context!");
     
     if (![self origContext]) {
+        NSLog(@"init extension context");
         [self setOrigContext:self.extensionContext];
         
         NSExtensionItem *item = self.extensionContext.inputItems[0];
         NSItemProvider *itemProvider = item.attachments[0];
+        
+        NSLog(@"check type %@", EDUID_EXTENSION_TYPE);
         
         [itemProvider loadItemForTypeIdentifier: EDUID_EXTENSION_TYPE
                                         options:nil
                               completionHandler:^(id results, NSError *error)
          {
              if (!error) {
+                 NSLog(@"no error and received data");
                  [self receiveProtocols:(NSArray*)results];
              }
              else {
@@ -70,6 +70,8 @@
              }
          }];
     }
+
+    _myProtocols = @[];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -89,10 +91,15 @@
 //This is called by the completion handler (when data unpacking of the data sent by the extension is finished)
 -(void) receiveProtocols:(NSArray *) protocolList
 {
+    NSLog(@"receive %lu protocols", [protocolList count]);
+    [self setRequestData:protocolList];
+    _myProtocols = protocolList;
+
     for (NSString *s in protocolList) {
         NSLog(@"Protocol Name: %@", s);
-        [self setRequestData:protocolList];
     }
+    
+    [[self tableView] reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -109,14 +116,6 @@
 
 /** enable or disable the whole GUI
  @param inEnable: YES: enable GUI, NO: disabl GUI */
--(void)viewEnableGUI:(BOOL) inEnable
-{
-    [_eduIdLoginName setEnabled:inEnable];
-    [_eduIdLoginName setEnabled:inEnable];
-    [_eduIdPassword setEnabled:inEnable];
-    [_buttonLogIn setEnabled:inEnable];
-}
-
 //we are done with the extension, return to caller
 -(void) extensionDone
 {
@@ -125,11 +124,23 @@
     // TODO load data from data store and filter the apis.
     // TODO attach the token data from the service endpoints to the RSD.
 
-    NSDictionary *token = [NSDictionary dictionaryWithObjectsAndKeys:@"1234", @"kid", @"helloWorld", @"mac_key", @"HS256", @"mac_algorithm", @"123123121241513513", @"client_id",nil];
-    NSDictionary *xapi  = [NSDictionary dictionaryWithObjectsAndKeys:@"lrs/xapi", @"apiLink", nil];
-    NSDictionary *qti  = [NSDictionary dictionaryWithObjectsAndKeys:@"content/qti", @"apiLink", nil];
-    NSDictionary *apis  = [NSDictionary dictionaryWithObjectsAndKeys: xapi, @"gov.adlnet.xapi", qti, @"org.imsglobal.qti", nil];
-    NSDictionary *engineRsd = [NSDictionary dictionaryWithObjectsAndKeys:@"https://moodle.htwchur.ch", @"homePageLink", @"", @"engineLink", apis, @"apis", token, @"token", nil];
+    NSDictionary *token = @{@"kid": @"1234",
+                            @"mac_key": @"helloWorld",
+                            @"mac_algorithm": @"HS256",
+                            @"client_id": @"123123121241513513"};
+    
+    NSDictionary *xapi  = @{@"apiLink":@"lrs/xapi"};
+    NSDictionary *qti  = @{@"apiLink": @"content/qti"};
+    
+    NSDictionary *apis  = @{@"gov.adlnet.xapi": xapi,
+                            @"org.imsglobal.qti": qti};
+    
+    NSDictionary *engineRsd = @{@"homePageLink": @"https://moodle.htwchur.ch",
+                                @"engineLink": @"",
+                                @"apis": apis,
+                                @"token": token,
+                                @"name": @"moodle@HTW Chur"};
+    
 
     NSDictionary *services = [NSDictionary dictionaryWithObjectsAndKeys: engineRsd, @"moodle.htwchur.ch", nil];
 
@@ -144,6 +155,27 @@
 
     // call directly because the extension terminates after returning the data.
     [[self origContext] completeRequestReturningItems:@[extensionItem] completionHandler:nil];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSLog(@"init tableview with %lu rows", (unsigned long)[_myProtocols count]);
+    return [_myProtocols count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"get cell at index %@", indexPath);
+    static NSString *simpleTableIdentifier = @"SimpleTableItem";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+    }
+    
+    cell.textLabel.text = [_myProtocols objectAtIndex:indexPath.row];
+    return cell;
 }
 
 @end

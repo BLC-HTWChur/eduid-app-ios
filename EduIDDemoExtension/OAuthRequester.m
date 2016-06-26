@@ -525,14 +525,11 @@ NSInteger const SERVICE_TOKEN = 4;
             NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
 
             status = [NSNumber numberWithInteger:httpResponse.statusCode];
-            NSLog(@"status %ld", [status integerValue]);
 
             if (data &&
                 [data length]) {
                 result = [[NSString alloc] initWithData:data
                                                encoding:NSUTF8StringEncoding];
-                NSLog(@"result %@", result);
-
                 if ([status isEqual: @200]) {
                     NSLog(@"status %ld", tokenId);
                     switch (tokenId) {
