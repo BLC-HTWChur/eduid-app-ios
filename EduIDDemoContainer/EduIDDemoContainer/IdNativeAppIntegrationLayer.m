@@ -132,6 +132,34 @@
     return retval;
 }
 
+- (NSString*) getNameForService:(NSString *)serviceName
+{
+    NSString *retval = @"";
+    
+    NSDictionary *epDict = [services valueForKey:serviceName];
+    if (epDict) {
+        retval = [epDict valueForKey:@"name"];
+    }
+    
+    return retval;
+}
+
+- (NSString*) getTokenId:(NSString *)serviceName
+{
+    NSString *retval = @"";
+    
+    NSDictionary *epDict = [services valueForKey:serviceName];
+    
+    if (epDict) {
+        NSDictionary *tDict = [epDict valueForKey:@"token"];
+        if (tDict) {
+            retval = [tDict valueForKey:@"kid"];
+        }
+    }
+    
+    return retval;
+}
+
 - (NSString*) getServiceAuthorization:(NSString*) serviceName
                           forProtocol:(NSString*) protocolName
 {
@@ -260,7 +288,10 @@
 
         IMP imp = [callerObject methodForSelector:selector];
         void (*func)(id, SEL) = (void *)imp;
-        func(callerObject, selector);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            func(callerObject, selector);
+        });
+
     }
 }
 
@@ -270,7 +301,7 @@
 
 - (NSDictionary*) getServiceToken:(NSString*)serviceName
 {
-    NSDictionary *dict = [NSDictionary dictionary];
+    NSDictionary *dict = @{};
 
     // get an object
     NSDictionary *epDict = [services valueForKey:serviceName];

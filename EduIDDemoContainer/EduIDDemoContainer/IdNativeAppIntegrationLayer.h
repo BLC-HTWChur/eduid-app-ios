@@ -37,7 +37,6 @@
 - (void) requestProtocols:(NSArray*)protocolList
                 forObject:(id)object
              withSelector:(SEL)selector;
-
 /**
  * Returns an NSArray containing all service names returned by the
  * authorizing app.
@@ -67,6 +66,9 @@
  */
 - (NSString*) getServiceUrl:(NSString*) serviceName
                 forProtocol:(NSString*) protocolName;
+
+- (NSString*) getTokenId:(NSString*) serviceName;
+- (NSString*) getNameForService:(NSString*) serviceName;
 
 /**
  * Generates a Bearer token string for the requested authorization for a service

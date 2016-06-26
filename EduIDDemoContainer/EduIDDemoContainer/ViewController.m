@@ -9,6 +9,8 @@
 #include "../common/constants.h" //common values for the whole project
 
 #import "ViewController.h"
+
+#import "AppDelegate.h"
 #import "IdNativeAppIntegrationLayer.h"
 
 @interface ViewController ()
@@ -35,6 +37,10 @@
     // Do any additional setup after loading the view, typically from a nib.
 
     nail = [[IdNativeAppIntegrationLayer alloc] init];
+    
+    AppDelegate *main = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    
+    [main setNail:nail];
 
     // [nail getEndpointAuthorization:@"foo" withProtocol:@"bar" withClaims: nil];
 
@@ -55,9 +61,10 @@
 
 - (void) idExtensionCompleted {
     NSLog(@"ID Extension Completed");
-
-    NSLog(@"%@", [nail getServiceUrl:@"moodle.htwchur.ch" forProtocol:@"gov.adlnet.xapi"]);
-    NSLog(@"%@", [nail getServiceAuthorization:@"moodle.htwchur.ch" forProtocol:@"gov.adlnet.xapi"]);
+    if ([[nail serviceNames] count]) {
+        // handover to the authorization list
+        [self performSegueWithIdentifier:@"toAuthorizationList" sender:self];
+    }
 }
 
 
