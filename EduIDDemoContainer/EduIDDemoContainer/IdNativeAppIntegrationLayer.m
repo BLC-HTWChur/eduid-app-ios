@@ -138,7 +138,7 @@
     
     NSDictionary *epDict = [services valueForKey:serviceName];
     if (epDict) {
-        retval = [epDict valueForKey:@"name"];
+        retval = [epDict valueForKey:@"engineName"];
     }
     
     return retval;

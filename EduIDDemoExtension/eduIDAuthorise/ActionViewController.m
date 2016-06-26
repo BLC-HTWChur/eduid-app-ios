@@ -133,22 +133,33 @@
                             @"mac_algorithm": @"HS256",
                             @"client_id": @"123123121241513513"};
     
-    NSDictionary *xapi  = @{@"apiLink":@"lrs/xapi"};
-    NSDictionary *qti  = @{@"apiLink": @"content/qti"};
+    NSArray *r = [self requestData];
+    NSMutableDictionary *services = [NSMutableDictionary dictionary];
     
-    NSDictionary *apis  = @{@"gov.adlnet.xapi": xapi,
-                            @"org.imsglobal.qti": qti};
+    NSMutableDictionary *serviceApis = [NSMutableDictionary dictionary];
     
-    NSDictionary *engineRsd = @{@"homePageLink": @"https://moodle.htwchur.ch",
-                                @"engineLink": @"",
-                                @"apis": apis,
-                                @"token": token,
-                                @"name": @"moodle@HTW Chur"};
+    for (NSDictionary *service in _myServices) {
+        NSDictionary *apis = [service objectForKey:@"apis"];
+        
+        for (NSString *apiName in r) {
+            NSDictionary *a = [apis objectForKey:apiName];
+            if (a != nil) {
+                [serviceApis setValue:a forKey:apiName];
+            }
+        }
+        
+        NSDictionary *engineRsd = @{@"homePageLink": [service valueForKey:@"homePageLink"],
+                                    @"engineLink": [service valueForKey:@"engineLink"],
+                                    @"apis": apis,
+                                    @"token": token,
+                                    @"engineName": [service valueForKey:@"engineName"]};
+
+        [services setValue:engineRsd forKey:[service valueForKey:@"homePageLink"]];
+    }
+    
     
 
-    NSDictionary *services = [NSDictionary dictionaryWithObjectsAndKeys: engineRsd, @"moodle.htwchur.ch", nil];
-
-    //create structure to return data to the calling app
+        //create structure to return data to the calling app
     NSExtensionItem* extensionItem = [[NSExtensionItem alloc] init];
     //Place the data in the transfer data structure.
 
