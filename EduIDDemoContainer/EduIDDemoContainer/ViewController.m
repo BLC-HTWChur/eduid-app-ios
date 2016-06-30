@@ -36,11 +36,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
 
-    nail = [[IdNativeAppIntegrationLayer alloc] init];
-    
-    AppDelegate *main = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    
-    [main setNail:nail];
 
     // [nail getEndpointAuthorization:@"foo" withProtocol:@"bar" withClaims: nil];
 
@@ -54,6 +49,11 @@
 
 - (IBAction)authorButtonPressed:(id)sender
 {
+    AppDelegate *main = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+
+    nail = [[IdNativeAppIntegrationLayer alloc] init];
+    [main setNail:nail];
+
     NSArray *protocols = @[@"gov.adlnet.xapi", @"powertla.content.courselist"];
 
     [nail requestProtocols:protocols forObject:self withSelector:@selector(idExtensionCompleted)];
@@ -62,6 +62,8 @@
 - (void) idExtensionCompleted {
     NSLog(@"ID Extension Completed");
     if ([[nail serviceNames] count]) {
+        // continue with authorized requests
+
         // handover to the authorization list
         [self performSegueWithIdentifier:@"toAuthorizationList" sender:self];
     }
