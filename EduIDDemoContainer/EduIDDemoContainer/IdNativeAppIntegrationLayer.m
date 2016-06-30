@@ -42,9 +42,19 @@
         selector     = cbSelector;
         services = [NSDictionary dictionary];
 
+        UIDevice *device = [UIDevice currentDevice];
+        NSBundle *bundle   = [NSBundle mainBundle];
+
+        NSDictionary *request = @{
+            @"protocols": protocolList,
+            @"app_id":    [bundle bundleIdentifier],
+            @"client_id": [[device identifierForVendor] UUIDString],
+            @"app_name":  [[bundle infoDictionary] objectForKey:(id)kCFBundleExecutableKey]
+        };
+
         // The NSItemProvider is the hook for passing objects securely between
         // apps
-        NSItemProvider *itemProvider = [[NSItemProvider alloc] initWithItem:protocolList
+        NSItemProvider *itemProvider = [[NSItemProvider alloc] initWithItem:request
                                                              typeIdentifier:EDUID_EXTENSION_TYPE];
 
         // The NSExtensionItem is a container for explicitly passing information
