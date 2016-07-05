@@ -18,11 +18,13 @@
         <attribute name="baseurl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rsd" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="token" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="token_target" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
         <element name="EduidConfiguration" positionX="-63" positionY="9" width="128" height="75"/>
         <element name="Protocols" positionX="-36" positionY="45" width="128" height="75"/>
         <element name="Tokens" positionX="-63" positionY="-18" width="128" height="105"/>
-        <element name="UserService" positionX="-54" positionY="18" width="128" height="90"/>
+        <element name="UserService" positionX="-54" positionY="18" width="128" height="120"/>
     </elements>
 </model>

@@ -13,17 +13,23 @@
 #import "ActionViewController.h"
 #import "../OAuthRequester.h"
 #import "../EduIDDemoExtension/JWT.h"
+#import "../UserService.h"
 
 @interface ActionViewController ()
 
-@property (retain) NSArray *myProtocols;
 @property (retain) NSArray *myServices;
+@property (retain) NSDictionary *appRequest;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (nonatomic, strong) NSFetchedResultsController *resultsController;
 
 @end
 
 @implementation ActionViewController
+
+@synthesize resultsController;
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -41,9 +47,11 @@
         [req setDataStore:ds];
         [req setDeviceToken:tString];
     }
-    
+
+    [self initializeFetchResultController];
+
     [[self oauth] registerReceiver:self
-                      withSelector:@selector(requestDone)];
+                      withSelector:@selector(requestDone:withResult:)];
     
     NSLog(@"Load Extension Context!");
     
@@ -61,8 +69,8 @@
                               completionHandler:^(id results, NSError *error)
          {
              if (!error) {
-                 NSLog(@"no error and received data");
-                 [self receiveProtocols:(NSArray*)results];
+                 [self setRequestData:results];
+                 [self receiveProtocols:(NSArray*)[(NSDictionary*)results objectForKey:@"protocols"]];
              }
              else {
                  NSLog(@"invalid extension context");
@@ -70,12 +78,12 @@
          }];
     }
 
-    _myProtocols = @[];
+    _appRequest = @{};
     _myServices  = @[];
 
-    if ([self requestData] && [[self requestData] count]) {
-        NSLog(@"request services for protocols");
-        [[self oauth] postProtocolList:[self requestData]];
+    if ([self requestData]) {
+        NSLog(@"request services for protocols %ld", [[self requestData] count]);
+        [[self oauth] postProtocolList:[[self requestData] objectForKey:@"protocols"]];
     }
 }
 
@@ -94,15 +102,14 @@
 }
 
 //This is called by the completion handler (when data unpacking of the data sent by the extension is finished)
--(void) receiveProtocols:(NSArray *) protocolList
+-(void) receiveProtocols:(NSArray *)protocolList
 {
     NSLog(@"receive %lu protocols", [protocolList count]);
-    [self setRequestData:protocolList];
-    _myProtocols = protocolList;
-
-    if ([self requestData] && [[self requestData] count]) {
+    NSLog(@"%@", [protocolList componentsJoinedByString: @", "]);
+    if (protocolList && [protocolList count]) {
         NSLog(@"request services for protocols");
-        [[self oauth] postProtocolList:[self requestData]];
+
+        [[self oauth] postProtocolList:protocolList];
     }
 }
 
@@ -115,6 +122,9 @@
 - (IBAction)done {
     //we are finished
     NSLog(@"return to container app");
+
+
+
     [self extensionDone];
 }
 
@@ -133,7 +143,7 @@
                             @"mac_algorithm": @"HS256",
                             @"client_id": @"123123121241513513"};
     
-    NSArray *r = [self requestData];
+    NSDictionary *r = [self requestData];
     NSMutableDictionary *services = [NSMutableDictionary dictionary];
     
     NSMutableDictionary *serviceApis = [NSMutableDictionary dictionary];
@@ -172,34 +182,71 @@
     [[self origContext] completeRequestReturningItems:@[extensionItem] completionHandler:nil];
 }
 
-- (void) requestDone
+- (void) requestDone: (NSNumber*)status withResult: (NSString*)result
 {
-    // the protocol request succeeded
-    NSString *result = [[self oauth] result];
-    if (result != nil) {
-        if (result != [[self oauth] clientToken] &&
-            result != [[self oauth] accessToken]) {
-            // only respond to our requests
-            NSLog(@"received result %@", result);
-            
-            _myServices = (NSArray*)[JWT jsonDecode:result];
-            
-            // display
-            [_tableView reloadData];
-        }
-        NSLog(@"result data: %@", result);
+    // display
+    NSLog(@"LIST RESULT COMPLETE, REFRESH TABLE");
+
+    NSError *err;
+    if (![[self resultsController] performFetch:&err]) {
+        NSLog(@"fetch failed %@ \n%@", [err localizedDescription], [err userInfo]);
     }
 }
 
+- (void) initializeFetchResultController
+{
+    NSFetchRequest *req= [NSFetchRequest fetchRequestWithEntityName:@"UserService"];
+
+    [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES]]];
+
+    OAuthRequester *oauth = [self oauth];
+
+    NSManagedObjectContext *moc = [[oauth dataStore] managedObjectContext];
+
+    resultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:req
+                                                            managedObjectContext:moc
+                                                              sectionNameKeyPath:nil
+                                                                       cacheName:nil];
+
+    [resultsController setDelegate:self];
+
+
+    NSError *err;
+    if (![[self resultsController] performFetch:&err]) {
+        NSLog(@"fetch failed %@ \n%@", [err localizedDescription], [err userInfo]);
+    }
+    else {
+        [_tableView reloadData];
+    }
+}
+
+- (void) controllerDidChangeContent:(NSFetchedResultsController*) controller
+{
+    NSLog(@"reload table view data");
+    [self.tableView reloadData];
+}
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    NSLog(@"number of sections %ld", [[[self resultsController] sections] count]);
+
+    return [[[self resultsController] sections] count];
+}
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"init tableview with %lu rows", (unsigned long)[_myServices count]);
-    return [_myServices count];
+    id<NSFetchedResultsSectionInfo> sectionInfo = [[self resultsController] sections][section];
+
+    NSLog(@"number of items in section %ld", [sectionInfo numberOfObjects]);
+
+    return [sectionInfo numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"get cell at index %@", indexPath);
+    UserService *us = [[self resultsController] objectAtIndexPath:indexPath];
+
     static NSString *simpleTableIdentifier = @"SimpleTableItem";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
@@ -207,8 +254,9 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
-    
-    cell.textLabel.text = [[_myServices objectAtIndex:indexPath.row] objectForKey:@"engineName"];
+
+    cell.textLabel.text = [us name];
+    // [[us objectAtIndex:indexPath.row] objectForKey:@"engineName"];
     return cell;
 }
 

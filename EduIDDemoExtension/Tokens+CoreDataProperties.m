@@ -13,9 +13,9 @@
 
 @implementation Tokens (CoreDataProperties)
 
-@dynamic token;
-@dynamic type;
-@dynamic target;
-@dynamic subject;
+@dynamic token;     // the token object (JSON)
+@dynamic type;      // the type (client, access, service or app)
+@dynamic target;    // the target (service for the token)
+@dynamic subject;   // the subject (the app for which the token has been issued, ch.eduid.app for ourselves).
 
 @end

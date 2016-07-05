@@ -9,6 +9,6 @@
 @import UIKit;
 #import "ExtensionController.h"
 
-@interface ActionViewController : ExtensionController <UITableViewDelegate, UITableViewDataSource>
+@interface ActionViewController : ExtensionController <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
 
 @end

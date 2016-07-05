@@ -16,5 +16,7 @@
 @dynamic name;
 @dynamic rsd;
 @dynamic baseurl;
+@dynamic token;
+@dynamic token_target;
 
 @end

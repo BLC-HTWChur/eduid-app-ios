@@ -29,7 +29,7 @@
     // Do any additional setup after loading the view.
     AppDelegate *main = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     req = [main oauth];
-    [req registerReceiver:self withSelector:@selector(requestDone)];
+    [req registerReceiver:self withSelector:@selector(requestDone:withResult:)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -51,7 +51,7 @@
     [req logout];
 }
 
-- (void)requestDone
+- (void)requestDone: (NSNumber*)status withResult: (NSString*)result
 {
     // we expect only logout completions.
     NSLog(@"request done ");

@@ -300,13 +300,12 @@
 /**
  * JSON decodes a string into a dictionary.
  */
-+ (NSDictionary*)jsonDecode:(NSString*) jsonString
++ (id)jsonDecode:(NSString*) jsonString
 {
     NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                         options:0
-                                                           error:nil];
-    return dict;
+    return [NSJSONSerialization JSONObjectWithData:jsonData
+                                           options:0
+                                             error:nil];
 }
 
 /**

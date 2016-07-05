@@ -29,12 +29,12 @@
 
     req = [main oauth];
 
-    [req registerReceiver:self withSelector:@selector(requestDone)];
+    [req registerReceiver:self withSelector:@selector(requestDone:withResult:)];
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
-    [req authorize];
+    [req verifyAuthorization];
 }
 
 
@@ -53,7 +53,7 @@
 }
 */
 
-- (void) requestDone
+- (void) requestDone: (NSNumber*)status withResult: (NSString*)result
 {
     if ([req accessToken]) {
         NSLog(@"appeared & got access token, switch to profile view");

@@ -18,15 +18,12 @@
 @property (retain, setter=setRawClientToken:) NSString *clientToken;
 @property (retain, setter=setRawAccessToken:) NSString *accessToken;
 
-@property (retain, nonatomic) NSString *clientID; //
-
-@property (readonly, retain) NSNumber *status;
-@property (readonly, retain) NSString *result;
+@property (retain, nonatomic) NSString *clientId; //
 
 @property (retain, setter=setRawDataStore:) SharedDataStore *dataStore;
 
 @property (retain, nonatomic) Tokens *clientData;
-@property (retain, nonatomic)Tokens *accessData;
+@property (retain, nonatomic) Tokens *accessData;
 
 
 + (OAuthRequester*) oauth;
@@ -46,14 +43,36 @@
 // user authorization
 - (void) postPassword:(NSString*)password forUser:(NSString*)username;
 
+// revoke authorization
+- (void) logout;
+
 // user information
 - (void) getUserProfile;
 
 // service information
 - (void) postProtocolList: (NSArray*) protocolList;
 
-- (void) authorize;  // allows the caller to request or trigger authorization 
-- (void) logout;
+// service assertion
+- (void) retrieveServiceAssertion:(NSString*) targetServiceUrl;
+
+- (void) authorizeWithService:(NSString*) targetServiceUrl
+        withAuthorizationCode:(NSString*) assertionToken
+                   withCaller: (id) caller
+                 withSelector: (SEL)selector;
+
+// app assertion
+- (void) authorizeApp:(NSString*) appClientId
+            atService:(NSString*) targetService;
+
+- (NSString*) serviceUrl:(nonnull NSDictionary*)rsd
+             forProtocol:(nonnull NSString*)protocol;
+
+- (nullable NSString*) serviceUrl:(nonnull NSDictionary*)rsd
+             forProtocol:(nonnull NSString*)protocol
+             forEndpoint:(nullable NSString*) endpoint;
+
+// app specific functions
+- (void) verifyAuthorization;  // allows the caller to request or trigger authorization
 
 - (void) loadTokens;
 - (void) storeTokens;

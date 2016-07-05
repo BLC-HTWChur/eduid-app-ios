@@ -18,8 +18,8 @@
 @property (nonatomic, retain) SharedDataStore *eduIdDS;
 @property (atomic, retain) OAuthRequester *oauth;
 
-@property (atomic, retain) NSArray *requestData;
+@property (atomic, retain) NSDictionary *requestData;
 
-- (void) requestDone;
+- (void) requestDone:(NSNumber*) status withResult: (NSString*) result;
 
 @end

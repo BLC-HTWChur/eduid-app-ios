@@ -25,7 +25,7 @@
     authRetry = NO;
     
     [[self oauth] registerReceiver:self
-                      withSelector:@selector(requestDone)];
+                      withSelector:@selector(requestDone:withResult:)];
     [self registerForKeyboardNotifications];
 }
 
@@ -58,7 +58,7 @@
 }
 */
 
-- (void) requestDone
+- (void) requestDone: (NSNumber*)status withResult: (NSString*)result
 {
     OAuthRequester *req = [self oauth];
     
@@ -67,7 +67,7 @@
     // case 2: there is a client token but no access token and we should retry.
     // case 3: there is a client token but no access token in this case the login has just normally failed.
 
-    if ([[req status] integerValue] > 0) {
+    if ([status integerValue] > 0) {
         if (![req clientToken]) {
             authRetry = [req retry];
         }

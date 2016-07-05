@@ -97,7 +97,8 @@
 */
 
 // override to do something with OAuth data
--(void) requestDone {}
+-(void) requestDone: (NSNumber*) status withResult: (NSString*)result
+{}
 
 
 @end

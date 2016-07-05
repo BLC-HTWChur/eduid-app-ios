@@ -122,11 +122,11 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="7fP-p7-N80"/>
-                                <exclude reference="krH-RP-UXW"/>
                                 <exclude reference="2uZ-yz-gnl"/>
                                 <exclude reference="Ghl-GB-bE8"/>
                                 <exclude reference="mnc-sf-eKE"/>
+                                <exclude reference="7fP-p7-N80"/>
+                                <exclude reference="krH-RP-UXW"/>
                             </mask>
                         </variation>
                     </view>

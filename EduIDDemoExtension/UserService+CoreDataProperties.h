@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSString *rsd;
 @property (nullable, nonatomic, retain) NSString *baseurl;
+@property (nullable, nonatomic, retain) NSString *token;         // the eduid service token
+@property (nullable, nonatomic, retain) NSString *token_target;  // the token endpoint at the service
 
 @end
 

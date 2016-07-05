@@ -29,7 +29,7 @@
     
     req = [main oauth];
     
-    [req registerReceiver:self withSelector:@selector(requestDone)];
+    [req registerReceiver:self withSelector:@selector(requestDone:withResult:)];
     // load the profile
     [req getUserProfile];
 }
@@ -49,15 +49,13 @@
 }
 */
 
-- (void) requestDone
+- (void) requestDone: (NSNumber*)status withResult: (NSString*)result
 {
     // ok we got the user data
-    NSLog(@"request status: %@", [req status]);
-    NSLog(@"request result: %@", [req result]);
+    NSLog(@"request status: %@", status);
+    NSLog(@"request result: %@", result);
     
-    NSString *profileData = [req result];
-    
-    NSArray  *profile = (NSArray*)[JWT jsonDecode:profileData];
+    NSArray  *profile = (NSArray*)[JWT jsonDecode:result];
     
     if (profile != nil &&
         [profile count] > 0) {

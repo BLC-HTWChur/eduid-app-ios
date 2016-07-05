@@ -52,7 +52,7 @@
 - (void) setKid:(NSString*)kid;
 
 + (NSString*) jsonEncode:(id)dict;
-+ (NSDictionary*) jsonDecode:(NSString*)jsonString;
++ (id) jsonDecode:(NSString*)jsonString;
 
 @end
 
