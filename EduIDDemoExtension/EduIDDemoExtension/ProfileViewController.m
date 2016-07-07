@@ -12,6 +12,8 @@
 #import "../OAuthRequester.h"
 #import "JWT.h"
 
+#import "../RequestData.h"
+
 @interface ProfileViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *emailLabel;
@@ -29,9 +31,9 @@
     
     req = [main oauth];
     
-    [req registerReceiver:self withSelector:@selector(requestDone:withResult:)];
+    [req registerReceiver:self withCallback:@selector(requestDone:)];
     // load the profile
-    [req getUserProfile];
+    [req getUserProfile:@selector(requestDone:)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -49,13 +51,10 @@
 }
 */
 
-- (void) requestDone: (NSNumber*)status withResult: (NSString*)result
+- (void) requestDone:(RequestData*)result
 {
     // ok we got the user data
-    NSLog(@"request status: %@", status);
-    NSLog(@"request result: %@", result);
-    
-    NSArray  *profile = (NSArray*)[JWT jsonDecode:result];
+    NSArray  *profile = [result processedResult];
     
     if (profile != nil &&
         [profile count] > 0) {
@@ -67,7 +66,6 @@
         _usernameLabel.text = un;
         _emailLabel.text    = em;
     }
-    
 }
 
 

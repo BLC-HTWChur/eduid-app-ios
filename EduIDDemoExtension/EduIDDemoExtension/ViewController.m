@@ -6,15 +6,17 @@
 //  Copyright © 2016 SII. All rights reserved.
 //
 
-#include "../common/constants.h" //common values for the whole project
+#include "../common/constants.h" //common values for the whole project: UNUSED
 
 #import "ViewController.h"
 
 
 @import MobileCoreServices;
 
-#import "../OAuthRequester.h"
 #import "AppDelegate.h"
+
+#import "../OAuthRequester.h"
+#import "../RequestData.h"
 
 @interface ViewController ()
 
@@ -46,7 +48,7 @@
 
     req = [main oauth];
 
-    [req registerReceiver:self withSelector:@selector(requestDone:withResult:)];
+    [req registerReceiver:self withCallback:@selector(requestDone:)];
 
     [self registerForKeyboardNotifications];
 }
@@ -56,7 +58,7 @@
     didAppear = 1;
 }
 
-- (void) requestDone: (NSNumber*)status withResult: (NSString*)result
+- (void) requestDone: (RequestData*)result
 {
     
     // There are 3 cases during login.
@@ -64,9 +66,9 @@
     // case 2: there is a client token but no access token and we should retry.
     // case 3: there is a client token but no access token in this case the login has just normally failed.
 
-    if ([status integerValue] > 0) {
+    if ([[result status] integerValue] > 0) {
         if (![req clientToken]) {
-            authRetry = [req retry];
+            authRetry = [result shouldRetry];
         }
         else if ([req clientToken] && ![req accessToken] && authRetry) {
             authRetry = NO;
@@ -74,7 +76,8 @@
                 [_usernameInput.text length]) {
 
                 [req postPassword:_passwordInput.text
-                          forUser:_usernameInput.text];
+                          forUser:_usernameInput.text
+                     withCallback:nil];
             }
         }
         else if ([req clientToken] && ![req accessToken]) {
@@ -99,7 +102,8 @@
 
     if ([_passwordInput.text length] && [_usernameInput.text length]) {
         [req postPassword:_passwordInput.text
-                  forUser:_usernameInput.text];
+                  forUser:_usernameInput.text
+             withCallback:@selector(requestDone:)];
     }
     else {
         NSLog(@"username and/or password empty");

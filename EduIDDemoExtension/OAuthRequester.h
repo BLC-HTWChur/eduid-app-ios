@@ -36,33 +36,38 @@
 
 - (void) setDataStore:(SharedDataStore *)dataStore;
 
-- (void) registerReceiver:(id)receiver withSelector:(SEL)selector;
+- (void) registerReceiver:(id)receiver;
+- (void) registerReceiver:(id)receiver withCallback:(SEL)callback;
 
 // client authorization
-- (void) postClientCredentials;
+- (void) postClientCredentials: (SEL)callback;
 // user authorization
-- (void) postPassword:(NSString*)password forUser:(NSString*)username;
+- (void) postPassword:(NSString*)password
+              forUser:(NSString*)username
+         withCallback:(SEL)callback;
 
 // revoke authorization
-- (void) logout;
+- (void) logout: (SEL)callback;
 
 // user information
-- (void) getUserProfile;
+- (void) getUserProfile:(SEL)callback;
 
 // service information
-- (void) postProtocolList: (NSArray*) protocolList;
+- (void) postProtocolList: (NSArray*) protocolList
+             withCallback: (SEL)callback;
 
 // service assertion
-- (void) retrieveServiceAssertion:(NSString*) targetServiceUrl;
+- (void) retrieveServiceAssertion:(NSString*) targetServiceUrl
+                     withCallback: (SEL)callback;
 
 - (void) authorizeWithService:(NSString*) targetServiceUrl
         withAuthorizationCode:(NSString*) assertionToken
-                   withCaller: (id) caller
-                 withSelector: (SEL)selector;
+                   withCallback: (SEL)callback;
 
 // app assertion
 - (void) authorizeApp:(NSString*) appClientId
-            atService:(NSString*) targetService;
+            atService:(NSString*) targetService
+         withCallback: (SEL)callback;
 
 - (NSString*) serviceUrl:(nonnull NSDictionary*)rsd
              forProtocol:(nonnull NSString*)protocol;
@@ -72,7 +77,7 @@
              forEndpoint:(nullable NSString*) endpoint;
 
 // app specific functions
-- (void) verifyAuthorization;  // allows the caller to request or trigger authorization
+- (void) verifyAuthorization:(SEL)callback;  // allows the caller to request or trigger authorization
 
 - (void) loadTokens;
 - (void) storeTokens;

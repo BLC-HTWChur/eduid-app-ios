@@ -8,6 +8,8 @@
 
 #import "LoginViewController.h"
 
+#import "../RequestData.h"
+
 @interface LoginViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *usernameInput;
 @property (weak, nonatomic) IBOutlet UITextField *passwordInput;
@@ -25,7 +27,7 @@
     authRetry = NO;
     
     [[self oauth] registerReceiver:self
-                      withSelector:@selector(requestDone:withResult:)];
+                      withCallback:@selector(requestDone:)];
     [self registerForKeyboardNotifications];
 }
 
@@ -41,7 +43,8 @@
     
     if ([_passwordInput.text length] && [_usernameInput.text length]) {
         [[self oauth] postPassword:_passwordInput.text
-                           forUser:_usernameInput.text];
+                           forUser:_usernameInput.text
+                      withCallback:nil];
     }
     else {
         NSLog(@"username and/or password empty");
@@ -58,8 +61,7 @@
 }
 */
 
-- (void) requestDone: (NSNumber*)status withResult: (NSString*)result
-{
+- (void) requestDone: (RequestData*)result {
     OAuthRequester *req = [self oauth];
     
     // There are 3 cases during login.
@@ -67,9 +69,9 @@
     // case 2: there is a client token but no access token and we should retry.
     // case 3: there is a client token but no access token in this case the login has just normally failed.
 
-    if ([status integerValue] > 0) {
+    if ([[result status] integerValue] > 0) {
         if (![req clientToken]) {
-            authRetry = [req retry];
+            authRetry = [result shouldRetry];
         }
         else if ([req clientToken] && ![req accessToken] && authRetry) {
             // retry with fixed client token
@@ -78,7 +80,8 @@
                 [_usernameInput.text length]) {
                 
                 [req postPassword:_passwordInput.text
-                          forUser:_usernameInput.text];
+                          forUser:_usernameInput.text
+                     withCallback:@selector(requestDone:)];
             }
         }
         else if ([req clientToken] && ![req accessToken]) {

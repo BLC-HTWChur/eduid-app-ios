@@ -14,11 +14,16 @@
 #import "../OAuthRequester.h"
 #import "../EduIDDemoExtension/JWT.h"
 #import "../UserService.h"
+#import "../SharedDataStore.h"
+#import "../RequestData.h"
+
+#import "ServiceListCell.h"
 
 @interface ActionViewController ()
 
 @property (retain) NSArray *myServices;
 @property (retain) NSDictionary *appRequest;
+@property (retain, atomic) NSMutableArray *resultSet;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -26,14 +31,30 @@
 
 @end
 
-@implementation ActionViewController
+@implementation ActionViewController {
+    BOOL buildResult;
+    BOOL initServiceTokens;
+
+    NSInteger missingServices;
+    NSInteger assertCountDown;
+    NSInteger authSelfCountDown;
+    NSInteger authAppCountDown;
+}
 
 @synthesize resultsController;
-
+@synthesize resultSet;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
+    buildResult = NO;
+    initServiceTokens = NO;
+
+    missingServices = 0;
+    assertCountDown = 0;
+    authSelfCountDown = 0;
+    authAppCountDown = 0;
+
     SharedDataStore *ds = [self eduIdDS];
     
     
@@ -51,7 +72,7 @@
     [self initializeFetchResultController];
 
     [[self oauth] registerReceiver:self
-                      withSelector:@selector(requestDone:withResult:)];
+                      withCallback:@selector(requestDone:withResult:)];
     
     NSLog(@"Load Extension Context!");
     
@@ -83,7 +104,7 @@
 
     if ([self requestData]) {
         NSLog(@"request services for protocols %ld", [[self requestData] count]);
-        [[self oauth] postProtocolList:[[self requestData] objectForKey:@"protocols"]];
+        [[self oauth] postProtocolList:[[self requestData] objectForKey:@"protocols"] withCallback:@selector(requestDone:)];
     }
 }
 
@@ -109,7 +130,8 @@
     if (protocolList && [protocolList count]) {
         NSLog(@"request services for protocols");
 
-        [[self oauth] postProtocolList:protocolList];
+        [[self oauth] postProtocolList:protocolList
+                          withCallback:@selector(requestDone:)];
     }
 }
 
@@ -123,10 +145,20 @@
     //we are finished
     NSLog(@"return to container app");
 
+    buildResult = NO;
+    initServiceTokens = YES;
 
+    SharedDataStore *ds = [[self oauth] dataStore];
+
+    // for all services in the data that have no token, get one
+    [[self oauth] registerReceiver:self
+                      withCallback:@selector(userAssertionDone:)];
 
     [self extensionDone];
 }
+
+
+
 
 /** enable or disable the whole GUI
  @param inEnable: YES: enable GUI, NO: disabl GUI */
@@ -151,7 +183,7 @@
     for (NSDictionary *service in _myServices) {
         NSDictionary *apis = [service objectForKey:@"apis"];
         
-        for (NSString *apiName in r) {
+        for (NSString *apiName in [r objectForKey:@"protocols"]) {
             NSDictionary *a = [apis objectForKey:apiName];
             if (a != nil) {
                 [serviceApis setValue:a forKey:apiName];
@@ -182,14 +214,36 @@
     [[self origContext] completeRequestReturningItems:@[extensionItem] completionHandler:nil];
 }
 
-- (void) requestDone: (NSNumber*)status withResult: (NSString*)result
+- (void) requestDone: (RequestData*)result
 {
-    // display
+    if ([[result status] integerValue] != 200) {
+        NSLog(@"ActionViewController received no data");
+    }
+
     NSLog(@"LIST RESULT COMPLETE, REFRESH TABLE");
 
     NSError *err;
     if (![[self resultsController] performFetch:&err]) {
         NSLog(@"fetch failed %@ \n%@", [err localizedDescription], [err userInfo]);
+    }
+
+}
+
+- (void) userAssertionDone: (RequestData*)result
+{
+    // count down the remaining services
+    if (assertCountDown > 0) {
+        assertCountDown = assertCountDown - 1;
+    }
+}
+
+- (void) appAssertionDone: (RequestData*)result
+{
+    if (authAppCountDown > 0) {
+        authAppCountDown = authAppCountDown - 1;
+    }
+    else {
+        // now we can wrap up
     }
 }
 
@@ -247,17 +301,19 @@
 {
     UserService *us = [[self resultsController] objectAtIndexPath:indexPath];
 
-    static NSString *simpleTableIdentifier = @"SimpleTableItem";
+    static NSString *serviceCellIdentifier = @"ServiceSelectionCEll";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:serviceCellIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:serviceCellIdentifier];
     }
 
     cell.textLabel.text = [us name];
     // [[us objectAtIndex:indexPath.row] objectForKey:@"engineName"];
     return cell;
 }
+
+
 
 @end

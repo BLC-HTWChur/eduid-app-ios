@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "../OAuthRequester.h"
 
+#import "../RequestData.h"
+
 @interface SplashViewController ()
 
 @property (retain, nonatomic) OAuthRequester *req;
@@ -29,12 +31,12 @@
 
     req = [main oauth];
 
-    [req registerReceiver:self withSelector:@selector(requestDone:withResult:)];
+    [req registerReceiver:self withCallback:@selector(requestDone:)];
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
-    [req verifyAuthorization];
+    [req verifyAuthorization:@selector(requestDone:)];
 }
 
 
@@ -53,7 +55,7 @@
 }
 */
 
-- (void) requestDone: (NSNumber*)status withResult: (NSString*)result
+- (void) requestDone: (RequestData*)result
 {
     if ([req accessToken]) {
         NSLog(@"appeared & got access token, switch to profile view");

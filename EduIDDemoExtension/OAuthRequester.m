@@ -11,11 +11,14 @@
 #import "EduidConfig.h"
 #import "UserService.h"
 #import "Protocols.h"
+#import "RequestData.h"
 
 @import Foundation;
 @import UIKit;
 
 @interface OAuthRequester ()
+
+@property (nonatomic) RequestData *requestData;
 
 @end
 
@@ -212,7 +215,11 @@ NSInteger const SERVICE_TOKEN = 4;
                     }
                 }
             }
-            [self completeRequest: @0 withResult: @"" withCaller:callerObject withSelector:callerSelector];
+
+            RequestData *res = [_requestData cloneRequest];
+
+            [res setType: @"load_tokens"];
+            [res complete:@0];
         }
     }
 }
@@ -293,23 +300,32 @@ NSInteger const SERVICE_TOKEN = 4;
 }
 
 - (void) registerReceiver:(id)receiver
-             withSelector:(SEL)selector
 {
-    callerObject   = receiver;
-    callerSelector = selector;
+    _requestData = [RequestData requestWithObject:receiver];
 }
 
-- (void) verifyAuthorization
+- (void) registerReceiver:(id)receiver withCallback:(SEL)callback
+{
+    _requestData = [RequestData requestWithObject:receiver withCallback:callback];
+}
+
+
+- (void) verifyAuthorization:(SEL)callback
 {
     NSLog(@"verify authorization");
     // if we have no client token we try to request one
     if (!_clientToken) {
         // TODO verify that we have network access
-        [self postClientCredentials];
+
+        [self postClientCredentials:callback];
     }
     else {
-        //
-        [self completeRequest: @0 withResult: @"" withCaller:callerObject withSelector:callerSelector];
+
+        RequestData *res = [_requestData cloneRequest:callback];
+
+        [res setType: @"verify_authorization"];
+
+        [res complete:@0];
     }
 }
 
@@ -319,70 +335,115 @@ NSInteger const SERVICE_TOKEN = 4;
 {
     NSLog(@"call GET");
 
-    [self      fetchFromUrl: url
-                  withToken: nil
-         useResponseHandler: @selector(verifyCoreService:withStatus:fromUrl:withCaller:withSelector:)];
+    RequestData *res = [_requestData cloneRequest];
+    RequestData *req= [res subRequestFor:self
+                            withCallback:@selector(verifyCoreService:)];
+    [req setUrl:[url absoluteString]];
+
+    [self      fetch: req
+           withToken: nil];
 }
 
 // send the client_credentials request
-- (void) postClientCredentials
+- (void) postClientCredentials:(SEL)callback
 {
     NSLog(@"postClientCredentials");
 
+    RequestData *res = [_requestData cloneRequest:callback];
+
+    [res setType: @"post_user_password"];
+    [res setStatus:@-400];
+    [res setUrl:[self extendUrl:@"/token"]];
+
+    RequestData *req = [res subRequestFor:self
+                             withCallback:@selector(handleClientAuthorization:)];
+
     NSDictionary *reqdata = @{@"grant_type": @"client_credentials"};
 
-    [self           postToUrl: [self extendUrl:@"/token"]
-                     withJSON:reqdata
-                   withToken:[self prepareToken:DEVICE_TOKEN]
-          useResponseHandler:@selector(handleClientAuthorization:withStatus:fromUrl:withCaller:withSelector:)];
+    [self    post: req
+         withJSON:reqdata
+        withToken:[self prepareToken:DEVICE_TOKEN]];
 }
 
-- (void) postPassword:(NSString*)password forUser:(NSString*)username
+- (void) postPassword:(NSString*)password
+              forUser:(NSString*)username
+         withCallback:(SEL)callback
 {
     NSLog(@"postPassword:forUser:");
 
-    NSDictionary *reqdata = @{
+    RequestData *res = [_requestData cloneRequest:callback];
+
+    [res setType: @"post_user_password"];
+    [res setStatus:@-400];
+    [res setUrl:[self extendUrl:@"/token"]];
+
+    RequestData *reqData = [res subRequestFor:self
+                                 withCallback:@selector(handleUserAuthorization:)];
+
+    NSDictionary *payload = @{
                               @"grant_type": @"password",
                               @"username": username,
                               @"password": password
                               };
 
-
-    [self           postToUrl: [self extendUrl:@"/token"]
-                     withJSON:reqdata
-                   withToken:[self prepareToken:CLIENT_TOKEN]
-          useResponseHandler:@selector(handleUserAuthorization:withStatus:fromUrl:withCaller:withSelector:)];
+    [self   post:reqData
+        withJSON:payload
+       withToken:[self prepareToken:CLIENT_TOKEN]];
 }
 
-- (void) getUserProfile {
-
+- (void) getUserProfile:(SEL)callback
+{
     NSLog(@"getUserProfile");
 
+    RequestData *res = [_requestData cloneRequest:callback];
+
+    [res setType: @"get_user_profile"];
+    [res setStatus:@-400];
+    [res setUrl:[self extendUrl:@"/user-profile"]];
+
     if (_accessToken) {
-        [self      fetchFromUrl:[self extendUrl:@"/user-profile"]
-                      withToken:[self prepareToken:ACCESS_TOKEN]
-             useResponseHandler:@selector(handleUserProfile:withStatus:fromUrl:withCaller:withSelector:)];
+        RequestData *fetchReq = [res subRequestFor:self
+                                   withCallback:@selector(handleUserProfile:)];
+
+
+        [self      fetch: fetchReq
+               withToken:[self prepareToken:ACCESS_TOKEN]];
     }
     else {
         NSLog(@"No access token present");
 
-        [self completeRequest: @-400 withResult:@"" withCaller:callerObject withSelector:callerSelector];
+        [res complete];
     }
 }
 
-- (void) postProtocolList:(NSArray *)protocolList
+- (void) postProtocolList:(NSArray *)protocolList withCallback:(SEL)callback
 {
     NSLog(@"postProtocolList:");
 
-    [self           postToUrl: [self extendUrl:@"/protocol-discovery/protocol"]
-                     withJSON: protocolList
-                    withToken: [self prepareToken:ACCESS_TOKEN]
-           useResponseHandler: @selector(handleProtocolServices:withStatus:fromUrl:withCaller:withSelector:)];
+    RequestData *res = [_requestData cloneRequest:callback];
+    RequestData *reqData = [res subRequestFor:self
+                                 withCallback:@selector(handleProtocolServices:)];
+
+    [reqData setType: @"get_user_profile"];
+    [reqData setStatus:@-400];
+    [reqData setUrl:[self extendUrl:@"/protocol-discovery/protocol"]];
+
+    [self   post: reqData
+        withJSON: protocolList
+       withToken:[self prepareToken:ACCESS_TOKEN]];
 }
 
-- (void) logout{
+- (void) logout:(SEL)callback
+{
     // delete accessToken
     NSLog(@"requested logout");
+
+    RequestData *res = [_requestData cloneRequest:callback];
+
+    [res setType: @"logout"];
+    [res setStatus:@0];
+    [res setUrl:[self extendUrl:@"/revoke"]];
+
     if (_accessToken &&
         accessData &&
         _DS) {
@@ -392,8 +453,6 @@ NSInteger const SERVICE_TOKEN = 4;
         
         // if necessary, revoke ALL access tokens with the resource services.
 
-        [self extendUrl:@"/revoke"];
-        
         // authorize itself using JWT-Bearer to revoke
         // send access_token value as token to revoke (will revoke the related refresh token)
         // Alternatively send refresh token to revoke
@@ -403,66 +462,91 @@ NSInteger const SERVICE_TOKEN = 4;
 
         accessData = nil;
         _accessToken = nil;
-        
-        [self completeRequest: @0 withResult: @"" withCaller:callerObject withSelector:callerSelector];
+
     }
-    else {
-        [self completeRequest: @0 withResult: @"" withCaller:callerObject withSelector:callerSelector];
-    }
+    [res complete];
 }
 
-- (void) retrieveServiceAssertion:(NSString*) targetServiceUrl
+- (void) retrieveServiceAssertion:(NSString*) targetServiceUrl withCallback:(SEL)callback
 {
     NSLog(@"retrieveServiceAssertion:");
 
     // we visit the authorization code endpoint
     // verify if we have an access token!!!
+
+    RequestData *res = [_requestData cloneRequest:callback];
+    [res setType: @"serviceAuth"];
+    [res setUrl: [self extendUrl: @"/authorization"]];
+
+    RequestData *reqData = [res subRequestFor:self
+                                 withCallback:@selector(handleServiceAuthorization:)];
+    [reqData setStatus:@-400];
     if (_accessToken &&
         accessData) {
-        NSDictionary *reqdata = @{
+        NSDictionary *payload = @{
                                   @"request_type": @"code",
                                   @"redirect_uri": targetServiceUrl,
                                   @"password": clientId
                                   };
 
-
-        [self           postToUrl: [self extendUrl:@"/authorization"]
-                         withJSON: reqdata
-                        withToken:[self prepareToken:ACCESS_TOKEN]
-               useResponseHandler:@selector(handleServiceAssertion:withStatus:fromUrl:withCaller:withSelector:)];
+        [self   post: reqData
+            withJSON: payload
+           withToken:[self prepareToken:ACCESS_TOKEN]];
     }
     else {
-        [self completeRequest: @-2 withResult: @"" withCaller:callerObject withSelector:callerSelector];
+        [res setStatus:@-2];
+        [res complete];
     }
 }
 
 - (void) authorizeWithService: (NSString*)targetServiceUrl
         withAuthorizationCode: (NSString*)assertionToken
-                   withCaller: (id)caller
-                 withSelector: (SEL)selector
+                withCallback: (SEL)callback
 {
     NSLog(@"authorizeWithService:withAuthorizationCode:");
 
-    if (assertionToken && [assertionToken length]) {
-    NSDictionary *reqdata = @{
-                              @"grant_type": @"urn:ietf:param:oauth:grant-type:jwt-bearer",
-                              @"assertion": assertionToken
-                              };
+    RequestData *rData = [_requestData cloneRequest:callback];
 
-    [self           postToUrl: [NSURL URLWithString: targetServiceUrl]
-                     withJSON: reqdata
-                    withToken: nil
-           useResponseHandler:@selector(handleServiceAuthorization:withStatus:fromUrl:withCaller:withSelector:)];
+    [rData setType: @"serviceAuth"];
+    [rData setUrl:targetServiceUrl];
+
+    RequestData *reqData = [rData subRequestFor:self
+                                withCallback:@selector(handleServiceAuthorization:)];
+
+    [reqData setStatus:@-400];
+
+
+    if (assertionToken && [assertionToken length]) {
+        NSDictionary *payload = @{
+                                  @"grant_type": @"urn:ietf:param:oauth:grant-type:jwt-bearer",
+                                  @"assertion": assertionToken
+                                  };
+
+        [self   post:reqData
+            withJSON:payload
+           withToken: nil];
     }
     else {
-        [self completeRequest: @-1 withResult: @"" withCaller:caller withSelector:selector];
+        [rData setStatus: @-1];
+        [rData complete];
     }
 }
 
 - (void) authorizeApp:(NSString*) appClientId
            atService:(NSString*)  targetServiceUrl
+         withCallback:(SEL)callback
 {
     NSLog(@"authorizeApp:atService:");
+
+    RequestData *rData = [_requestData cloneRequest:callback];
+
+    [rData setType: @"appAuth"];
+    [rData setUrl:targetServiceUrl];
+
+    RequestData *reqData = [rData subRequestFor:self
+                                   withCallback:@selector(handleAppAssertion:)];
+
+    [reqData setStatus:@-400];
 
     // build authorization token
 
@@ -470,31 +554,35 @@ NSInteger const SERVICE_TOKEN = 4;
     if (serviceToken) {
         JWT *webToken = [JWT jwtWithTokenString:serviceToken];
 
-        [webToken setIssuer: clientId];
-        [webToken setAudience: targetServiceUrl];
-        [webToken setSubject: appClientId];
+        [webToken setIssuer:clientId];
+        [webToken setAudience:targetServiceUrl];
+        [webToken setSubject:appClientId];
 
         NSDictionary *reqdata = @{
                                   @"grant_type": @"authorization_code",
                                   @"authorization_code": webToken,
                                   @"client_id": appClientId
                                   };
-
-        [self         postToUrl: [NSURL URLWithString:targetServiceUrl]
-                       withJSON: reqdata
-                       withToken: webToken
-             useResponseHandler: @selector(handleAppAssertion:withStatus:fromUrl:withCaller:withSelector:)];
+        [self     post:reqData
+              withJSON:reqData
+             withToken:webToken];
+    }
+    else {
+        [rData setStatus: @-1];
+        [rData complete];
     }
     // collect the auth token for the final result
 }
 
-- (NSURL*) extendUrl:(NSString*)suffix
+- (NSString*) extendUrl:(NSString*)suffix
 {
     NSString *u = [url absoluteString];
+
     if (suffix && [suffix length]) {
         u = [u stringByAppendingString:suffix];
     }
-    return [NSURL URLWithString:u];
+
+    return u;
 }
 
 - (NSString*) serviceUrl:(nonnull NSDictionary*)rsd
@@ -557,82 +645,57 @@ NSInteger const SERVICE_TOKEN = 4;
     return endpointUrl;
 }
 
-- (void)          postToUrl: (NSURL*) requrl
-                   withJSON: (id) payload
-                  withToken: (JWT*) token
-         useResponseHandler: (SEL)responseHandler
+
+- (void)    post: (RequestData*) req
+        withJSON: (id) payload
+       withToken: (JWT*) token
 {
-    [self       postToUrl: requrl
-                 withData: [[JWT jsonEncode:payload] dataUsingEncoding:NSUTF8StringEncoding]
-                 andToken: token
-       useResponseHandler: responseHandler];
+    [req setInput:payload];
+
+    [self    post: req
+         withData: [req inputData]
+         withToken: token];
 }
 
-- (void) postToUrl: (NSURL*) requrl
-          withData: (NSData*) data
-            andToken: (JWT *)token
-   useResponseHandler: (SEL)responseHandler
+- (void)    post: (RequestData*) requestData
+        withData: (NSData*) data
+        withToken: (JWT *)token
 {
-    [self        postToUrl:requrl
-                  withData:data
-                  andToken:token
-        useResponseHandler:responseHandler
-                withCaller:callerObject
-              withSelector:callerSelector];
-}
-
-- (void) postToUrl: (NSURL*) requrl
-          withData: (NSData*) data
-          andToken: (JWT *)token
-useResponseHandler: (SEL)responseHandler
-        withCaller: (id)caller
-      withSelector: (SEL)myCallerSelector
-{
-    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-
-    [self setAuthHeader: sessionConfiguration
-              withToken: token];
-
-    NSURLSession *session        =  [NSURLSession sessionWithConfiguration:sessionConfiguration];
-
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requrl];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[requestData processedUrl]];
 
     [request setHTTPMethod: @"POST"];
-
     [request addValue: @"application/json" forHTTPHeaderField:@"Content-Type"];
+
     [request setHTTPBody: data];
 
-    NSURLSessionDataTask *task;
-
-    task = [session dataTaskWithRequest:request
-                      completionHandler:[self useResponseHandler:responseHandler
-                                                          forUrl:requrl
-                                                      withCaller:caller
-                                                    withSelector:myCallerSelector]];
-    [task resume];
+    [self executeHttpRequest:request
+             withRequestData:requestData
+                   withToken:token];
 }
 
+- (void) fetch:(RequestData*)requestData
+     withToken:(JWT*)token
+{
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[requestData processedUrl]];
 
-- (void)     fetchFromUrl: (NSURL*) requrl
-                withToken: (JWT*) token
-       useResponseHandler:(nonnull SEL) responseHandler
+    [self executeHttpRequest:urlRequest
+             withRequestData:requestData
+                   withToken:token];
+}
+
+- (void) executeHttpRequest:(NSURLRequest*)urlRequest
+            withRequestData:(RequestData*)requestData
+                  withToken:(JWT*)token
 {
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    
+
     [self setAuthHeader: sessionConfiguration
               withToken: token];
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
-    NSURLRequest *request = [NSURLRequest requestWithURL:requrl];
-    
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler:[self useResponseHandler:responseHandler
-                                                                                forUrl:requrl
-                                                                            withCaller:callerObject
-                                                                          withSelector:callerSelector
-                                                               ]];
-    [task resume];
 
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:urlRequest
+                                            completionHandler:[self useRequestData:requestData]];
+    [task resume];
 }
 
 - (void) setAuthHeader:(NSURLSessionConfiguration*)config
@@ -715,190 +778,127 @@ useResponseHandler: (SEL)responseHandler
     return dToken;
 }
 
-// needs to be a little more complex because the user may change views and thus the callback
-- (void) completeRequest: (NSNumber*)reqStatus
-              withResult: (NSString*)reqResult
-              withCaller: (id) callerObj
-            withSelector: (SEL) methSelector
-{
-    if (callerObject != nil &&
-        callerSelector != nil) {
-
-        // NSLog(@"complete authorization");
-
-        IMP imp = [callerObj methodForSelector:methSelector];
-        void (*func)(id, SEL, NSNumber*, NSString*) = (void *)imp;
-
-        // because our objects operate on the main thread, we signal them there
-        dispatch_async(dispatch_get_main_queue(), ^{
-            func(callerObj, methSelector, reqStatus, reqResult);
-        });
-    }
-}
-
-- (void (^)(NSData*, NSURLResponse*, NSError*)) useResponseHandler:(nonnull SEL)responseSelector
-                                                            forUrl:(nonnull NSURL*)target
-                                                        withCaller:(nonnull id)cbObj
-                                                      withSelector: (SEL)cbSelector
+- (void (^)(NSData*, NSURLResponse*, NSError*)) useRequestData:(nonnull RequestData*)requestData
 {
     // reset the status and the result.
-    retryRequest = NO; // reset retry marker
 
     // get Local references for the call back
-    id cObj   = cbObj;
-    SEL cMeth = cbSelector;
+    RequestData *cResult = requestData;
 
     return ^(NSData *data,
              NSURLResponse *response,
              NSError *error) {
 
-        NSString *reqResult;
-        NSNumber *reqStatus = @-1;
-
-        IMP imp = [self methodForSelector:responseSelector];
-        void (*completionHandler)(id, SEL, NSString*, NSNumber*, NSURL*, id, SEL) = (void *)imp;
+        [cResult setStatus:@-1];
 
         if (!error) {
             NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
 
-            reqStatus = [NSNumber numberWithInteger:httpResponse.statusCode];
-            reqResult = @"";
+            [cResult setStatus:[NSNumber numberWithInteger:httpResponse.statusCode]];
 
             if (data &&
                 [data length]) {
-                reqResult = [[NSString alloc] initWithData:data
-                                                  encoding:NSUTF8StringEncoding];
+                [cResult setResult:[[NSString alloc] initWithData:data
+                                                         encoding:NSUTF8StringEncoding]];
             }
         }
+        else {
+            NSLog(@"error!? %@", error);
+        }
 
-        //
-        completionHandler(self, responseSelector, reqResult, reqStatus, target, cObj, cMeth);
+        [cResult complete];
     };
 }
 
-- (void) verifyCoreService: (NSString*) reqResult
-                withStatus: (NSNumber*) reqStatus
-                   fromUrl: (NSURL*) targetURL
-                withCaller: (id) myCaller
-              withSelector: (SEL) mySelector
+- (void) verifyCoreService: (RequestData*)reqResult
 {
-    [self completeRequest:reqStatus withResult: @"" withCaller:myCaller withSelector:mySelector];
+    [[reqResult parent] complete];
 }
 
-- (void) handleClientAuthorization: (NSString*) reqResult
-                        withStatus: (NSNumber*) reqStatus
-                           fromUrl: (NSURL*) targetURL
-                        withCaller: (id) myCaller
-                      withSelector: (SEL) mySelector
+- (void) handleClientAuthorization: (RequestData*)reqResult
 {
-    if ([reqStatus integerValue] == 200) {
-        [self setClientToken:reqResult];
+    if ([[reqResult status] integerValue] == 200) {
+        [self setClientToken:[reqResult result]];
     }
-    else {
-        NSLog(@"different status %@", reqStatus);
-        NSLog(@"service message: %@", reqResult);
-    }
-
-    [self completeRequest:reqStatus withResult: @"" withCaller:myCaller withSelector:mySelector];
+    [[reqResult parent] complete];
 }
 
-- (void) handleUserAuthorization: (NSString*) reqResult
-                      withStatus: (NSNumber*) reqStatus
-                         fromUrl: (NSURL*) targetURL
-                      withCaller: (id) myCaller
-                    withSelector: (SEL) mySelector
+- (void) handleUserAuthorization: (RequestData*) reqResult
 {
-    if ([reqStatus integerValue] == 200) {
-        [self setAccessToken:reqResult];
+    if ([[reqResult status] integerValue] == 200) {
+        [self setAccessToken:[reqResult result]];
     }
-    else {
-        NSLog(@"different status %@", reqStatus);
-        NSLog(@"service message: %@", reqResult);
-    }
-    [self completeRequest:reqStatus withResult: @"" withCaller:myCaller withSelector:mySelector];
+    [[reqResult parent] complete];
 }
 
-- (void) handleUserProfile: (NSString*) reqResult
-                withStatus: (NSNumber*) reqStatus
-                   fromUrl: (NSURL*) targetURL
-                withCaller: (id) myCaller
-              withSelector: (SEL) mySelector
+- (void) handleUserProfile: (RequestData*)reqResult
 {
-    [self completeRequest:reqStatus withResult: reqResult withCaller:myCaller withSelector:mySelector];
+    NSLog(@"handle user profile");
+    [[reqResult parent] complete];
 }
 
-- (void) handleServiceAssertion: (NSString*) reqResult
-                     withStatus: (NSNumber*) reqStatus
-                        fromUrl: (NSURL*) targetURL
-                     withCaller: (id) myCaller
-                   withSelector: (SEL) mySelector
+- (void) handleServiceAssertion: (RequestData*) reqResult
 {
-    // we immediately pass on to service authorization
-    if ([reqStatus integerValue] == 200) {
-        NSDictionary *dict = [JWT jsonDecode:reqResult];
 
-        NSString *code      = (NSString*)[dict objectForKey:@"code"];
+    if ([[reqResult status] integerValue] == 200) {
+        NSDictionary *dict = [reqResult processedResult];
+
+        NSString *code        = (NSString*)[dict objectForKey:@"code"];
         NSString *redirectUri = (NSString*)[dict objectForKey:@"redirect_uri"];
 
-        [self authorizeWithService:redirectUri
-             withAuthorizationCode:code
-                        withCaller:myCaller
-                      withSelector:mySelector];
+        // hand down
+        RequestData *useAssertionReq = [reqResult cloneRequest];
+        [useAssertionReq setUrl:redirectUri];
+
+        // authorize with service
     }
-    [self completeRequest:reqStatus withResult: @"" withCaller:myCaller withSelector:mySelector];
+    else {
+        [[reqResult parent] complete];
+    }
 }
 
-- (void) handleServiceAuthorization: (NSString*) reqResult
-                         withStatus: (NSNumber*) reqStatus
-                            fromUrl: (NSURL*) targetURL
-                         withCaller: (id) myCaller
-                       withSelector: (SEL) mySelector
+- (void) handleServiceAuthorization: (RequestData*) reqResult
 {
-    if ([reqStatus integerValue] == 200) {
-        // store token into the token database
+    if ([[reqResult status] integerValue] == 200) {
         Tokens *serviceToken = [NSEntityDescription insertNewObjectForEntityForName:@"Tokens"
                                                              inManagedObjectContext:[_DS managedObjectContext]];
-        [serviceToken setTarget:  [targetURL absoluteString]];     // store the endpoint
-        [serviceToken setSubject: @"ch.eduid.app"];                // for myself
+        [serviceToken setTarget:  [reqResult url]];     // store the endpoint
+        [serviceToken setSubject: @"ch.eduid.app"];     // for myself
         [serviceToken setType:    @"service"];
-        [serviceToken setToken:   reqResult];                      // store the token
-        
+        [serviceToken setToken:   [reqResult result]];  // remember the token
+
         [self storeTokens];
     }
-    [self completeRequest:reqStatus withResult: @"" withCaller:myCaller withSelector:mySelector];
+
+    [[reqResult parent] complete];
 }
 
-- (void) handleAppAssertion: (NSString*) reqResult
-                 withStatus: (NSNumber*) reqStatus
-                    fromUrl: (NSURL*) targetURL
-                 withCaller: (id) myCaller
-               withSelector: (SEL) mySelector
+
+- (void) handleAppAssertion: (RequestData*) reqResult
 {
-    if ([reqStatus integerValue] == 200) {
+    if ([[reqResult status] integerValue] == 200) {
         // store app assertion so we can kill it later
         Tokens *appToken = [NSEntityDescription insertNewObjectForEntityForName:@"Tokens"
                                                          inManagedObjectContext:[_DS managedObjectContext]];
-        [appToken setTarget:  [targetURL absoluteString]];     // store the endpoint
-        [appToken setSubject: @"ch.eduid.app"];                // for myself
+
+        // we should get the client id
+        [appToken setTarget:  [reqResult url]];     // store the endpoint
+        [appToken setSubject: @"ch.eduid.app"];     // for myself
         [appToken setType:    @"app"];
-        [appToken setToken:   reqResult];                      // store the token
-        
+        [appToken setToken:   [reqResult result]];  // store the token
+
         [self storeTokens];
     }
-
-    [self completeRequest:reqStatus withResult: @"" withCaller:myCaller withSelector:mySelector];
+    
+    [[reqResult parent] complete];
 }
 
-- (void) handleProtocolServices: (NSString*) reqResult
-                     withStatus: (NSNumber*) reqStatus
-                        fromUrl: (NSURL*) targetURL
-                     withCaller: (id) myCaller
-                   withSelector: (SEL) mySelector
+- (void) handleProtocolServices: (RequestData*) reqResult
 {
+    if ([[reqResult status] integerValue] == 200) {
 
-    if ([reqStatus integerValue] == 200) {
         // we expect a list of services
-        NSArray *services = [JWT jsonDecode:reqResult];
+        NSArray *services = [reqResult processedResult];
 
         UserService *us;
         Protocols   *proto;
@@ -968,18 +968,17 @@ useResponseHandler: (SEL)responseHandler
         [self storeTokens];
     }
 
-    [self completeRequest:reqStatus withResult: @"" withCaller:myCaller withSelector:mySelector];
+    [[reqResult parent] complete];
 }
 
 - (void) invalidateToken:(NSInteger)tokenType
+             withRequest: (RequestData*)request
 {
-    retryRequest = YES;
     switch (tokenType) {
         case DEVICE_TOKEN:
             // TODO: expose this information so we can display error messages
             // NSLog(@"FATAL: The Version has been invalidated!");
-            retryRequest = NO;
-            invalidDevice = YES;
+            [request invalidate];
             break;
         case CLIENT_TOKEN:
             // NSLog(@"invalidate client token");
@@ -998,11 +997,12 @@ useResponseHandler: (SEL)responseHandler
             _accessToken = nil;
             
             // complete the old request before starting a new one
-
-            [self completeRequest:@403 withResult: @"" withCaller:callerObject withSelector:callerSelector];
+            [request retry];
+            [request complete:@403 withResult:@""];
 
             // try to get a new token
-            [self postClientCredentials];
+            // reuse the callback
+            [self postClientCredentials:nil];
             break;
         case ACCESS_TOKEN:
             if (accessData) {
@@ -1011,8 +1011,10 @@ useResponseHandler: (SEL)responseHandler
             }
             accessData = nil;
             _accessToken = nil;
+            [request retry];
             break;
         default:
+            [request retry];
             break;
     }
     [_DS saveContext];

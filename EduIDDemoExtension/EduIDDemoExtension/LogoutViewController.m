@@ -9,6 +9,7 @@
 #import "LogoutViewController.h"
 #import "AppDelegate.h"
 #import "../OAuthRequester.h"
+#import "../RequestData.h"
 
 @interface LogoutViewController ()
 
@@ -29,7 +30,8 @@
     // Do any additional setup after loading the view.
     AppDelegate *main = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     req = [main oauth];
-    [req registerReceiver:self withSelector:@selector(requestDone:withResult:)];
+    [req registerReceiver:self
+             withCallback:@selector(requestDone:)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,7 +50,7 @@
 */
 - (IBAction)logoutButtonPressed:(id)sender {
     NSLog(@"logout");
-    [req logout];
+    [req logout:nil];
 }
 
 - (void)requestDone: (NSNumber*)status withResult: (NSString*)result
@@ -60,7 +62,7 @@
         // switch to profile view
         NSLog(@"got access token, switch to profile view");
         [self performSegueWithIdentifier:@"toLoginSegue"
-                                        sender:self];
+                                  sender:self];
 
     }
     else {
