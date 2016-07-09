@@ -11,9 +11,13 @@
 @import MobileCoreServices;
 
 #import "ActionViewController.h"
+
 #import "../OAuthRequester.h"
 #import "../EduIDDemoExtension/JWT.h"
+
 #import "../UserService.h"
+#import "../Tokens.h"
+
 #import "../SharedDataStore.h"
 #import "../RequestData.h"
 
@@ -21,7 +25,9 @@
 
 @interface ActionViewController ()
 
-@property (retain) NSArray *myServices;
+@property (retain) NSArray *myServices;               // selected services, if empty all matching are used
+@property (retain) NSMutableArray *filteredServices;  // all matching services
+
 @property (retain) NSDictionary *appRequest;
 @property (retain, atomic) NSMutableArray *resultSet;
 
@@ -68,8 +74,6 @@
         [req setDataStore:ds];
         [req setDeviceToken:tString];
     }
-
-    [self initializeFetchResultController];
 
     [[self oauth] registerReceiver:self
                       withCallback:@selector(requestDone:withResult:)];
@@ -148,16 +152,56 @@
     buildResult = NO;
     initServiceTokens = YES;
 
-    SharedDataStore *ds = [[self oauth] dataStore];
-
     // for all services in the data that have no token, get one
-    [[self oauth] registerReceiver:self
-                      withCallback:@selector(userAssertionDone:)];
 
-    [self extensionDone];
+    [self completeProtocolRequest];
 }
 
+- (void) completeProtocolRequest
+{
+    SharedDataStore *ds = [[self oauth] dataStore];
+    NSManagedObjectContext *moc = [ds managedObjectContext];
 
+    NSFetchRequest *reqU= [NSFetchRequest fetchRequestWithEntityName:@"UserService"];
+
+
+    NSError *error = nil;
+    NSArray *resUS = [moc executeFetchRequest:reqU error:&error];
+    NSArray *resUT = nil;
+
+    if (!error && resUS) {
+        
+        NSFetchRequest *reqT= [NSFetchRequest fetchRequestWithEntityName:@"Tokens"];
+        authAppCountDown = [resUS count];
+
+        for     (UserService *us in resUS) {
+            // check if we have a token for the service already
+            NSString *targetUrl = [us token_target];
+            [reqT setPredicate:[NSPredicate predicateWithFormat:@"target == %@ and type == %@", targetUrl, @"service"]];
+
+            resUT = [moc executeFetchRequest:reqU error:&error];
+            if (!error){
+                if (resUT && [resUT count]) {
+                    // directly request the app assertion from the service
+                    NSLog(@"First: get app assertion from the service ");
+                    [[self oauth] authorizeApp:[[self requestData] objectForKey:@"client_id"]
+                                     atService:targetUrl
+                                  withCallback:@selector(appAssertionDone:)];
+                }
+                else {
+                    // first try to connect to the service and then get the app assertion
+                    NSLog(@"First: get service assertion");
+                    [[self oauth] retrieveServiceAssertion:[us token_target]
+                                              withCallback:@selector(serviceAssertionDone:)];
+                }
+            }
+            else {
+                NSLog(@"error %@", error);
+                error = nil;
+            }
+        }
+    }
+}
 
 
 /** enable or disable the whole GUI
@@ -170,36 +214,40 @@
     // TODO load data from data store and filter the apis.
     // TODO attach the token data from the service endpoints to the RSD.
 
-    NSDictionary *token = @{@"kid": @"1234",
-                            @"mac_key": @"helloWorld",
-                            @"mac_algorithm": @"HS256",
-                            @"client_id": @"123123121241513513"};
-    
     NSDictionary *r = [self requestData];
     NSMutableDictionary *services = [NSMutableDictionary dictionary];
     
     NSMutableDictionary *serviceApis = [NSMutableDictionary dictionary];
-    
-    for (NSDictionary *service in _myServices) {
-        NSDictionary *apis = [service objectForKey:@"apis"];
-        
-        for (NSString *apiName in [r objectForKey:@"protocols"]) {
-            NSDictionary *a = [apis objectForKey:apiName];
-            if (a != nil) {
-                [serviceApis setValue:a forKey:apiName];
-            }
-        }
-        
-        NSDictionary *engineRsd = @{@"homePageLink": [service valueForKey:@"homePageLink"],
-                                    @"engineLink": [service valueForKey:@"engineLink"],
-                                    @"apis": apis,
-                                    @"token": token,
-                                    @"engineName": [service valueForKey:@"engineName"]};
 
-        [services setValue:engineRsd forKey:[service valueForKey:@"homePageLink"]];
+    // if the user has selected nothing in the table view, then use all services
+    if (!_myServices) {
+        for (UserService *us in _filteredServices) {
+            _myServices = [JWT jsonDecode:[us rsd]];
+        }
     }
-    
-    
+
+    for (NSDictionary *service in _myServices) {
+        NSDictionary *token = [self serviceToken:service];
+
+        if (token) {
+            NSDictionary *apis = [service objectForKey:@"apis"];
+
+            for (NSString *apiName in [r objectForKey:@"protocols"]) {
+                NSDictionary *a = [apis objectForKey:apiName];
+                if (a != nil) {
+                    [serviceApis setValue:a forKey:apiName];
+                }
+            }
+
+            NSDictionary *engineRsd = @{@"homePageLink": [service valueForKey:@"homePageLink"],
+                                        @"engineLink": [service valueForKey:@"engineLink"],
+                                        @"apis": apis,
+                                        @"token": token,
+                                        @"engineName": [service valueForKey:@"engineName"]};
+            
+            [services setValue:engineRsd forKey:[service valueForKey:@"homePageLink"]];
+        }
+    }
 
         //create structure to return data to the calling app
     NSExtensionItem* extensionItem = [[NSExtensionItem alloc] init];
@@ -214,6 +262,30 @@
     [[self origContext] completeRequestReturningItems:@[extensionItem] completionHandler:nil];
 }
 
+- (NSDictionary*) serviceToken:(NSDictionary*)service
+{
+    NSDictionary *dict = nil;
+
+    SharedDataStore *ds = [[self oauth] dataStore];
+    NSManagedObjectContext *moc = [ds managedObjectContext];
+
+    NSFetchRequest *reqT= [NSFetchRequest fetchRequestWithEntityName:@"Tokens"];
+    // compund predicate
+    NSString *targetUrl = [[self oauth] serviceUrl:service forProtocol:@"oauth2"];
+
+    [reqT setPredicate:[NSPredicate predicateWithFormat:@"target == %@ AND type == %@", targetUrl, @"app"]];
+
+    NSError *error = nil;
+    NSArray *resUT = [moc executeFetchRequest:reqT error:&error];
+
+    if (!error && resUT && [resUT count]) {
+        Tokens *token = [resUT objectAtIndex:0];
+        dict = [JWT jsonDecode:[token token]];
+    }
+
+    return dict;
+}
+
 - (void) requestDone: (RequestData*)result
 {
     if ([[result status] integerValue] != 200) {
@@ -221,85 +293,110 @@
     }
 
     NSLog(@"LIST RESULT COMPLETE, REFRESH TABLE");
-
-    NSError *err;
-    if (![[self resultsController] performFetch:&err]) {
-        NSLog(@"fetch failed %@ \n%@", [err localizedDescription], [err userInfo]);
-    }
-
+    [self filterServices];
 }
 
-- (void) userAssertionDone: (RequestData*)result
+- (void) filterServices {
+    SharedDataStore *ds = [[self oauth] dataStore];
+    NSManagedObjectContext *moc = [ds managedObjectContext];
+
+    NSFetchRequest *reqU= [NSFetchRequest fetchRequestWithEntityName:@"UserService"];
+
+    NSError *error = nil;
+    NSArray *resUS = [moc executeFetchRequest:reqU error:&error];
+
+    if (!error && resUS) {
+        _filteredServices = [NSMutableArray arrayWithCapacity:[resUS count]];
+
+        for (UserService *us in resUS) {
+            if ([us rsd] &&
+                [[us rsd] length] &&
+                [self rsdProvidesProtocols:[JWT jsonDecode:[us rsd]]]) {
+
+                [_filteredServices addObject:us];
+            }
+        }
+    }
+    [_tableView reloadData];
+}
+
+- (BOOL) rsdProvidesProtocols:(NSDictionary*)myRsd {
+    NSArray * protocols;
+
+    if ([self requestData]) {
+        protocols = [[self requestData] objectForKey:@"protocols"];
+    }
+
+    if (protocols && [protocols count]) {
+        NSArray *apis = [[myRsd objectForKey:@"apis"] allKeys];
+
+        for (NSString* prc in protocols) {
+            if ([apis indexOfObject:prc] == NSNotFound) {
+                return NO;
+            }
+        }
+    }
+    else {
+        return NO;
+    }
+
+    return YES;
+}
+
+- (void) serviceAssertionDone: (RequestData*)result
 {
-    // count down the remaining services
-    if (assertCountDown > 0) {
-        assertCountDown = assertCountDown - 1;
+    // once we have the user assertion we can request the app token
+    NSLog(@"second: get the app assertion");
+
+    if ([[result status] integerValue] == 200) {
+
+        [[self oauth] authorizeApp:[[self requestData] objectForKey:@"client_id"]
+                         atService:[[result processedResult] objectForKey:@"redirect_uri"]
+                      withCallback:@selector(appAssertionDone:)];
+    }
+    else {
+        [self countDownAndComplete];
     }
 }
 
 - (void) appAssertionDone: (RequestData*)result
 {
+    // the app token should be in the local cache
+    if ([[result status] integerValue] == 200) {
+        NSLog(@"received assertion for %@", [[result input] objectForKey:@"client_id"]);
+    }
+    else {
+        NSLog(@"received assertion for %ld", [[result status] integerValue]);
+    }
+    [self countDownAndComplete];
+}
+
+- (void) countDownAndComplete
+{
+    NSLog(@"countdown %ld", authAppCountDown);
     if (authAppCountDown > 0) {
         authAppCountDown = authAppCountDown - 1;
     }
-    else {
-        // now we can wrap up
+
+    // store the app assertion to the result set
+
+    if (authAppCountDown == 0) {
+        NSLog(@"got all assertions");
+        [self extensionDone];
     }
 }
 
-- (void) initializeFetchResultController
-{
-    NSFetchRequest *req= [NSFetchRequest fetchRequestWithEntityName:@"UserService"];
 
-    [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES]]];
-
-    OAuthRequester *oauth = [self oauth];
-
-    NSManagedObjectContext *moc = [[oauth dataStore] managedObjectContext];
-
-    resultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:req
-                                                            managedObjectContext:moc
-                                                              sectionNameKeyPath:nil
-                                                                       cacheName:nil];
-
-    [resultsController setDelegate:self];
-
-
-    NSError *err;
-    if (![[self resultsController] performFetch:&err]) {
-        NSLog(@"fetch failed %@ \n%@", [err localizedDescription], [err userInfo]);
-    }
-    else {
-        [_tableView reloadData];
-    }
-}
-
-- (void) controllerDidChangeContent:(NSFetchedResultsController*) controller
-{
-    NSLog(@"reload table view data");
-    [self.tableView reloadData];
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    NSLog(@"number of sections %ld", [[[self resultsController] sections] count]);
-
-    return [[[self resultsController] sections] count];
-}
-
+// Table view Controller
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    id<NSFetchedResultsSectionInfo> sectionInfo = [[self resultsController] sections][section];
-
-    NSLog(@"number of items in section %ld", [sectionInfo numberOfObjects]);
-
-    return [sectionInfo numberOfObjects];
+    return [_filteredServices count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UserService *us = [[self resultsController] objectAtIndexPath:indexPath];
+    UserService *us = [_filteredServices objectAtIndex:indexPath.row];
 
     static NSString *serviceCellIdentifier = @"ServiceSelectionCEll";
     

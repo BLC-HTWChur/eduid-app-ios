@@ -467,7 +467,8 @@ NSInteger const SERVICE_TOKEN = 4;
     [res complete];
 }
 
-- (void) retrieveServiceAssertion:(NSString*) targetServiceUrl withCallback:(SEL)callback
+- (void) retrieveServiceAssertion:(NSString*)targetServiceUrl
+                     withCallback:(SEL)callback
 {
     NSLog(@"retrieveServiceAssertion:");
 
@@ -475,11 +476,11 @@ NSInteger const SERVICE_TOKEN = 4;
     // verify if we have an access token!!!
 
     RequestData *res = [_requestData cloneRequest:callback];
-    [res setType: @"serviceAuth"];
+    [res setType: @"service_assertion"];
     [res setUrl: [self extendUrl: @"/authorization"]];
 
     RequestData *reqData = [res subRequestFor:self
-                                 withCallback:@selector(handleServiceAuthorization:)];
+                                 withCallback:@selector(handleServiceAssertion:)];
     [reqData setStatus:@-400];
     if (_accessToken &&
         accessData) {
@@ -494,27 +495,19 @@ NSInteger const SERVICE_TOKEN = 4;
            withToken:[self prepareToken:ACCESS_TOKEN]];
     }
     else {
-        [res setStatus:@-2];
         [res complete];
     }
 }
 
-- (void) authorizeWithService: (NSString*)targetServiceUrl
-        withAuthorizationCode: (NSString*)assertionToken
-                withCallback: (SEL)callback
+- (void) forwardAssertion: (RequestData*)targetReq
+    withAuthorizationCode:(NSString*)assertionToken
 {
-    NSLog(@"authorizeWithService:withAuthorizationCode:");
+    [targetReq setType:@"service_authorization"];
 
-    RequestData *rData = [_requestData cloneRequest:callback];
-
-    [rData setType: @"serviceAuth"];
-    [rData setUrl:targetServiceUrl];
-
-    RequestData *reqData = [rData subRequestFor:self
-                                withCallback:@selector(handleServiceAuthorization:)];
+    RequestData *reqData = [targetReq subRequestFor:self
+                                       withCallback:@selector(handleServiceAuthorization:)];
 
     [reqData setStatus:@-400];
-
 
     if (assertionToken && [assertionToken length]) {
         NSDictionary *payload = @{
@@ -527,8 +520,7 @@ NSInteger const SERVICE_TOKEN = 4;
            withToken: nil];
     }
     else {
-        [rData setStatus: @-1];
-        [rData complete];
+        [targetReq complete];
     }
 }
 
@@ -537,10 +529,12 @@ NSInteger const SERVICE_TOKEN = 4;
          withCallback:(SEL)callback
 {
     NSLog(@"authorizeApp:atService:");
+    NSLog(@"app: %@", appClientId);
+    NSLog(@"service: %@", targetServiceUrl);
 
     RequestData *rData = [_requestData cloneRequest:callback];
 
-    [rData setType: @"appAuth"];
+    [rData setType: @"app_authorization"];
     [rData setUrl:targetServiceUrl];
 
     RequestData *reqData = [rData subRequestFor:self
@@ -550,8 +544,11 @@ NSInteger const SERVICE_TOKEN = 4;
 
     // build authorization token
 
+    NSLog(@"service URL: %@", targetServiceUrl);
+
     NSString *serviceToken = [self loadServiceToken:targetServiceUrl];
     if (serviceToken) {
+        NSLog(@"service URL: %ld %@", [serviceToken length], serviceToken);
         JWT *webToken = [JWT jwtWithTokenString:serviceToken];
 
         [webToken setIssuer:clientId];
@@ -651,6 +648,8 @@ NSInteger const SERVICE_TOKEN = 4;
        withToken: (JWT*) token
 {
     [req setInput:payload];
+
+    NSLog(@"input data: %@", payload);
 
     [self    post: req
          withData: [req inputData]
@@ -851,6 +850,13 @@ NSInteger const SERVICE_TOKEN = 4;
         [useAssertionReq setUrl:redirectUri];
 
         // authorize with service
+        [[reqResult parent] setUrl:redirectUri];
+
+        NSLog(@"code %@", code);
+        NSLog(@"uri %@", redirectUri);
+
+        [self      forwardAssertion:[reqResult parent]
+              withAuthorizationCode:code];
     }
     else {
         [[reqResult parent] complete];
@@ -881,9 +887,13 @@ NSInteger const SERVICE_TOKEN = 4;
         Tokens *appToken = [NSEntityDescription insertNewObjectForEntityForName:@"Tokens"
                                                          inManagedObjectContext:[_DS managedObjectContext]];
 
+        NSDictionary *input = [reqResult input];
+        NSString *appClientId = [input objectForKey:@"client_id"];
+
         // we should get the client id
         [appToken setTarget:  [reqResult url]];     // store the endpoint
-        [appToken setSubject: @"ch.eduid.app"];     // for myself
+        [appToken setSubject: appClientId];         // for myself: FIXME: FOR THE APP
+                                                    // FIXME: relate app clientIds to app ids
         [appToken setType:    @"app"];
         [appToken setToken:   [reqResult result]];  // store the token
 
