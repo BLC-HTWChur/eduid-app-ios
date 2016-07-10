@@ -147,22 +147,26 @@
 
 - (void) copyData: (RequestData*)req
 {
-    [req setType:type];
-    [req setUrl:url];
+    if (![req type])
+        [req setType:type];
+    if (![req url])
+        [req setUrl:url];
 
     [req setStatus:status];
     [req setResult:result];
-
-    [req setInput:input];
     [req setData:[self processedResult]];
+
+    if (![req input]) {
+        [req setInput:input];
+    }
 
     if ([self shouldRetry]) {
         [req retry];
     }
+    
     if ([self isInvalid]) {
         [req invalidate];
     }
-
 }
 
 - (void) complete // calls the callback
@@ -239,8 +243,8 @@
 
 - (NSData*) inputData
 {
-    if (data) {
-        return [[JWT jsonEncode:data] dataUsingEncoding:NSUTF8StringEncoding];
+    if (input) {
+        return [[JWT jsonEncode:input] dataUsingEncoding:NSUTF8StringEncoding];
     }
     return nil;
 }

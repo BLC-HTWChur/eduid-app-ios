@@ -60,10 +60,6 @@
 - (void) retrieveServiceAssertion:(NSString*) targetServiceUrl
                      withCallback: (SEL)callback;
 
-- (void) authorizeWithService:(NSString*) targetServiceUrl
-        withAuthorizationCode:(NSString*) assertionToken
-                   withCallback: (SEL)callback;
-
 // app assertion
 - (void) authorizeApp:(NSString*) appClientId
             atService:(NSString*) targetService
@@ -77,7 +73,7 @@
              forEndpoint:(nullable NSString*) endpoint;
 
 // app specific functions
-- (void) verifyAuthorization:(SEL)callback;  // allows the caller to request or trigger authorization
+- (void) verifyAuthorization:(nonnull SEL)callback;  // allows the caller to request or trigger authorization
 
 - (void) loadTokens;
 - (void) storeTokens;

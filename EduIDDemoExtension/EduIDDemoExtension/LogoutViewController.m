@@ -53,7 +53,7 @@
     [req logout:nil];
 }
 
-- (void)requestDone: (NSNumber*)status withResult: (NSString*)result
+- (void)requestDone: (RequestData*)result
 {
     // we expect only logout completions.
     NSLog(@"request done ");

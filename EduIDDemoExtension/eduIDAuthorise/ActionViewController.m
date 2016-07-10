@@ -182,11 +182,23 @@
             resUT = [moc executeFetchRequest:reqU error:&error];
             if (!error){
                 if (resUT && [resUT count]) {
-                    // directly request the app assertion from the service
-                    NSLog(@"First: get app assertion from the service ");
-                    [[self oauth] authorizeApp:[[self requestData] objectForKey:@"client_id"]
-                                     atService:targetUrl
-                                  withCallback:@selector(appAssertionDone:)];
+                    
+                    Tokens *serviceToken = [resUT objectAtIndex:0];
+                    
+                    if ([serviceToken token] &&
+                        [[serviceToken token] length]) {
+                        NSLog(@"Service Token has been previously rejected?");
+                        NSLog(@"First: retry service assertion");
+                        [[self oauth] retrieveServiceAssertion:[us token_target]
+                                                  withCallback:@selector(serviceAssertionDone:)];
+                    }
+                    else {
+                        // directly request the app assertion from the service
+                        NSLog(@"First: get app assertion from the service ");
+                        [[self oauth] authorizeApp:[[self requestData] objectForKey:@"client_id"]
+                                         atService:targetUrl
+                                      withCallback:@selector(appAssertionDone:)];
+                    }
                 }
                 else {
                     // first try to connect to the service and then get the app assertion
@@ -349,7 +361,8 @@
     NSLog(@"second: get the app assertion");
 
     if ([[result status] integerValue] == 200) {
-
+        
+        // in the extension this point is only reached for app assertions
         [[self oauth] authorizeApp:[[self requestData] objectForKey:@"client_id"]
                          atService:[[result processedResult] objectForKey:@"redirect_uri"]
                       withCallback:@selector(appAssertionDone:)];

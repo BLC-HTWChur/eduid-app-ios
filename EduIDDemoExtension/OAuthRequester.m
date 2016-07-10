@@ -351,17 +351,21 @@ NSInteger const SERVICE_TOKEN = 4;
 
     RequestData *res = [_requestData cloneRequest:callback];
 
-    [res setType: @"post_user_password"];
-    [res setStatus:@-400];
-    [res setUrl:[self extendUrl:@"/token"]];
+    [self postClientCredentialsRequest:res];
+}
 
-    RequestData *req = [res subRequestFor:self
-                             withCallback:@selector(handleClientAuthorization:)];
-
-    NSDictionary *reqdata = @{@"grant_type": @"client_credentials"};
-
+- (void) postClientCredentialsRequest:(RequestData*)resObj
+{
+    RequestData *req = [resObj subRequestFor:self
+                                withCallback:@selector(handleClientAuthorization:)];
+ 
+    [req setType: @"post_user_password"];
+    [req setStatus:@-400];
+    [req setUrl:[self extendUrl:@"/token"]];
+    
+    [req setInput: @{@"grant_type": @"client_credentials"}];
+    
     [self    post: req
-         withJSON:reqdata
         withToken:[self prepareToken:DEVICE_TOKEN]];
 }
 
@@ -380,15 +384,25 @@ NSInteger const SERVICE_TOKEN = 4;
     RequestData *reqData = [res subRequestFor:self
                                  withCallback:@selector(handleUserAuthorization:)];
 
-    NSDictionary *payload = @{
-                              @"grant_type": @"password",
-                              @"username": username,
-                              @"password": password
-                              };
+    [reqData setInput: @{
+                     @"grant_type": @"password",
+                     @"username": username,
+                     @"password": password
+                     }];
+    
+    if (_clientToken) {
 
-    [self   post:reqData
-        withJSON:payload
-       withToken:[self prepareToken:CLIENT_TOKEN]];
+        [self   post:reqData
+           withToken:[self prepareToken:CLIENT_TOKEN]];
+    }
+    else {
+        // need to get the client token first
+        
+        RequestData *subRequest = [reqData subRequestFor:self
+                                            withCallback:@selector(handleClientAuthForUserAuth:)];
+        
+        [self postClientCredentialsRequest:subRequest];
+    }
 }
 
 - (void) getUserProfile:(SEL)callback
@@ -427,9 +441,9 @@ NSInteger const SERVICE_TOKEN = 4;
     [reqData setType: @"get_user_profile"];
     [reqData setStatus:@-400];
     [reqData setUrl:[self extendUrl:@"/protocol-discovery/protocol"]];
+    [reqData setInput: protocolList];
 
     [self   post: reqData
-        withJSON: protocolList
        withToken:[self prepareToken:ACCESS_TOKEN]];
 }
 
@@ -484,14 +498,13 @@ NSInteger const SERVICE_TOKEN = 4;
     [reqData setStatus:@-400];
     if (_accessToken &&
         accessData) {
-        NSDictionary *payload = @{
-                                  @"request_type": @"code",
-                                  @"redirect_uri": targetServiceUrl,
-                                  @"password": clientId
-                                  };
+        [reqData setInput: @{
+                             @"request_type": @"code",
+                             @"redirect_uri": targetServiceUrl,
+                             @"password": clientId
+                             }];
 
         [self   post: reqData
-            withJSON: payload
            withToken:[self prepareToken:ACCESS_TOKEN]];
     }
     else {
@@ -510,13 +523,12 @@ NSInteger const SERVICE_TOKEN = 4;
     [reqData setStatus:@-400];
 
     if (assertionToken && [assertionToken length]) {
-        NSDictionary *payload = @{
-                                  @"grant_type": @"urn:ietf:param:oauth:grant-type:jwt-bearer",
-                                  @"assertion": assertionToken
-                                  };
+        [reqData setInput: @{
+                         @"grant_type": @"urn:ietf:param:oauth:grant-type:jwt-bearer",
+                         @"assertion": assertionToken
+                         }];
 
         [self   post:reqData
-            withJSON:payload
            withToken: nil];
     }
     else {
@@ -555,13 +567,12 @@ NSInteger const SERVICE_TOKEN = 4;
         [webToken setAudience:targetServiceUrl];
         [webToken setSubject:appClientId];
 
-        NSDictionary *reqdata = @{
-                                  @"grant_type": @"authorization_code",
-                                  @"authorization_code": webToken,
-                                  @"client_id": appClientId
-                                  };
+        [reqData setInput: @{
+                             @"grant_type": @"authorization_code",
+                             @"authorization_code": webToken,
+                             @"client_id": appClientId
+                             }];
         [self     post:reqData
-              withJSON:reqData
              withToken:webToken];
     }
     else {
@@ -643,29 +654,16 @@ NSInteger const SERVICE_TOKEN = 4;
 }
 
 
-- (void)    post: (RequestData*) req
-        withJSON: (id) payload
-       withToken: (JWT*) token
-{
-    [req setInput:payload];
-
-    NSLog(@"input data: %@", payload);
-
-    [self    post: req
-         withData: [req inputData]
-         withToken: token];
-}
-
 - (void)    post: (RequestData*) requestData
-        withData: (NSData*) data
-        withToken: (JWT *)token
+       withToken: (JWT*) token
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[requestData processedUrl]];
 
     [request setHTTPMethod: @"POST"];
     [request addValue: @"application/json" forHTTPHeaderField:@"Content-Type"];
 
-    [request setHTTPBody: data];
+    NSLog(@"post body %@", [requestData inputData]);
+    [request setHTTPBody: [requestData inputData]];
 
     [self executeHttpRequest:request
              withRequestData:requestData
@@ -729,13 +727,13 @@ NSInteger const SERVICE_TOKEN = 4;
 
     switch (tokenId) {
         case DEVICE_TOKEN:
-            NSLog(@"use access token");
+            NSLog(@"use device token");
 
             jwt = [self prepareDeviceToken];
             break;
         case CLIENT_TOKEN:
-
-            NSLog(@"use access token");
+ 
+            NSLog(@"use client token");
             jwt = [self selectClientToken];
             break;
         case ACCESS_TOKEN:
@@ -816,17 +814,47 @@ NSInteger const SERVICE_TOKEN = 4;
 
 - (void) handleClientAuthorization: (RequestData*)reqResult
 {
+    NSLog(@"client authorization done");
     if ([[reqResult status] integerValue] == 200) {
         [self setClientToken:[reqResult result]];
     }
+    
+    NSLog(@"request status %@", [reqResult status]);
+    NSLog(@"input %@", [reqResult input]);
+    
     [[reqResult parent] complete];
+}
+
+- (void) handleClientAuthForUserAuth: (RequestData*)reqResult
+{
+    NSLog(@"missing client auth done");
+    if ([[reqResult status] integerValue] == 200) {
+        NSLog(@"client auth OK");
+        
+        [self setClientToken:[reqResult result]];
+        
+        NSLog(@"forward authorization for %@", [[reqResult parent] input]);
+        [self   post:[reqResult parent]
+           withToken:[self prepareToken:CLIENT_TOKEN]];
+    }
+    else {
+        NSLog(@"errror status %@", [reqResult status]);
+        NSLog(@"input %@", [reqResult input]);
+        NSLog(@"url   %@", [reqResult url]);
+        [[[reqResult parent] parent] complete];
+    }
 }
 
 - (void) handleUserAuthorization: (RequestData*) reqResult
 {
+    NSLog(@"user authorization done");
     if ([[reqResult status] integerValue] == 200) {
         [self setAccessToken:[reqResult result]];
     }
+    else {
+        NSLog(@"error status %@", [reqResult status]);
+    }
+    
     [[reqResult parent] complete];
 }
 
