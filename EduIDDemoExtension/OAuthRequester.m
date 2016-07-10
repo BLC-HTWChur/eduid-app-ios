@@ -501,13 +501,14 @@ NSInteger const SERVICE_TOKEN = 4;
         [reqData setInput: @{
                              @"request_type": @"code",
                              @"redirect_uri": targetServiceUrl,
-                             @"password": clientId
+                             @"client_id": clientId
                              }];
 
         [self   post: reqData
            withToken:[self prepareToken:ACCESS_TOKEN]];
     }
     else {
+        NSLog(@"no access token stop assertion request");
         [res complete];
     }
 }
@@ -532,6 +533,7 @@ NSInteger const SERVICE_TOKEN = 4;
            withToken: nil];
     }
     else {
+        NSLog(@"missing assertion token");
         [targetReq complete];
     }
 }
@@ -576,6 +578,7 @@ NSInteger const SERVICE_TOKEN = 4;
              withToken:webToken];
     }
     else {
+        NSLog(@"service token missing");
         [rData setStatus: @-1];
         [rData complete];
     }
@@ -662,7 +665,7 @@ NSInteger const SERVICE_TOKEN = 4;
     [request setHTTPMethod: @"POST"];
     [request addValue: @"application/json" forHTTPHeaderField:@"Content-Type"];
 
-    NSLog(@"post body %@", [requestData inputData]);
+    NSLog(@"post body %@", [requestData input]);
     [request setHTTPBody: [requestData inputData]];
 
     [self executeHttpRequest:request
@@ -887,6 +890,8 @@ NSInteger const SERVICE_TOKEN = 4;
               withAuthorizationCode:code];
     }
     else {
+        NSLog(@"assertion request failed %@",[reqResult status]);
+        
         [[reqResult parent] complete];
     }
 }

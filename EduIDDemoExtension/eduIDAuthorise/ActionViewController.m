@@ -182,22 +182,24 @@
             resUT = [moc executeFetchRequest:reqU error:&error];
             if (!error){
                 if (resUT && [resUT count]) {
-                    
+                    NSLog(@"resUT count %ld", [resUT count]);
                     Tokens *serviceToken = [resUT objectAtIndex:0];
                     
-                    if ([serviceToken token] &&
+                    if (serviceToken &&
+                        [serviceToken token] &&
                         [[serviceToken token] length]) {
+                        
+                        // directly request the app assertion from the service
+                        NSLog(@"First: get app assertion from the service %@", [serviceToken token]);
+                        [[self oauth] authorizeApp:[[self requestData] objectForKey:@"client_id"]
+                                         atService:targetUrl
+                                      withCallback:@selector(appAssertionDone:)];
+                    }
+                    else {
                         NSLog(@"Service Token has been previously rejected?");
                         NSLog(@"First: retry service assertion");
                         [[self oauth] retrieveServiceAssertion:[us token_target]
                                                   withCallback:@selector(serviceAssertionDone:)];
-                    }
-                    else {
-                        // directly request the app assertion from the service
-                        NSLog(@"First: get app assertion from the service ");
-                        [[self oauth] authorizeApp:[[self requestData] objectForKey:@"client_id"]
-                                         atService:targetUrl
-                                      withCallback:@selector(appAssertionDone:)];
                     }
                 }
                 else {
@@ -379,7 +381,7 @@
         NSLog(@"received assertion for %@", [[result input] objectForKey:@"client_id"]);
     }
     else {
-        NSLog(@"received assertion for %ld", [[result status] integerValue]);
+        NSLog(@"received assertion error for %ld", [[result status] integerValue]);
     }
     [self countDownAndComplete];
 }
