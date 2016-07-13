@@ -129,6 +129,13 @@
         NSString *key = [token objectForKey: @"mac_key"];
         NSString *alg = [token objectForKey: @"mac_algorithm"];
 
+        if (!alg) {
+            alg = [token objectForKey:@"algorithm"];
+        }
+        if (!key) {
+            key = [token objectForKey:@"sign_key"];
+        }
+
         if ([token objectForKey:@"client_id"])
             [self setIssuer:[token objectForKey: @"client_id"]];
         
