@@ -10,6 +10,8 @@
 
 @interface SharedDataStore ()
 
+@property (retain, atomic) NSPersistentStore *store;
+
 @end
 
 @implementation SharedDataStore
@@ -39,10 +41,10 @@ NSString *SHARED_GROUP_CONTEXT = @"group.mobinaut.test";
 
 - (void) setupCoreData
 {
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"EduidData"
-                                              withExtension:@"momd"];
-    
-    _mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+//    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"EduidData"
+//                                              withExtension:@"momd"];
+//    
+    _mom = [NSManagedObjectModel mergedModelFromBundles:nil];
     
     _psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:_mom];
     
@@ -58,13 +60,13 @@ NSString *SHARED_GROUP_CONTEXT = @"group.mobinaut.test";
             
             NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
             
-            NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType
+            _store = [psc addPersistentStoreWithType:NSSQLiteStoreType
                                                          configuration:nil
                                                                    URL:storeURL
                                                                options:nil
                                                                  error:&error];
             
-            NSAssert(store != nil, @"Error initializing PSC: %@\n%@", [error localizedDescription], [error userInfo]);
+            NSAssert(_store != nil, @"Error initializing PSC: %@\n%@", [error localizedDescription], [error userInfo]);
         });
         
     }
@@ -79,6 +81,20 @@ NSString *SHARED_GROUP_CONTEXT = @"group.mobinaut.test";
             NSLog(@"data stored");
         }
     }
+}
+
+- (void)shutDown
+{
+    NSError *error = nil;
+    [_moctxt reset]; // ensure that everything is stored to the disk
+    _moctxt = nil;
+    _mom = nil;
+    NSLog(@"remove datastore");
+    [_psc removePersistentStore:_store error:&error]; // drop the data store from the handling
+    if (error) {
+        NSLog(@"problem releasing data store %@", error);
+    }
+    _psc = nil;
 }
 
 @end

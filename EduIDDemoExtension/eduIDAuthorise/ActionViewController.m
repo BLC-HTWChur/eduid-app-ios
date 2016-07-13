@@ -274,6 +274,8 @@
 
     // call directly because the extension terminates after returning the data.
     [[self origContext] completeRequestReturningItems:@[extensionItem] completionHandler:nil];
+    // finally cleanup our data store
+    [[[self oauth] dataStore] shutDown];
 }
 
 - (NSDictionary*) serviceToken:(NSDictionary*)service
@@ -370,6 +372,7 @@
                       withCallback:@selector(appAssertionDone:)];
     }
     else {
+        NSLog(@"service assertion received error for %@ : %@", [result url], [result status]);
         [self countDownAndComplete];
     }
 }

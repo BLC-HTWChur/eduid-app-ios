@@ -17,5 +17,6 @@
 
 - (id) init;
 - (void)saveContext;
+- (void)shutDown;
 
 @end

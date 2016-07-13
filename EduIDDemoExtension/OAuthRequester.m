@@ -131,21 +131,41 @@ NSInteger const SERVICE_TOKEN = 4;
 {
     if (_DS != nil) {
         NSManagedObjectContext *moc = [_DS managedObjectContext];
+
+        [moc reset];
+        moc.retainsRegisteredObjects = NO; // ensure that nothing is reused
         
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"EduidConfiguration"];
-        
+
+        // the next statement forces CoreData to load from the store.
+        request.returnsObjectsAsFaults = NO;
+
         [request setPredicate:[NSPredicate predicateWithFormat:@"cfg_name == %@", @"client_id"]];
         
         NSError *error = nil;
         NSArray *results = [moc executeFetchRequest:request error:&error];
-        if (results) {
+        if (results && [results count]) {
+            NSLog(@"use cached client id (got %ld config)", [results count]);
             for (EduidConfig *cfg in results) {
                 clientId = [cfg cfg_value];
                 break;
             }
+            NSLog(@"cached client id is %@", clientId);
         }
-        
+        else {
+            if (error) {
+                NSLog(@"loading triggered error: %@", error);
+            }
+            else if (results){
+                NSLog(@"no errors detected, just no results. Am I running the first time?");
+            }
+            else {
+                NSLog(@"results nil? a race problem? ");
+            }
+        }
+
         if (!clientId) {
+            NSLog(@"use real client id");
             UIDevice *device = [UIDevice currentDevice];
             clientId = [[device identifierForVendor] UUIDString];
             EduidConfig *tConfig = [NSEntityDescription insertNewObjectForEntityForName:@"EduidConfiguration"
@@ -562,16 +582,24 @@ NSInteger const SERVICE_TOKEN = 4;
 
     NSString *serviceToken = [self loadServiceToken:targetServiceUrl];
     if (serviceToken) {
-        NSLog(@"service URL: %ld %@", [serviceToken length], serviceToken);
+        NSLog(@"service Token: %ld %@", [serviceToken length], serviceToken);
         JWT *webToken = [JWT jwtWithTokenString:serviceToken];
 
+        // create the authorization token for myself
         [webToken setIssuer:clientId];
         [webToken setAudience:targetServiceUrl];
         [webToken setSubject:appClientId];
 
+        // create a second token for the app
+        JWT *authCode = [JWT jwtWithTokenString:serviceToken];
+
+        [authCode setIssuer:clientId ];
+        [authCode setSubject:appClientId];
+        [authCode setAudience:targetServiceUrl];
+
         [reqData setInput: @{
                              @"grant_type": @"authorization_code",
-                             @"authorization_code": webToken,
+                             @"authorization_code": [authCode compact],
                              @"client_id": appClientId
                              }];
         [self     post:reqData
@@ -800,6 +828,10 @@ NSInteger const SERVICE_TOKEN = 4;
                 [data length]) {
                 [cResult setResult:[[NSString alloc] initWithData:data
                                                          encoding:NSUTF8StringEncoding]];
+            }
+
+            if (httpResponse.statusCode == 500) {
+                NSLog(@"Server Error for %@", [cResult url]);
             }
         }
         else {

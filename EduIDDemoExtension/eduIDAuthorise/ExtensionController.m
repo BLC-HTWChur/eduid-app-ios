@@ -23,7 +23,11 @@
 - (SharedDataStore*)eduIdDS
 {
     if (!_dataStore) {
+        NSLog(@"init data store");
         _dataStore = [[SharedDataStore alloc] init];
+    }
+    else {
+        NSLog(@"reuse existing data store");
     }
     return _dataStore;
 }
