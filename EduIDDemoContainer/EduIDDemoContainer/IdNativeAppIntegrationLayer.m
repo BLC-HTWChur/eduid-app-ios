@@ -72,7 +72,7 @@
                                                        NSArray *returnedItems,
                                                        NSError *activityError) {
             if (activityError == nil &&
-                returnedItems.count > 0) {
+                [returnedItems count] > 0) {
 
                 // NSLog(@"Return from Extension with success");
 
@@ -146,9 +146,9 @@
 {
     NSString *retval = @"";
     
-    NSDictionary *epDict = [services valueForKey:serviceName];
+    NSDictionary *epDict = [services objectForKey:serviceName];
     if (epDict) {
-        retval = [epDict valueForKey:@"engineName"];
+        retval = [epDict objectForKey:@"engineName"];
     }
     
     return retval;
@@ -158,12 +158,21 @@
 {
     NSString *retval = @"";
     
-    NSDictionary *epDict = [services valueForKey:serviceName];
+    NSDictionary *epDict = [services objectForKey:serviceName];
     
     if (epDict) {
-        NSDictionary *tDict = [epDict valueForKey:@"token"];
+        NSDictionary *tDict = [epDict objectForKey:@"token"];
         if (tDict) {
-            retval = [tDict valueForKey:@"kid"];
+
+            // the key id might be a number rather than a string, so be extra carefull.
+            // I spent 3h identifying that a random segfault had its roots here.  
+            if ([[tDict objectForKey:@"kid"] isKindOfClass:[NSString class]]) {
+                retval = [tDict objectForKey:@"kid"];
+            }
+            else if ([[tDict objectForKey:@"kid"] isKindOfClass:[NSNumber class]]) {
+                retval = [NSString stringWithFormat:@"%@", [tDict objectForKey:@"kid"]];
+            }
+
         }
     }
     

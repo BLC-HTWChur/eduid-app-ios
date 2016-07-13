@@ -53,7 +53,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)ptableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"get cell at index %@", indexPath);
+//    NSLog(@"get cell at index %ld", indexPath.row);
     static NSString *simpleTableIdentifier = @"SimpleTableItem";
     
     ServiceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
@@ -62,11 +62,15 @@
         cell = [[ServiceTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                            reuseIdentifier:simpleTableIdentifier];
     }
+
+//    NSLog(@"set cell data");
+
     NSString *serviceId =(NSString*)[[nail serviceNames] objectAtIndex:indexPath.row];
+//    NSLog(@"service id %@", serviceId);
     [cell setServiceId:serviceId];
     [cell setTokenId:[nail getTokenId:serviceId]];
     [cell setServiceName:[nail getNameForService:serviceId]];
-    
+
     return cell;
 }
 
