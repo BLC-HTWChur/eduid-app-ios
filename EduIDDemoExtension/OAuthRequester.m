@@ -738,7 +738,7 @@ NSInteger const SERVICE_TOKEN = 4;
         }
     }
     else {
-        NSLog(@"no jwt present?");
+        NSLog(@"setAuthHeader: no jwt present");
     }
 }
 
@@ -901,7 +901,6 @@ NSInteger const SERVICE_TOKEN = 4;
 
 - (void) handleServiceAssertion: (RequestData*) reqResult
 {
-
     if ([[reqResult status] integerValue] == 200) {
         NSDictionary *dict = [reqResult processedResult];
 

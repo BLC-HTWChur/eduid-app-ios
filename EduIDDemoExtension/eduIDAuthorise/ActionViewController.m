@@ -25,7 +25,7 @@
 
 @interface ActionViewController ()
 
-@property (retain) NSArray *myServices;               // selected services, if empty all matching are used
+@property (retain) NSMutableArray *myServices;               // selected services, if empty all matching are used
 @property (retain) NSMutableArray *filteredServices;  // all matching services
 
 @property (retain) NSDictionary *appRequest;
@@ -104,7 +104,7 @@
     }
 
     _appRequest = @{};
-    _myServices  = @[];
+    _myServices  = [NSMutableArray array];
 
     if ([self requestData]) {
         NSLog(@"request services for protocols %ld", [[self requestData] count]);
@@ -179,7 +179,7 @@
             NSString *targetUrl = [us token_target];
             [reqT setPredicate:[NSPredicate predicateWithFormat:@"target == %@ and type == %@", targetUrl, @"service"]];
 
-            resUT = [moc executeFetchRequest:reqU error:&error];
+            resUT = [moc executeFetchRequest:reqT error:&error];
             if (!error){
                 if (resUT && [resUT count]) {
                     NSLog(@"resUT count %ld", [resUT count]);
@@ -217,9 +217,6 @@
     }
 }
 
-
-/** enable or disable the whole GUI
- @param inEnable: YES: enable GUI, NO: disabl GUI */
 //we are done with the extension, return to caller
 -(void) extensionDone
 {
@@ -234,14 +231,22 @@
     NSMutableDictionary *serviceApis = [NSMutableDictionary dictionary];
 
     // if the user has selected nothing in the table view, then use all services
-    if (!_myServices) {
+    if (!(_myServices && [_myServices count])) {
+        NSLog(@"filtered service count: %ld", [_filteredServices count]);
+
+        _myServices = [NSMutableArray array];
         for (UserService *us in _filteredServices) {
-            _myServices = [JWT jsonDecode:[us rsd]];
+            NSLog(@"got service with rsd %@", [us rsd]);
+            [_myServices addObject:[JWT jsonDecode:[us rsd]]];
         }
     }
 
     for (NSDictionary *service in _myServices) {
-        NSDictionary *token = [self serviceToken:service];
+
+        NSLog(@"add service to result set: %@", [service objectForKey:@"homePageLink"]);
+
+        NSLog(@"check service");
+        NSDictionary *token = [self serviceToken:service forSubject:[r objectForKey:@"client_id"]];
 
         if (token) {
             NSDictionary *apis = [service objectForKey:@"apis"];
@@ -255,7 +260,7 @@
 
             NSDictionary *engineRsd = @{@"homePageLink": [service valueForKey:@"homePageLink"],
                                         @"engineLink": [service valueForKey:@"engineLink"],
-                                        @"apis": apis,
+                                        @"apis": serviceApis,
                                         @"token": token,
                                         @"engineName": [service valueForKey:@"engineName"]};
             
@@ -279,6 +284,7 @@
 }
 
 - (NSDictionary*) serviceToken:(NSDictionary*)service
+                    forSubject:(NSString*)subject
 {
     NSDictionary *dict = nil;
 
@@ -286,12 +292,15 @@
     NSManagedObjectContext *moc = [ds managedObjectContext];
 
     NSFetchRequest *reqT= [NSFetchRequest fetchRequestWithEntityName:@"Tokens"];
-    // compund predicate
-    NSString *targetUrl = [[self oauth] serviceUrl:service forProtocol:@"oauth2"];
-
-    [reqT setPredicate:[NSPredicate predicateWithFormat:@"target == %@ AND type == %@", targetUrl, @"app"]];
 
     NSError *error = nil;
+
+    // compund predicate
+    NSString *targetUrl = [[self oauth] serviceUrl:service forProtocol:@"org.ietf.oauth2" forEndpoint:@"token"];
+    NSLog(@"service url? %@", targetUrl);
+
+    [reqT setPredicate:[NSPredicate predicateWithFormat:@"target == %@ AND type == %@ AND subject == %@", targetUrl, @"app", subject]];
+
     NSArray *resUT = [moc executeFetchRequest:reqT error:&error];
 
     if (!error && resUT && [resUT count]) {
@@ -308,7 +317,7 @@
         NSLog(@"ActionViewController received no data");
     }
 
-    NSLog(@"LIST RESULT COMPLETE, REFRESH TABLE");
+    // NSLog(@"LIST RESULT COMPLETE, REFRESH TABLE");
     [self filterServices];
 }
 
