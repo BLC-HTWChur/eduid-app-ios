@@ -236,7 +236,7 @@
 
         _myServices = [NSMutableArray array];
         for (UserService *us in _filteredServices) {
-            NSLog(@"got service with rsd %@", [us rsd]);
+            //NSLog(@"got service with rsd %@", [us rsd]);
             [_myServices addObject:[JWT jsonDecode:[us rsd]]];
         }
     }
