@@ -730,7 +730,7 @@ NSInteger const SERVICE_TOKEN = 4;
              withToken:(JWT*) token
 {
     if (token != nil) {
-        NSString *authValue = [@[@"Bearer", [token compact]] componentsJoinedByString:@" "];
+        NSString *authValue = [NSString stringWithFormat:@"Bearer %@", [token compact]];
 
         if ([authValue length] > 0) {
             NSLog(@"auth header: %@", authValue);
