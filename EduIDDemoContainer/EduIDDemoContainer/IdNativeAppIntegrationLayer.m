@@ -98,7 +98,7 @@
     return [services allKeys];
 }
 
-- (NSString*) getServiceUrl:(NSString *)serviceName
+- (NSString*) getEndpointUrl:(NSString *)serviceName
                 forProtocol:(NSString *)protocolName
 {
     NSString *retval= @"";
@@ -165,14 +165,16 @@
         if (tDict) {
 
             // the key id might be a number rather than a string, so be extra carefull.
-            // I spent 3h identifying that a random segfault had its roots here.  
-            if ([[tDict objectForKey:@"kid"] isKindOfClass:[NSString class]]) {
-                retval = [tDict objectForKey:@"kid"];
+            // I spent 3h identifying that a random segfault had its roots here.
+            id kidObj = [tDict objectForKey:@"kid"];
+            if (kidObj != nil) {
+                if ([[tDict objectForKey:@"kid"] isKindOfClass:[NSString class]]) {
+                    retval = kidObj;
+                }
+                else if ([[tDict objectForKey:@"kid"] isKindOfClass:[NSNumber class]]) {
+                    retval = [NSString stringWithFormat:@"%@", kidObj];
+                }
             }
-            else if ([[tDict objectForKey:@"kid"] isKindOfClass:[NSNumber class]]) {
-                retval = [NSString stringWithFormat:@"%@", [tDict objectForKey:@"kid"]];
-            }
-
         }
     }
     
@@ -194,7 +196,7 @@
     NSString *retval = nil;
 
     NSDictionary *token = [self getServiceToken: serviceName];
-    NSString     *url   = [self getServiceUrl: serviceName
+    NSString     *url   = [self getEndpointUrl: serviceName
                                   forProtocol: protocolName];
 
     if ([url length] > 0) {
@@ -207,14 +209,13 @@
 
         NSNumber *ti = [NSNumber numberWithInteger:[[NSDate date] timeIntervalSince1970]];
 
-        retval = [token objectForKey: @"access_key"];
+        // by default we use the access token.
+        retval = [token objectForKey: @"access_token"];
 
-        // if the token has a refresh token, the client MUST authenticate using
-        // the access_token. Otherwise the client MUST authenticate using JWT.
+        // we MUST use the access_token if there is confirmation key
 
-        if ([[token allKeys] indexOfObject:@"refresh_token"] == NSNotFound) {
-            // sha256 the deviceID, so we don't have to expose information unnecessarily
-
+        // FIXME: Conform to RFC 7800
+        if ([[token allKeys] indexOfObject:@"kid"] != NSNotFound) {
             // create a header
             NSDictionary *header  = [NSDictionary dictionaryWithObjectsAndKeys:@"JWT", @"typ",
                                      [token objectForKey:@"kid"], @"kid",

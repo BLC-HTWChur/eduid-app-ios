@@ -44,8 +44,13 @@
 
 - (void) setTokenId:(NSString *)tokenId
 {
-    _tokenId = tokenId;
-    _tokenIdLabel.text = tokenId;
+    if (tokenId && [tokenId length]) {
+        _tokenId = tokenId;
+    }
+    else {
+        _tokenId = @"simple bearer token";
+    }
+    _tokenIdLabel.text = _tokenId;
 }
 
 - (void)awakeFromNib {

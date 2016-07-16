@@ -19,6 +19,8 @@
 		B6B8F04E1D194B2C003C530A /* IdNativeAppIntegrationLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B8F04D1D194B2C003C530A /* IdNativeAppIntegrationLayer.m */; };
 		B6D86B211D1F1E3000813415 /* ResponseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B201D1F1E3000813415 /* ResponseViewController.m */; };
 		B6D86B271D1F471600813415 /* ServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86B261D1F471600813415 /* ServiceTableViewCell.m */; };
+		B6EFBD481D3A175000D23ED3 /* ResponseDetailsViewContollerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6EFBD471D3A175000D23ED3 /* ResponseDetailsViewContollerViewController.m */; };
+		B6EFBD4B1D3A17F600D23ED3 /* CourseDetailsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B6EFBD4A1D3A17F600D23ED3 /* CourseDetailsTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,10 @@
 		B6D86B201D1F1E3000813415 /* ResponseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResponseViewController.m; sourceTree = "<group>"; };
 		B6D86B251D1F471600813415 /* ServiceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceTableViewCell.h; sourceTree = "<group>"; };
 		B6D86B261D1F471600813415 /* ServiceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceTableViewCell.m; sourceTree = "<group>"; };
+		B6EFBD461D3A175000D23ED3 /* ResponseDetailsViewContollerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResponseDetailsViewContollerViewController.h; sourceTree = "<group>"; };
+		B6EFBD471D3A175000D23ED3 /* ResponseDetailsViewContollerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResponseDetailsViewContollerViewController.m; sourceTree = "<group>"; };
+		B6EFBD491D3A17F600D23ED3 /* CourseDetailsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CourseDetailsTableViewCell.h; sourceTree = "<group>"; };
+		B6EFBD4A1D3A17F600D23ED3 /* CourseDetailsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CourseDetailsTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,8 +125,12 @@
 				33DF1BF01CF7833700EC95DF /* ViewController.m */,
 				B6D86B1F1D1F1E3000813415 /* ResponseViewController.h */,
 				B6D86B201D1F1E3000813415 /* ResponseViewController.m */,
+				B6EFBD461D3A175000D23ED3 /* ResponseDetailsViewContollerViewController.h */,
+				B6EFBD471D3A175000D23ED3 /* ResponseDetailsViewContollerViewController.m */,
 				B6D86B251D1F471600813415 /* ServiceTableViewCell.h */,
 				B6D86B261D1F471600813415 /* ServiceTableViewCell.m */,
+				B6EFBD491D3A17F600D23ED3 /* CourseDetailsTableViewCell.h */,
+				B6EFBD4A1D3A17F600D23ED3 /* CourseDetailsTableViewCell.m */,
 				B6B8F04C1D194B18003C530A /* IdNativeAppIntegrationLayer.h */,
 				B6B8F04D1D194B2C003C530A /* IdNativeAppIntegrationLayer.m */,
 				33DF1BF21CF7833700EC95DF /* Main.storyboard */,
@@ -290,6 +300,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				33DF1BF11CF7833700EC95DF /* ViewController.m in Sources */,
+				B6EFBD4B1D3A17F600D23ED3 /* CourseDetailsTableViewCell.m in Sources */,
+				B6EFBD481D3A175000D23ED3 /* ResponseDetailsViewContollerViewController.m in Sources */,
 				33DF1BEE1CF7833700EC95DF /* AppDelegate.m in Sources */,
 				B6B8F04E1D194B2C003C530A /* IdNativeAppIntegrationLayer.m in Sources */,
 				B6D86B211D1F1E3000813415 /* ResponseViewController.m in Sources */,

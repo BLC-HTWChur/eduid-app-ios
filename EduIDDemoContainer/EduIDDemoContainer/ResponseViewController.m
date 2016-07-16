@@ -11,9 +11,12 @@
 #import "IdNativeAppIntegrationLayer.h"
 #import "ServiceTableViewCell.h"
 
+#import "ResponseDetailsViewContollerViewController.h"
+
 @interface ResponseViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IdNativeAppIntegrationLayer *nail;
+@property (strong, atomic) NSString *targetServiceId;
 
 @end
 
@@ -35,16 +38,23 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-}
-*/
 
+    if ([[segue identifier] isEqualToString:@"toCourseList"]) {
+        ResponseDetailsViewContollerViewController *vc = [segue destinationViewController];
+
+        // Pass any objects to the view controller here, like...
+        [vc setServiceName: _targetServiceId];
+    }
+}
+
+#pragma mark - TableView
 
 - (NSInteger)tableView:(UITableView *)ptableView numberOfRowsInSection:(NSInteger)section
 {
@@ -72,6 +82,14 @@
     [cell setServiceName:[nail getNameForService:serviceId]];
 
     return cell;
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    _targetServiceId = (NSString*)[[nail serviceNames] objectAtIndex:indexPath.row];
+
+    [self performSegueWithIdentifier:@"toCourseList" sender:self];
 }
 
 

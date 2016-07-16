@@ -64,7 +64,7 @@
  * If the requested serviceName or the requested protocol are not available,
  * then this function returns an empty string.
  */
-- (NSString*) getServiceUrl:(NSString*) serviceName
+- (NSString*) getEndpointUrl:(NSString*) serviceName
                 forProtocol:(NSString*) protocolName;
 
 - (NSString*) getTokenId:(NSString*) serviceName;
