@@ -594,8 +594,8 @@ NSInteger const SERVICE_TOKEN = 4;
         JWT *authCode = [JWT jwtWithTokenString:serviceToken];
 
         [authCode setIssuer:clientId ];
-        [authCode setSubject:appClientId];
         [authCode setAudience:targetServiceUrl];
+        [authCode setSubject:appClientId];
 
         [reqData setInput: @{
                              @"grant_type": @"authorization_code",
