@@ -29,6 +29,7 @@
 		B6CAB1411D1D450500577A58 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CAB1401D1D450500577A58 /* ProfileViewController.m */; };
 		B6CAB1441D1D451B00577A58 /* LogoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CAB1431D1D451B00577A58 /* LogoutViewController.m */; };
 		B6CAB1471D1D4C5A00577A58 /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CAB1461D1D4C5A00577A58 /* SplashViewController.m */; };
+		B6D527981D6F43DB000B9C15 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6D527971D6F43DB000B9C15 /* Images.xcassets */; };
 		B6D86AE41D1DB06000813415 /* Protocols+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AE11D1DB06000813415 /* Protocols+CoreDataProperties.m */; };
 		B6D86AE51D1DB06000813415 /* Protocols+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AE11D1DB06000813415 /* Protocols+CoreDataProperties.m */; };
 		B6D86AE61D1DB06000813415 /* Protocols.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D86AE31D1DB06000813415 /* Protocols.m */; };
@@ -133,6 +134,7 @@
 		B6CAB1431D1D451B00577A58 /* LogoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoutViewController.m; sourceTree = "<group>"; };
 		B6CAB1451D1D4C5A00577A58 /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
 		B6CAB1461D1D4C5A00577A58 /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
+		B6D527971D6F43DB000B9C15 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		B6D86AE01D1DB06000813415 /* Protocols+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Protocols+CoreDataProperties.h"; sourceTree = "<group>"; };
 		B6D86AE11D1DB06000813415 /* Protocols+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Protocols+CoreDataProperties.m"; sourceTree = "<group>"; };
 		B6D86AE21D1DB06000813415 /* Protocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Protocols.h; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 				B6D86B091D1E7AF600813415 /* LoginViewController.m */,
 				33F7BA241D0D598700AB1DA1 /* MainInterface.storyboard */,
 				33F7BA271D0D598700AB1DA1 /* Info.plist */,
+				B6D527971D6F43DB000B9C15 /* Images.xcassets */,
 			);
 			path = eduIDAuthorise;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33F7BA261D0D598700AB1DA1 /* MainInterface.storyboard in Resources */,
+				B6D527981D6F43DB000B9C15 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -763,6 +767,7 @@
 		33F7BA2C1D0D598700AB1DA1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = eduIDAuthorise/eduIDAuthorise.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = eduIDAuthorise/Info.plist;
@@ -776,6 +781,7 @@
 		33F7BA2D1D0D598700AB1DA1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = eduIDAuthorise/eduIDAuthorise.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = eduIDAuthorise/Info.plist;
