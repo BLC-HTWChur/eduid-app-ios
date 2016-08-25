@@ -599,7 +599,7 @@ NSInteger const SERVICE_TOKEN = 4;
 
         [reqData setInput: @{
                              @"grant_type": @"authorization_code",
-                             @"authorization_code": [authCode compact],
+                             @"code": [authCode compact],
                              @"client_id": appClientId
                              }];
         [self     post:reqData
