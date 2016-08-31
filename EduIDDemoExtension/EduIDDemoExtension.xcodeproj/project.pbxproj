@@ -17,7 +17,7 @@
 		33F7BA0E1D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F7BA0D1D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.m */; };
 		33F7BA231D0D598700AB1DA1 /* ActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F7BA221D0D598700AB1DA1 /* ActionViewController.m */; };
 		33F7BA261D0D598700AB1DA1 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33F7BA241D0D598700AB1DA1 /* MainInterface.storyboard */; };
-		33F7BA2A1D0D598700AB1DA1 /* eduIDAuthorise.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 33F7BA1F1D0D598700AB1DA1 /* eduIDAuthorise.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		33F7BA2A1D0D598700AB1DA1 /* edu-ID Mobile .appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 33F7BA1F1D0D598700AB1DA1 /* edu-ID Mobile .appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B61EB0A31D2C0E3600E79379 /* ServiceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B61EB0A21D2C0E3600E79379 /* ServiceListCell.m */; };
 		B61EB0A61D2CBEC400E79379 /* RequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = B61EB0A51D2CBEC400E79379 /* RequestData.m */; };
 		B61EB0A71D2CBEC400E79379 /* RequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = B61EB0A51D2CBEC400E79379 /* RequestData.m */; };
@@ -86,7 +86,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				33F7BA2A1D0D598700AB1DA1 /* eduIDAuthorise.appex in Embed App Extensions */,
+				33F7BA2A1D0D598700AB1DA1 /* edu-ID Mobile .appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -95,7 +95,7 @@
 
 /* Begin PBXFileReference section */
 		335A8EC91D0DE182004B8653 /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = constants.h; path = common/constants.h; sourceTree = "<group>"; };
-		33F7B9E51D0D575A00AB1DA1 /* EduIDDemoExtension.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EduIDDemoExtension.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		33F7B9E51D0D575A00AB1DA1 /* edu-ID Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "edu-ID Mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		33F7B9E91D0D575A00AB1DA1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		33F7B9EB1D0D575A00AB1DA1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		33F7B9EC1D0D575A00AB1DA1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -111,7 +111,7 @@
 		33F7BA091D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EduIDDemoExtensionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33F7BA0D1D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EduIDDemoExtensionUITests.m; sourceTree = "<group>"; };
 		33F7BA0F1D0D575B00AB1DA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		33F7BA1F1D0D598700AB1DA1 /* eduIDAuthorise.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = eduIDAuthorise.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		33F7BA1F1D0D598700AB1DA1 /* edu-ID Mobile .appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "edu-ID Mobile .appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		33F7BA211D0D598700AB1DA1 /* ActionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionViewController.h; sourceTree = "<group>"; };
 		33F7BA221D0D598700AB1DA1 /* ActionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionViewController.m; sourceTree = "<group>"; };
 		33F7BA251D0D598700AB1DA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -220,10 +220,10 @@
 		33F7B9E61D0D575A00AB1DA1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				33F7B9E51D0D575A00AB1DA1 /* EduIDDemoExtension.app */,
+				33F7B9E51D0D575A00AB1DA1 /* edu-ID Mobile.app */,
 				33F7B9FE1D0D575B00AB1DA1 /* EduIDDemoExtensionTests.xctest */,
 				33F7BA091D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.xctest */,
-				33F7BA1F1D0D598700AB1DA1 /* eduIDAuthorise.appex */,
+				33F7BA1F1D0D598700AB1DA1 /* edu-ID Mobile .appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -326,9 +326,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		33F7B9E41D0D575A00AB1DA1 /* EduIDDemoExtension */ = {
+		33F7B9E41D0D575A00AB1DA1 /* edu-ID Mobile */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 33F7BA121D0D575B00AB1DA1 /* Build configuration list for PBXNativeTarget "EduIDDemoExtension" */;
+			buildConfigurationList = 33F7BA121D0D575B00AB1DA1 /* Build configuration list for PBXNativeTarget "edu-ID Mobile" */;
 			buildPhases = (
 				33F7B9E11D0D575A00AB1DA1 /* Sources */,
 				33F7B9E21D0D575A00AB1DA1 /* Frameworks */,
@@ -340,9 +340,9 @@
 			dependencies = (
 				33F7BA291D0D598700AB1DA1 /* PBXTargetDependency */,
 			);
-			name = EduIDDemoExtension;
+			name = "edu-ID Mobile";
 			productName = EduIDDemoExtension;
-			productReference = 33F7B9E51D0D575A00AB1DA1 /* EduIDDemoExtension.app */;
+			productReference = 33F7B9E51D0D575A00AB1DA1 /* edu-ID Mobile.app */;
 			productType = "com.apple.product-type.application";
 		};
 		33F7B9FD1D0D575B00AB1DA1 /* EduIDDemoExtensionTests */ = {
@@ -381,9 +381,9 @@
 			productReference = 33F7BA091D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		33F7BA1E1D0D598700AB1DA1 /* eduIDAuthorise */ = {
+		33F7BA1E1D0D598700AB1DA1 /* edu-ID Mobile  */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 33F7BA2B1D0D598700AB1DA1 /* Build configuration list for PBXNativeTarget "eduIDAuthorise" */;
+			buildConfigurationList = 33F7BA2B1D0D598700AB1DA1 /* Build configuration list for PBXNativeTarget "edu-ID Mobile " */;
 			buildPhases = (
 				33F7BA1B1D0D598700AB1DA1 /* Sources */,
 				33F7BA1C1D0D598700AB1DA1 /* Frameworks */,
@@ -393,9 +393,9 @@
 			);
 			dependencies = (
 			);
-			name = eduIDAuthorise;
+			name = "edu-ID Mobile ";
 			productName = eduIDAuthorise;
-			productReference = 33F7BA1F1D0D598700AB1DA1 /* eduIDAuthorise.appex */;
+			productReference = 33F7BA1F1D0D598700AB1DA1 /* edu-ID Mobile .appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -448,10 +448,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				33F7B9E41D0D575A00AB1DA1 /* EduIDDemoExtension */,
+				33F7B9E41D0D575A00AB1DA1 /* edu-ID Mobile */,
 				33F7B9FD1D0D575B00AB1DA1 /* EduIDDemoExtensionTests */,
 				33F7BA081D0D575B00AB1DA1 /* EduIDDemoExtensionUITests */,
-				33F7BA1E1D0D598700AB1DA1 /* eduIDAuthorise */,
+				33F7BA1E1D0D598700AB1DA1 /* edu-ID Mobile  */,
 			);
 		};
 /* End PBXProject section */
@@ -565,17 +565,17 @@
 /* Begin PBXTargetDependency section */
 		33F7BA001D0D575B00AB1DA1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 33F7B9E41D0D575A00AB1DA1 /* EduIDDemoExtension */;
+			target = 33F7B9E41D0D575A00AB1DA1 /* edu-ID Mobile */;
 			targetProxy = 33F7B9FF1D0D575B00AB1DA1 /* PBXContainerItemProxy */;
 		};
 		33F7BA0B1D0D575B00AB1DA1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 33F7B9E41D0D575A00AB1DA1 /* EduIDDemoExtension */;
+			target = 33F7B9E41D0D575A00AB1DA1 /* edu-ID Mobile */;
 			targetProxy = 33F7BA0A1D0D575B00AB1DA1 /* PBXContainerItemProxy */;
 		};
 		33F7BA291D0D598700AB1DA1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 33F7BA1E1D0D598700AB1DA1 /* eduIDAuthorise */;
+			target = 33F7BA1E1D0D598700AB1DA1 /* edu-ID Mobile  */;
 			targetProxy = 33F7BA281D0D598700AB1DA1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -804,7 +804,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		33F7BA121D0D575B00AB1DA1 /* Build configuration list for PBXNativeTarget "EduIDDemoExtension" */ = {
+		33F7BA121D0D575B00AB1DA1 /* Build configuration list for PBXNativeTarget "edu-ID Mobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				33F7BA131D0D575B00AB1DA1 /* Debug */,
@@ -831,7 +831,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		33F7BA2B1D0D598700AB1DA1 /* Build configuration list for PBXNativeTarget "eduIDAuthorise" */ = {
+		33F7BA2B1D0D598700AB1DA1 /* Build configuration list for PBXNativeTarget "edu-ID Mobile " */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				33F7BA2C1D0D598700AB1DA1 /* Debug */,

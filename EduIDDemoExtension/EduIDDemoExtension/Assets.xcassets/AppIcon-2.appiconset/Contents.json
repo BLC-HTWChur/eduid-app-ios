@@ -3,25 +3,25 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "29_spotlight.png",
+      "filename" : "58_retina_settings.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "58_retina_spotlight-1.png",
+      "filename" : "87_retina_settings.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "40_spotlight.png",
+      "filename" : "80_retina_spotlight-2.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "80_retina_spotlight-1.png",
+      "filename" : "120_retina_homescreen-1.png",
       "scale" : "3x"
     },
     {
@@ -39,19 +39,19 @@
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "29_spotlight-1.png",
+      "filename" : "29_settings.png",
       "scale" : "1x"
     },
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "58_retina_spotlight.png",
+      "filename" : "58_retina_settings-1.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "40_spotlight-1.png",
+      "filename" : "40_spotlight.png",
       "scale" : "1x"
     },
     {
@@ -61,15 +61,13 @@
       "scale" : "2x"
     },
     {
-      "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "60_homescreen.png",
+      "size" : "76x76",
       "scale" : "1x"
     },
     {
-      "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "114_retina_homescreen.png",
+      "size" : "76x76",
       "scale" : "2x"
     },
     {
