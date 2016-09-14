@@ -6,6 +6,8 @@
 //  Copyright © 2016 SII. All rights reserved.
 //
 
+#include "../common/constants.h" //common values for the whole project
+
 #import "LoginViewController.h"
 
 #import "../RequestData.h"
@@ -49,6 +51,21 @@
     else {
         NSLog(@"username and/or password empty");
     }
+}
+- (IBAction)rejectAccessAndExit:(id)sender {
+    //create structure to return data to the calling app
+    NSExtensionItem* extensionItem = [[NSExtensionItem alloc] init];
+    //Place the data in the transfer data structure.
+
+    [extensionItem setAttributedTitle:[[NSAttributedString alloc] initWithString:EDUID_EXTENSION_TITLE]];
+
+    [extensionItem setAttachments:@[[[NSItemProvider alloc] initWithItem:@{}
+                                                          typeIdentifier:EDUID_EXTENSION_TYPE]]];
+
+    // call directly because the extension terminates after returning the data.
+    [[self origContext] completeRequestReturningItems:@[extensionItem] completionHandler:nil];
+    // finally cleanup our data store
+    [[[self oauth] dataStore] shutDown];
 }
 
 /*

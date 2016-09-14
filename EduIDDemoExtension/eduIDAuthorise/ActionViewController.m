@@ -156,6 +156,10 @@
 
     [self completeProtocolRequest];
 }
+- (IBAction)doneReject:(id)sender {
+    NSLog(@"refuse access alltogether");
+    [self extensionResponse:@{}];
+}
 
 - (void) completeProtocolRequest
 {
@@ -267,14 +271,18 @@
             [services setValue:engineRsd forKey:[service valueForKey:@"homePageLink"]];
         }
     }
+    [self extensionResponse:services];
+}
 
-        //create structure to return data to the calling app
+- (void) extensionResponse:(NSDictionary*) serviceSet {
+
+    //create structure to return data to the calling app
     NSExtensionItem* extensionItem = [[NSExtensionItem alloc] init];
     //Place the data in the transfer data structure.
 
     [extensionItem setAttributedTitle:[[NSAttributedString alloc] initWithString:EDUID_EXTENSION_TITLE]];
 
-    [extensionItem setAttachments:@[[[NSItemProvider alloc] initWithItem:services
+    [extensionItem setAttachments:@[[[NSItemProvider alloc] initWithItem:serviceSet
                                                           typeIdentifier:EDUID_EXTENSION_TYPE]]];
 
     // call directly because the extension terminates after returning the data.
