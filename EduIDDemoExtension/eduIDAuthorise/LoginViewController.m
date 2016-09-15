@@ -98,7 +98,7 @@
                 
                 [req postPassword:_passwordInput.text
                           forUser:_usernameInput.text
-                     withCallback:@selector(requestDone:)];
+                     withCallback:nil];
             }
         }
         else if ([req clientToken] && ![req accessToken]) {
