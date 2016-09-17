@@ -319,6 +319,16 @@
     return dict;
 }
 
+// this is triggered if a user selects the My Services filter
+- (IBAction)pushPersonalServices:(id)sender {
+    NSLog(@"select persinal filter");
+}
+
+// this is triggered if a user selects the My Institutions filter
+- (IBAction)pushInstitutionalServices:(id)sender {
+    NSLog(@"select Institution filter");
+}
+
 - (void) requestDone: (RequestData*)result
 {
     if ([[result status] integerValue] != 200) {
@@ -445,6 +455,8 @@
     // [[us objectAtIndex:indexPath.row] objectForKey:@"engineName"];
     return cell;
 }
+
+
 
 
 
