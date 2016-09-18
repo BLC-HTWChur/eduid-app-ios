@@ -214,6 +214,7 @@
                         <outlet property="buttonAuthorise" destination="L1w-CY-Djg" id="WTy-tv-NTg"/>
                         <outlet property="eduIdLoginName" destination="NVO-Od-s16" id="ak9-nT-vHv"/>
                         <outlet property="eduIdPassword" destination="uWq-af-Zbx" id="P8k-Bm-84c"/>
+                        <outlet property="secAuthButton" destination="L1w-CY-Djg" id="Ljb-G8-26P"/>
                         <segue destination="gnK-K1-2OY" kind="presentation" identifier="toAuthorizationList" modalTransitionStyle="flipHorizontal" id="rEF-OV-F23"/>
                     </connections>
                 </viewController>
@@ -515,6 +516,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="7hH-kP-Bdf"/>
+        <segue reference="rEF-OV-F23"/>
     </inferredMetricsTieBreakers>
 </document>

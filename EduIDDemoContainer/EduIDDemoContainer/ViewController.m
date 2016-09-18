@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonAuthorise;
 
 @property (readonly, atomic) IdNativeAppIntegrationLayer *nail;
+@property (weak, nonatomic) IBOutlet UIButton *secAuthButton;
 
 @end
 
@@ -35,7 +36,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-
 
     // [nail getEndpointAuthorization:@"foo" withProtocol:@"bar" withClaims: nil];
 
@@ -53,6 +53,9 @@
 
     nail = [[IdNativeAppIntegrationLayer alloc] init];
     [main setNail:nail];
+
+    // for ipads we need to hand down a button rect.
+    nail.view = _secAuthButton;
 
     NSArray *protocols = @[@"gov.adlnet.xapi", @"powertla.content.courselist"];
 
