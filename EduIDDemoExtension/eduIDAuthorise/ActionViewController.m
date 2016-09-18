@@ -443,15 +443,15 @@
 {
     UserService *us = [_filteredServices objectAtIndex:indexPath.row];
 
-    static NSString *serviceCellIdentifier = @"ServiceSelectionCEll";
+    static NSString *serviceCellIdentifier = @"ServiceSelectionCell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:serviceCellIdentifier];
+    ServiceListCell *cell = [tableView dequeueReusableCellWithIdentifier:serviceCellIdentifier];
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:serviceCellIdentifier];
     }
 
-    cell.textLabel.text = [us name];
+    cell.nameLabel.text =[us name];
     // [[us objectAtIndex:indexPath.row] objectForKey:@"engineName"];
     return cell;
 }
