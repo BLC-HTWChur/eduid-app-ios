@@ -29,6 +29,7 @@
 }
 
 @synthesize services;
+@synthesize view;
 
 -(void)requestProtocols:(NSArray*)protocolList
               forObject:(id)object
@@ -85,6 +86,17 @@
                 [self completeAuthorization];
             }
         };
+
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            NSLog(@"iPad");
+            if (self.view) {
+                activityExtension.popoverPresentationController.sourceView = self.view;
+            }
+            else {
+                NSLog(@"no view set");
+            }
+        }
 
         //hand over to iOS to handle the extension
         [object presentViewController:activityExtension
