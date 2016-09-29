@@ -24,6 +24,7 @@
 
 - (ServiceTableViewCell*) init
 {
+    // NSLog(@"simple table cell");
     self = [super init];
     _serviceNameLabel.text = @"hello";
     _tokenIdLabel.text = @"world";

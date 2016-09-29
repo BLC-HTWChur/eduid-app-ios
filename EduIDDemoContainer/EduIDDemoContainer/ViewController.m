@@ -66,10 +66,13 @@
     NSLog(@"ID Extension Completed");
     if ([[nail serviceNames] count]) {
         // continue with authorized requests
-
+        // NSLog(@"# services returned: %lu", (unsigned long)[[nail serviceNames] count]);
         // handover to the authorization list
         [self performSegueWithIdentifier:@"toAuthorizationList" sender:self];
     }
+    //else {
+        // NSLog(@"no services returned?");
+    //}
 }
 
 

@@ -14,7 +14,7 @@
 #import "ResponseDetailsViewContollerViewController.h"
 
 @interface ResponseViewController ()
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UITableView *tableViewOut;
 @property (weak, nonatomic) IdNativeAppIntegrationLayer *nail;
 @property (strong, atomic) NSString *targetServiceId;
 
@@ -22,7 +22,7 @@
 
 @implementation ResponseViewController
 
-@synthesize tableView;
+@synthesize tableViewOut;
 @synthesize nail;
 
 - (void)viewDidLoad {
@@ -31,6 +31,7 @@
     AppDelegate *main = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     
     nail = [main nail];
+    // NSLog(@"Service list view (ResponseViewController) loaded");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,22 +59,21 @@
 
 - (NSInteger)tableView:(UITableView *)ptableView numberOfRowsInSection:(NSInteger)section
 {
+    // NSLog(@"# service names %lu", [[nail serviceNames] count]);
     return [[nail serviceNames] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)ptableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSLog(@"get cell at index %ld", indexPath.row);
+    // NSLog(@"get cell at index %ld", indexPath.row);
     static NSString *simpleTableIdentifier = @"SimpleTableItem";
     
-    ServiceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    ServiceTableViewCell *cell = [tableViewOut dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
     if (cell == nil) {
         cell = [[ServiceTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                            reuseIdentifier:simpleTableIdentifier];
     }
-
-//    NSLog(@"set cell data");
 
     NSString *serviceId =(NSString*)[[nail serviceNames] objectAtIndex:indexPath.row];
 //    NSLog(@"service id %@", serviceId);
@@ -87,6 +87,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // NSLog(@"select cell at index %ld", indexPath.row);
+
     _targetServiceId = (NSString*)[[nail serviceNames] objectAtIndex:indexPath.row];
 
     [self performSegueWithIdentifier:@"toCourseList" sender:self];
