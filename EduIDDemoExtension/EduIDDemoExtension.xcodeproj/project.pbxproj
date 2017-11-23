@@ -21,6 +21,17 @@
 		B61EB0A31D2C0E3600E79379 /* ServiceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B61EB0A21D2C0E3600E79379 /* ServiceListCell.m */; };
 		B61EB0A61D2CBEC400E79379 /* RequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = B61EB0A51D2CBEC400E79379 /* RequestData.m */; };
 		B61EB0A71D2CBEC400E79379 /* RequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = B61EB0A51D2CBEC400E79379 /* RequestData.m */; };
+		B65A576C1E41BE7800CBF3EF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B65A576B1E41BE7800CBF3EF /* Security.framework */; };
+		B65A57711E41C67700CBF3EF /* Asn1Sequence.m in Sources */ = {isa = PBXBuildFile; fileRef = B65A57701E41C67700CBF3EF /* Asn1Sequence.m */; };
+		B65A57761E41C91B00CBF3EF /* Asn1Item.m in Sources */ = {isa = PBXBuildFile; fileRef = B65A57751E41C91B00CBF3EF /* Asn1Item.m */; };
+		B65A57781E42498000CBF3EF /* Jose.m in Sources */ = {isa = PBXBuildFile; fileRef = B65A57771E42498000CBF3EF /* Jose.m */; };
+		B65A57801E4249EC00CBF3EF /* edu_ID_MobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B65A577F1E4249EC00CBF3EF /* edu_ID_MobileTests.m */; };
+		B65A578E1E424C0700CBF3EF /* edu_ID_JOSE_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = B65A578D1E424C0700CBF3EF /* edu_ID_JOSE_Tests.m */; };
+		B65A57A31E4251E300CBF3EF /* jose.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B65A579A1E4251E300CBF3EF /* jose.framework */; };
+		B65A57AA1E4251E300CBF3EF /* joseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B65A57A91E4251E300CBF3EF /* joseTests.m */; };
+		B65A57AC1E4251E300CBF3EF /* jose.h in Headers */ = {isa = PBXBuildFile; fileRef = B65A579C1E4251E300CBF3EF /* jose.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B65A57AF1E4251E300CBF3EF /* jose.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B65A579A1E4251E300CBF3EF /* jose.framework */; };
+		B65A57B01E4251E300CBF3EF /* jose.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B65A579A1E4251E300CBF3EF /* jose.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B67CF59C1D1A79DD00714E32 /* JWT.m in Sources */ = {isa = PBXBuildFile; fileRef = B67CF59B1D1A79DD00714E32 /* JWT.m */; };
 		B67CF59D1D1A79DD00714E32 /* JWT.m in Sources */ = {isa = PBXBuildFile; fileRef = B67CF59B1D1A79DD00714E32 /* JWT.m */; };
 		B67CF5A61D1A99F300714E32 /* OAuthRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = B67CF5A51D1A99F300714E32 /* OAuthRequester.m */; };
@@ -77,6 +88,41 @@
 			remoteGlobalIDString = 33F7BA1E1D0D598700AB1DA1;
 			remoteInfo = eduIDAuthorise;
 		};
+		B65A57821E4249EC00CBF3EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33F7B9DD1D0D575A00AB1DA1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33F7B9E41D0D575A00AB1DA1;
+			remoteInfo = "edu-ID Mobile";
+		};
+		B65A57931E42500000CBF3EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33F7B9DD1D0D575A00AB1DA1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33F7B9E41D0D575A00AB1DA1;
+			remoteInfo = "edu-ID Mobile";
+		};
+		B65A57A41E4251E300CBF3EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33F7B9DD1D0D575A00AB1DA1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B65A57991E4251E300CBF3EF;
+			remoteInfo = jose;
+		};
+		B65A57A61E4251E300CBF3EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33F7B9DD1D0D575A00AB1DA1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33F7B9E41D0D575A00AB1DA1;
+			remoteInfo = "edu-ID Mobile";
+		};
+		B65A57AD1E4251E300CBF3EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33F7B9DD1D0D575A00AB1DA1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B65A57991E4251E300CBF3EF;
+			remoteInfo = jose;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -89,6 +135,17 @@
 				33F7BA2A1D0D598700AB1DA1 /* edu-ID Mobile .appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B65A57B41E4251E300CBF3EF /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B65A57B01E4251E300CBF3EF /* jose.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -120,6 +177,24 @@
 		B61EB0A21D2C0E3600E79379 /* ServiceListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceListCell.m; sourceTree = "<group>"; };
 		B61EB0A41D2CBEC400E79379 /* RequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestData.h; sourceTree = "<group>"; };
 		B61EB0A51D2CBEC400E79379 /* RequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestData.m; sourceTree = "<group>"; };
+		B65A576B1E41BE7800CBF3EF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		B65A576F1E41C67700CBF3EF /* Asn1Sequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Asn1Sequence.h; sourceTree = "<group>"; };
+		B65A57701E41C67700CBF3EF /* Asn1Sequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Asn1Sequence.m; sourceTree = "<group>"; };
+		B65A57741E41C91B00CBF3EF /* Asn1Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Asn1Item.h; sourceTree = "<group>"; };
+		B65A57751E41C91B00CBF3EF /* Asn1Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Asn1Item.m; sourceTree = "<group>"; };
+		B65A57771E42498000CBF3EF /* Jose.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Jose.m; sourceTree = "<group>"; };
+		B65A577D1E4249EC00CBF3EF /* edu-ID MobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "edu-ID MobileTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B65A577F1E4249EC00CBF3EF /* edu_ID_MobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = edu_ID_MobileTests.m; sourceTree = "<group>"; };
+		B65A57811E4249EC00CBF3EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B65A578B1E424C0700CBF3EF /* edu-ID JOSE Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "edu-ID JOSE Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B65A578D1E424C0700CBF3EF /* edu_ID_JOSE_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = edu_ID_JOSE_Tests.m; sourceTree = "<group>"; };
+		B65A578F1E424C0700CBF3EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B65A579A1E4251E300CBF3EF /* jose.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = jose.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B65A579C1E4251E300CBF3EF /* jose.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jose.h; sourceTree = "<group>"; };
+		B65A579D1E4251E300CBF3EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B65A57A21E4251E300CBF3EF /* joseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = joseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B65A57A91E4251E300CBF3EF /* joseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = joseTests.m; sourceTree = "<group>"; };
+		B65A57AB1E4251E300CBF3EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B67CF59A1D1A79DD00714E32 /* JWT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JWT.h; sourceTree = "<group>"; };
 		B67CF59B1D1A79DD00714E32 /* JWT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JWT.m; sourceTree = "<group>"; };
 		B67CF5A41D1A99F300714E32 /* OAuthRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthRequester.h; sourceTree = "<group>"; };
@@ -167,6 +242,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B65A57AF1E4251E300CBF3EF /* jose.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,7 +264,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B65A576C1E41BE7800CBF3EF /* Security.framework in Frameworks */,
 				B6B8F0481D19310E003C530A /* MobileCoreServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B65A577A1E4249EC00CBF3EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B65A57881E424C0700CBF3EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B65A57961E4251E300CBF3EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B65A579F1E4251E300CBF3EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B65A57A31E4251E300CBF3EF /* jose.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +304,7 @@
 		33F7B9DC1D0D575A00AB1DA1 = {
 			isa = PBXGroup;
 			children = (
+				B65A576D1E41C60A00CBF3EF /* jose */,
 				B6E1DCB71D1BE97B00E72C75 /* EduidData.xcdatamodeld */,
 				B6D86ADF1D1DAFB300813415 /* Models */,
 				B67CF5A41D1A99F300714E32 /* OAuthRequester.h */,
@@ -213,7 +320,12 @@
 				33F7BA011D0D575B00AB1DA1 /* EduIDDemoExtensionTests */,
 				33F7BA0C1D0D575B00AB1DA1 /* EduIDDemoExtensionUITests */,
 				33F7BA201D0D598700AB1DA1 /* eduIDAuthorise */,
+				B65A577E1E4249EC00CBF3EF /* edu-ID MobileTests */,
+				B65A578C1E424C0700CBF3EF /* edu-ID JOSE Tests */,
+				B65A579B1E4251E300CBF3EF /* jose */,
+				B65A57A81E4251E300CBF3EF /* joseTests */,
 				33F7B9E61D0D575A00AB1DA1 /* Products */,
+				B65A576A1E41BE7800CBF3EF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -224,6 +336,10 @@
 				33F7B9FE1D0D575B00AB1DA1 /* EduIDDemoExtensionTests.xctest */,
 				33F7BA091D0D575B00AB1DA1 /* EduIDDemoExtensionUITests.xctest */,
 				33F7BA1F1D0D598700AB1DA1 /* edu-ID Mobile .appex */,
+				B65A577D1E4249EC00CBF3EF /* edu-ID MobileTests.xctest */,
+				B65A578B1E424C0700CBF3EF /* edu-ID JOSE Tests.xctest */,
+				B65A579A1E4251E300CBF3EF /* jose.framework */,
+				B65A57A21E4251E300CBF3EF /* joseTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -264,6 +380,7 @@
 		33F7BA011D0D575B00AB1DA1 /* EduIDDemoExtensionTests */ = {
 			isa = PBXGroup;
 			children = (
+				B65A57771E42498000CBF3EF /* Jose.m */,
 				33F7BA021D0D575B00AB1DA1 /* EduIDDemoExtensionTests.m */,
 				33F7BA041D0D575B00AB1DA1 /* Info.plist */,
 			);
@@ -300,6 +417,61 @@
 			path = eduIDAuthorise;
 			sourceTree = "<group>";
 		};
+		B65A576A1E41BE7800CBF3EF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B65A576B1E41BE7800CBF3EF /* Security.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B65A576D1E41C60A00CBF3EF /* jose */ = {
+			isa = PBXGroup;
+			children = (
+				B65A576F1E41C67700CBF3EF /* Asn1Sequence.h */,
+				B65A57701E41C67700CBF3EF /* Asn1Sequence.m */,
+				B65A57741E41C91B00CBF3EF /* Asn1Item.h */,
+				B65A57751E41C91B00CBF3EF /* Asn1Item.m */,
+			);
+			name = jose;
+			sourceTree = "<group>";
+		};
+		B65A577E1E4249EC00CBF3EF /* edu-ID MobileTests */ = {
+			isa = PBXGroup;
+			children = (
+				B65A577F1E4249EC00CBF3EF /* edu_ID_MobileTests.m */,
+				B65A57811E4249EC00CBF3EF /* Info.plist */,
+			);
+			path = "edu-ID MobileTests";
+			sourceTree = "<group>";
+		};
+		B65A578C1E424C0700CBF3EF /* edu-ID JOSE Tests */ = {
+			isa = PBXGroup;
+			children = (
+				B65A578D1E424C0700CBF3EF /* edu_ID_JOSE_Tests.m */,
+				B65A578F1E424C0700CBF3EF /* Info.plist */,
+			);
+			path = "edu-ID JOSE Tests";
+			sourceTree = "<group>";
+		};
+		B65A579B1E4251E300CBF3EF /* jose */ = {
+			isa = PBXGroup;
+			children = (
+				B65A579C1E4251E300CBF3EF /* jose.h */,
+				B65A579D1E4251E300CBF3EF /* Info.plist */,
+			);
+			path = jose;
+			sourceTree = "<group>";
+		};
+		B65A57A81E4251E300CBF3EF /* joseTests */ = {
+			isa = PBXGroup;
+			children = (
+				B65A57A91E4251E300CBF3EF /* joseTests.m */,
+				B65A57AB1E4251E300CBF3EF /* Info.plist */,
+			);
+			path = joseTests;
+			sourceTree = "<group>";
+		};
 		B6D86ADF1D1DAFB300813415 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -325,6 +497,17 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		B65A57971E4251E300CBF3EF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B65A57AC1E4251E300CBF3EF /* jose.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		33F7B9E41D0D575A00AB1DA1 /* edu-ID Mobile */ = {
 			isa = PBXNativeTarget;
@@ -334,11 +517,13 @@
 				33F7B9E21D0D575A00AB1DA1 /* Frameworks */,
 				33F7B9E31D0D575A00AB1DA1 /* Resources */,
 				33F7BA2E1D0D598700AB1DA1 /* Embed App Extensions */,
+				B65A57B41E4251E300CBF3EF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				33F7BA291D0D598700AB1DA1 /* PBXTargetDependency */,
+				B65A57AE1E4251E300CBF3EF /* PBXTargetDependency */,
 			);
 			name = "edu-ID Mobile";
 			productName = EduIDDemoExtension;
@@ -398,6 +583,79 @@
 			productReference = 33F7BA1F1D0D598700AB1DA1 /* edu-ID Mobile .appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		B65A577C1E4249EC00CBF3EF /* edu-ID MobileTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B65A57841E4249EC00CBF3EF /* Build configuration list for PBXNativeTarget "edu-ID MobileTests" */;
+			buildPhases = (
+				B65A57791E4249EC00CBF3EF /* Sources */,
+				B65A577A1E4249EC00CBF3EF /* Frameworks */,
+				B65A577B1E4249EC00CBF3EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B65A57831E4249EC00CBF3EF /* PBXTargetDependency */,
+			);
+			name = "edu-ID MobileTests";
+			productName = "edu-ID MobileTests";
+			productReference = B65A577D1E4249EC00CBF3EF /* edu-ID MobileTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B65A578A1E424C0700CBF3EF /* edu-ID JOSE Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B65A57901E424C0700CBF3EF /* Build configuration list for PBXNativeTarget "edu-ID JOSE Tests" */;
+			buildPhases = (
+				B65A57871E424C0700CBF3EF /* Sources */,
+				B65A57881E424C0700CBF3EF /* Frameworks */,
+				B65A57891E424C0700CBF3EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B65A57941E42500000CBF3EF /* PBXTargetDependency */,
+			);
+			name = "edu-ID JOSE Tests";
+			productName = "edu-ID JOSE Tests";
+			productReference = B65A578B1E424C0700CBF3EF /* edu-ID JOSE Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B65A57991E4251E300CBF3EF /* jose */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B65A57B11E4251E300CBF3EF /* Build configuration list for PBXNativeTarget "jose" */;
+			buildPhases = (
+				B65A57951E4251E300CBF3EF /* Sources */,
+				B65A57961E4251E300CBF3EF /* Frameworks */,
+				B65A57971E4251E300CBF3EF /* Headers */,
+				B65A57981E4251E300CBF3EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = jose;
+			productName = jose;
+			productReference = B65A579A1E4251E300CBF3EF /* jose.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		B65A57A11E4251E300CBF3EF /* joseTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B65A57B51E4251E300CBF3EF /* Build configuration list for PBXNativeTarget "joseTests" */;
+			buildPhases = (
+				B65A579E1E4251E300CBF3EF /* Sources */,
+				B65A579F1E4251E300CBF3EF /* Frameworks */,
+				B65A57A01E4251E300CBF3EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B65A57A51E4251E300CBF3EF /* PBXTargetDependency */,
+				B65A57A71E4251E300CBF3EF /* PBXTargetDependency */,
+			);
+			name = joseTests;
+			productName = joseTests;
+			productReference = B65A57A21E4251E300CBF3EF /* joseTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -433,6 +691,26 @@
 							};
 						};
 					};
+					B65A577C1E4249EC00CBF3EF = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 33F7B9E41D0D575A00AB1DA1;
+					};
+					B65A578A1E424C0700CBF3EF = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = AFWUM6884P;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 33F7B9E41D0D575A00AB1DA1;
+					};
+					B65A57991E4251E300CBF3EF = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+					B65A57A11E4251E300CBF3EF = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 33F7B9E41D0D575A00AB1DA1;
+					};
 				};
 			};
 			buildConfigurationList = 33F7B9E01D0D575A00AB1DA1 /* Build configuration list for PBXProject "EduIDDemoExtension" */;
@@ -452,6 +730,10 @@
 				33F7B9FD1D0D575B00AB1DA1 /* EduIDDemoExtensionTests */,
 				33F7BA081D0D575B00AB1DA1 /* EduIDDemoExtensionUITests */,
 				33F7BA1E1D0D598700AB1DA1 /* edu-ID Mobile  */,
+				B65A577C1E4249EC00CBF3EF /* edu-ID MobileTests */,
+				B65A578A1E424C0700CBF3EF /* edu-ID JOSE Tests */,
+				B65A57991E4251E300CBF3EF /* jose */,
+				B65A57A11E4251E300CBF3EF /* joseTests */,
 			);
 		};
 /* End PBXProject section */
@@ -490,6 +772,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B65A577B1E4249EC00CBF3EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B65A57891E424C0700CBF3EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B65A57981E4251E300CBF3EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B65A57A01E4251E300CBF3EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -506,10 +816,12 @@
 				B6E1DCBF1D1BEB6C00E72C75 /* Tokens+CoreDataProperties.m in Sources */,
 				B6E1DCC51D1BFD2700E72C75 /* SharedDataStore.m in Sources */,
 				B6CAB1411D1D450500577A58 /* ProfileViewController.m in Sources */,
+				B65A57711E41C67700CBF3EF /* Asn1Sequence.m in Sources */,
 				33F7B9ED1D0D575A00AB1DA1 /* AppDelegate.m in Sources */,
 				B61EB0A61D2CBEC400E79379 /* RequestData.m in Sources */,
 				B67CF5A61D1A99F300714E32 /* OAuthRequester.m in Sources */,
 				B6D86B171D1E7E7400813415 /* EduidConfig.m in Sources */,
+				B65A57761E41C91B00CBF3EF /* Asn1Item.m in Sources */,
 				33F7B9EA1D0D575A00AB1DA1 /* main.m in Sources */,
 				B6CAB1441D1D451B00577A58 /* LogoutViewController.m in Sources */,
 				B6E1DCB91D1BE97B00E72C75 /* EduidData.xcdatamodeld in Sources */,
@@ -523,6 +835,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B65A57781E42498000CBF3EF /* Jose.m in Sources */,
 				33F7BA031D0D575B00AB1DA1 /* EduIDDemoExtensionTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -560,6 +873,37 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B65A57791E4249EC00CBF3EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B65A57801E4249EC00CBF3EF /* edu_ID_MobileTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B65A57871E424C0700CBF3EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B65A578E1E424C0700CBF3EF /* edu_ID_JOSE_Tests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B65A57951E4251E300CBF3EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B65A579E1E4251E300CBF3EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B65A57AA1E4251E300CBF3EF /* joseTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -577,6 +921,31 @@
 			isa = PBXTargetDependency;
 			target = 33F7BA1E1D0D598700AB1DA1 /* edu-ID Mobile  */;
 			targetProxy = 33F7BA281D0D598700AB1DA1 /* PBXContainerItemProxy */;
+		};
+		B65A57831E4249EC00CBF3EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33F7B9E41D0D575A00AB1DA1 /* edu-ID Mobile */;
+			targetProxy = B65A57821E4249EC00CBF3EF /* PBXContainerItemProxy */;
+		};
+		B65A57941E42500000CBF3EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33F7B9E41D0D575A00AB1DA1 /* edu-ID Mobile */;
+			targetProxy = B65A57931E42500000CBF3EF /* PBXContainerItemProxy */;
+		};
+		B65A57A51E4251E300CBF3EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B65A57991E4251E300CBF3EF /* jose */;
+			targetProxy = B65A57A41E4251E300CBF3EF /* PBXContainerItemProxy */;
+		};
+		B65A57A71E4251E300CBF3EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33F7B9E41D0D575A00AB1DA1 /* edu-ID Mobile */;
+			targetProxy = B65A57A61E4251E300CBF3EF /* PBXContainerItemProxy */;
+		};
+		B65A57AE1E4251E300CBF3EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B65A57991E4251E300CBF3EF /* jose */;
+			targetProxy = B65A57AD1E4251E300CBF3EF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -698,6 +1067,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = EduIDDemoExtension/EduIDDemoExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = EduIDDemoExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ch.htwchur.eduid.app;
@@ -711,6 +1081,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = EduIDDemoExtension/EduIDDemoExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEFINES_MODULE = NO;
 				INFOPLIST_FILE = EduIDDemoExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ch.htwchur.eduid.app;
@@ -792,6 +1163,154 @@
 			};
 			name = Release;
 		};
+		B65A57851E4249EC00CBF3EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				INFOPLIST_FILE = "edu-ID MobileTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.mobinaut.eduid-tester3.edu-ID-MobileTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/edu-ID Mobile.app/edu-ID Mobile";
+			};
+			name = Debug;
+		};
+		B65A57861E4249EC00CBF3EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				INFOPLIST_FILE = "edu-ID MobileTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.mobinaut.eduid-tester3.edu-ID-MobileTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/edu-ID Mobile.app/edu-ID Mobile";
+			};
+			name = Release;
+		};
+		B65A57911E424C0700CBF3EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = AFWUM6884P;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				INFOPLIST_FILE = "edu-ID JOSE Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.mobinaut.eduid-tester3.edu-ID-JOSE-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/edu-ID Mobile.app/edu-ID Mobile";
+			};
+			name = Debug;
+		};
+		B65A57921E424C0700CBF3EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = AFWUM6884P;
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				INFOPLIST_FILE = "edu-ID JOSE Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.mobinaut.eduid-tester3.edu-ID-JOSE-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/edu-ID Mobile.app/edu-ID Mobile";
+			};
+			name = Release;
+		};
+		B65A57B21E4251E300CBF3EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = jose/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.mobinaut.eduid-tester3.jose";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B65A57B31E4251E300CBF3EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = jose/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.mobinaut.eduid-tester3.jose";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B65A57B61E4251E300CBF3EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				INFOPLIST_FILE = joseTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.mobinaut.eduid-tester3.joseTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/edu-ID Mobile.app/edu-ID Mobile";
+			};
+			name = Debug;
+		};
+		B65A57B71E4251E300CBF3EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				INFOPLIST_FILE = joseTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.mobinaut.eduid-tester3.joseTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/edu-ID Mobile.app/edu-ID Mobile";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -839,6 +1358,38 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		B65A57841E4249EC00CBF3EF /* Build configuration list for PBXNativeTarget "edu-ID MobileTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B65A57851E4249EC00CBF3EF /* Debug */,
+				B65A57861E4249EC00CBF3EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		B65A57901E424C0700CBF3EF /* Build configuration list for PBXNativeTarget "edu-ID JOSE Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B65A57911E424C0700CBF3EF /* Debug */,
+				B65A57921E424C0700CBF3EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		B65A57B11E4251E300CBF3EF /* Build configuration list for PBXNativeTarget "jose" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B65A57B21E4251E300CBF3EF /* Debug */,
+				B65A57B31E4251E300CBF3EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		B65A57B51E4251E300CBF3EF /* Build configuration list for PBXNativeTarget "joseTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B65A57B61E4251E300CBF3EF /* Debug */,
+				B65A57B71E4251E300CBF3EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 

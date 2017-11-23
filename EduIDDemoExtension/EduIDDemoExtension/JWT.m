@@ -122,34 +122,52 @@
     return [JWT jsonEncode:result];
 }
 
+- (NSString*) authHeader
+{
+    NSString *authstring = nil;
+
+    if ([token objectForKey: @"jwk"]) {
+        authstring = [self compact];
+    }
+    else if ([token objectForKey: @"access_token"]) {
+        authstring = [token objectForKey: @"access_token"];
+    }
+
+    if (authstring != nil) {
+        return [NSString stringWithFormat:@"Bearer %@", authstring];
+    }
+    
+    return nil;
+}
+
 - (void) sign
 {
-    if (token != nil) {
-        NSString *kid = [token objectForKey: @"kid"];
-        NSString *key = [token objectForKey: @"mac_key"];
-        NSString *alg = [token objectForKey: @"mac_algorithm"];
+    if (token != nil && [token objectForKey:@"jwk"] != nil) {
+        NSDictionary *jwk = [token objectForKey:@"jwk"];
+        NSString *use = [jwk objectForKey: @"use"];
 
-        if (!alg) {
-            alg = [token objectForKey:@"algorithm"];
+        if ([use isEqualToString:@"sig"]) {
+            NSString *kid = [jwk objectForKey: @"kid"];
+
+            NSString *key = [token objectForKey: @"k"];
+            NSString *alg = [jwk objectForKey: @"alg"];
+
+            if ([token objectForKey:@"aud"]) {
+                [self setIssuer:[token objectForKey: @"aud"]];
+            }
+
+            [self setHeader:@"alg" withValue:alg];
+            [self setHeader:@"kid" withValue:kid];
+
+            NSString *hstr =[JWT base64url:[JWT jsonEncode:header]];
+            NSString *cstr =[JWT base64url:[JWT jsonEncode:claims]];
+
+            NSString *estr = [@[hstr,cstr] componentsJoinedByString: @"."];
+
+            signature = [JWT signData:estr
+                              withKey:key
+                        withAlgorithm:alg];
         }
-        if (!key) {
-            key = [token objectForKey:@"sign_key"];
-        }
-
-        if ([token objectForKey:@"client_id"])
-            [self setIssuer:[token objectForKey: @"client_id"]];
-        
-        [self setHeader:@"alg" withValue:alg];
-        [self setHeader:@"kid" withValue:kid];
-
-        NSString *hstr =[JWT base64url:[JWT jsonEncode:header]];
-        NSString *cstr =[JWT base64url:[JWT jsonEncode:claims]];
-
-        NSString *estr = [@[hstr,cstr] componentsJoinedByString: @"."];
-
-        signature = [JWT signData:estr
-                          withKey:key
-                    withAlgorithm:alg];
     }
     else {
         [self setHeader:@"alg"

@@ -321,12 +321,12 @@ NSInteger const SERVICE_TOKEN = 4;
 
 - (void) registerReceiver:(id)receiver
 {
-    _requestData = [RequestData requestWithObject:receiver];
+    _requestData = [RequestData requestWithObject:receiver withDataStore:_DS];
 }
 
 - (void) registerReceiver:(id)receiver withCallback:(SEL)callback
 {
-    _requestData = [RequestData requestWithObject:receiver withCallback:callback];
+    _requestData = [RequestData requestWithObject:receiver withCallback:callback withDataStore:_DS];
 }
 
 
@@ -720,9 +720,11 @@ NSInteger const SERVICE_TOKEN = 4;
     [self setAuthHeader: sessionConfiguration
               withToken: token];
 
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:urlRequest
-                                            completionHandler:[self useRequestData:requestData]];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration
+                                                          delegate:requestData
+                                                     delegateQueue:nil];
+
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:urlRequest];
     [task resume];
 }
 
@@ -932,10 +934,11 @@ NSInteger const SERVICE_TOKEN = 4;
     if ([[reqResult status] integerValue] == 200) {
         Tokens *serviceToken = [NSEntityDescription insertNewObjectForEntityForName:@"Tokens"
                                                              inManagedObjectContext:[_DS managedObjectContext]];
-        [serviceToken setTarget:  [reqResult url]];     // store the endpoint
-        [serviceToken setSubject: @"ch.eduid.app"];     // for myself
+
+        [serviceToken setTarget:  [reqResult.url host]];  // store the endpoint
+        [serviceToken setSubject: @"ch.eduid.app"];       // for myself
         [serviceToken setType:    @"service"];
-        [serviceToken setToken:   [reqResult result]];  // remember the token
+        [serviceToken setToken:   [reqResult result]];    // remember the token
 
         [self storeTokens];
     }

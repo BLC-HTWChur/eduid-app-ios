@@ -23,13 +23,27 @@
 @synthesize cbFunction;
 @synthesize parent;
 
+@synthesize dataStore = _DS;
+
+// @synthesize authorizations;
 
 + (RequestData*) request
 {
     return [[RequestData alloc] init];
 }
 
++ (RequestData*) requestWithDataStore: (SharedDataStore*) datastore
+{
+    return [[RequestData alloc] initWithDataStore:datastore];
+}
+
 + (RequestData*) requestWithObject:(id)handler
+{
+    return [[RequestData alloc] initWithObject:handler];
+}
+
++ (RequestData*) requestWithObject:(id)handler
+                     withDataStore: (SharedDataStore*)datastore
 {
     return [[RequestData alloc] initWithObject:handler];
 }
@@ -39,6 +53,15 @@
 {
     return [[RequestData alloc] initWithObject:handler
                                   withCallback:callback];
+}
+
++ (RequestData*) requestWithObject:(id)handler
+                      withCallback: (SEL)callback
+                     withDataStore: (SharedDataStore*)datastore
+{
+    return [[RequestData alloc] initWithObject:handler
+                                  withCallback:callback
+                                 withDataStore:datastore];
 }
 
 + (RequestData*) cloneRequest:(RequestData*)request
@@ -105,6 +128,15 @@
     return self;
 }
 
+- (RequestData*) initWithDataStore: (SharedDataStore*) datastore
+{
+    self = [self init];
+
+    _DS = datastore;
+
+    return self;
+}
+
 - (RequestData*) initWithObject:(id)handler
 {
     self = [self init];
@@ -123,6 +155,18 @@
     return self;
 }
 
+- (RequestData*) initWithObject:(id)handler
+                   withCallback:(SEL)callback
+                  withDataStore:(SharedDataStore*)datastore
+{
+    self = [self init];
+    cbHandler = handler;
+    cbFunction = callback;
+    _DS = datastore;
+    return self;
+}
+
+
 - (RequestData*) initWithRequest:(RequestData*)request
 {
     self = [self init];
@@ -131,7 +175,7 @@
     cbHandler = [request cbHandler];
     cbFunction = [request cbFunction];
     parent = [request parent];
-    
+
     return self;
 }
 
@@ -143,6 +187,11 @@
         cbFunction = callback;
     }
     return self;
+}
+
+- (NSString*) absoluteURL
+{
+    return [url absoluteString];
 }
 
 - (void) copyData: (RequestData*)req
@@ -167,6 +216,8 @@
     if ([self isInvalid]) {
         [req invalidate];
     }
+
+    [req setRawDataStore: _DS];
 }
 
 - (void) complete // calls the callback
@@ -230,7 +281,7 @@
 
 - (NSURL*) processedUrl
 {
-    return [NSURL URLWithString:url];
+    return url;
 }
 
 - (id) processedResult
@@ -266,5 +317,90 @@
                        withHandler:subHandler
                       withCallback:subCallback];
 }
+
+/**
+ * URL Session Delegat Functions
+ */
+
+// this function adds the Authorization header if we have an authorization for a host.
+// The host authorizations MUST be set at the beginnen of the request. This method does not dynamically
+- (void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task willPerformHTTPRedirection:(NSHTTPURLResponse *)response newRequest:(NSURLRequest *)request completionHandler:(void (^)(NSURLRequest * _Nullable))completionHandler
+{
+
+    url = request.URL;
+
+    NSMutableURLRequest *newRequest = [[NSMutableURLRequest alloc] initWithURL:url
+                                                                   cachePolicy:request.cachePolicy
+                                                               timeoutInterval:request.timeoutInterval];
+
+    NSString *authString = [self loadToken];
+    
+    if (authString && [authString length]) {
+        [newRequest setValue:authString forHTTPHeaderField:@"Authorization"];
+    }
+
+    completionHandler(newRequest);
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)reqdata
+{
+
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)dataTask.response;
+
+    [self setStatus:[NSNumber numberWithInteger:httpResponse.statusCode]];
+
+    if (reqdata &&
+        [reqdata length]) {
+        [self setResult:[[NSString alloc] initWithData:data
+                                              encoding:NSUTF8StringEncoding]];
+    }
+
+    if (httpResponse.statusCode == 500) {
+        NSLog(@"Server Error for %@", [self absoluteURL]);
+    }
+
+    [self complete];
+}
+
+- (NSString*) loadToken
+{
+    NSString *targetHost = url.host;
+    NSString *retToken = nil;
+
+    if (_DS != nil) {
+        NSManagedObjectContext *moc = [_DS managedObjectContext];
+
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Tokens"];
+
+        [request setPredicate:[NSPredicate predicateWithFormat:@"target == %@", targetHost]];
+
+        NSError *error = nil;
+        NSArray *results = [moc executeFetchRequest:request error:&error];
+
+        NSString *token = nil;
+        if (results) {
+            for (Tokens *t in results)
+            {
+                if ([[t subject] isEqual: @"ch.eduid.app"]) {
+                    token = [t token];
+                }
+            }
+
+            if (token != nil) {
+                // process token
+                JWT *jwt = [JWT jwtWithTokenString:token];
+
+                [jwt setAudience:url.absoluteURL];
+
+                // any additional requirements MUST be defined in the auth jwk?
+
+                retToken = [jwt authHeader];
+            }
+        }
+    }
+
+    return retToken;
+}
+
 
 @end

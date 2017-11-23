@@ -28,6 +28,7 @@
 
 - (NSString*) compact; // compact representation
 - (NSString*) json;    // json representation
+- (NSString*) authHeader; // processes the token spec and returns the appropriate auth header
 
 - (void) sign;
 

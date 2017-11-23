@@ -13,6 +13,7 @@
 
 @interface OAuthRequester : NSObject
 
+
 @property (retain, nonatomic) NSURL *url;
 @property (retain, nonatomic) NSString *deviceToken;
 @property (retain, setter=setRawClientToken:) NSString *clientToken;
@@ -38,6 +39,8 @@
 
 - (void) registerReceiver:(id)receiver;
 - (void) registerReceiver:(id)receiver withCallback:(SEL)callback;
+
+
 
 // client authorization
 - (void) postClientCredentials: (SEL)callback;
